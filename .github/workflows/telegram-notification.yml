@@ -1,0 +1,20 @@
+name: Telegram Notification
+
+on:
+  pull_request:
+    types: [opened, reopened, review_requested]
+
+jobs:
+  telegram_notification:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Send Telegram Notification
+        uses: appleboy/telegram-action@master
+        with:
+          to: ${{ secrets.TELEGRAM_CHAT_ID }}
+          token: ${{ secrets.TELEGRAM_BOT_TOKEN }}
+          message: |
+            🚨 Pull Request Event 🚨
+            Author: ${{ github.actor }}
+            Title: ${{ github.event.pull_request.title }}
+            Link: ${{ github.event.pull_request.html_url }}
