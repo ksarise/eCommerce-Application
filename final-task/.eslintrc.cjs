@@ -4,6 +4,8 @@ module.exports = {
         "es2021": true
     },
     "extends": [
+        "eslint-config-airbnb-base",
+        "eslint-config-airbnb-typescript/base",
         "eslint:recommended",
         "plugin:@typescript-eslint/recommended"
     ],
@@ -24,12 +26,31 @@ module.exports = {
     "parserOptions": {
         "project": './tsconfig.json',
         "ecmaVersion": "latest",
-        "sourceType": "module"
+        "sourceType": "module",
+        "@typescript-eslint/no-explicit-any": 2,
     },
     "plugins": [
+        "eslint-plugin-prettier",
+        "prettier",
+        "import",
         "@typescript-eslint"
     ],
-    "noInlineConfig": true,
     "rules": {
-    }
+        "no-console": 0 ,
+        "prettier/prettier": [
+            "warn",
+            {
+              "endOfLine": "auto"
+            }
+          ]
+    },
+    "settings": {
+        "import/resolver": {
+          "typescript": true,
+        },
+        "import/parsers": {
+          "@typescript-eslint/parser": [".ts"],
+        },
+        "noInlineConfig": true,
+      }
 }
