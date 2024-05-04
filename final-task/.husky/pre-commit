@@ -1,2 +1,2 @@
 cd final-task
-npm run format && npm run lint
+npx lint-staged

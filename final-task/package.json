@@ -15,10 +15,18 @@
   "devDependencies": {
     "eslint-config-prettier": "^9.1.0",
     "husky": "^9.0.11",
+    "lint-staged": "^15.2.2",
     "prettier": "3.2.5",
     "typescript": "^5.2.2",
     "vite": "^5.2.0",
     "vite-plugin-eslint": "^1.8.1"
+  },
+  "lint-staged": {
+    "*.{js,jsx,ts,tsx}": [
+      "npm run format",
+      "npm run lint",
+      "git add"
+    ]
   },
   "dependencies": {
     "@typescript-eslint/eslint-plugin": "^7.8.0",
