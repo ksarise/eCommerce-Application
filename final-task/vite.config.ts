@@ -1,13 +1,13 @@
 import { defineConfig } from 'vite';
-import eslint from 'vite-plugin-eslint'
+import eslint from 'vite-plugin-eslint';
 
 export default defineConfig({
-    base: './',
+  base: './',
 
-    plugins: [eslint()],
+  plugins: [eslint()],
 
-    server: {
-        port: 8080,
-        open: true,
-      },
+  server: {
+    port: 8080,
+    open: true,
+  },
 });
