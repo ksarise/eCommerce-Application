@@ -8,6 +8,8 @@
     "build": "tsc && vite build",
     "preview": "vite preview",
     "lint": "npx eslint src/**/*.ts",
+    "format": "npx prettier --write .",
+    "ci:format": "npx prettier --check .",
     "prepare": "cd .. && husky final-task/.husky"
   },
   "devDependencies": {
