@@ -1,1 +1,2 @@
-npm test
+cd final-task
+npm run format && npm run lint
