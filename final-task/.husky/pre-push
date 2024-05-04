@@ -1,0 +1,2 @@
+cd final-task
+npx validate-branch-name
