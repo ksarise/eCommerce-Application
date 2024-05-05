@@ -1,23 +1,16 @@
 # eCommerce Application 🛍️🌐
 
-Welcome to our eCommerce application! Our team would like to introduce you to our app called Snowboarder's Haven. 🏂🏼❄️ Snowboarder's Haven is an eCommerce platform dedicated to providing snowboarding enthusiasts with a seamless online shopping experience. Our platform offers a diverse range of high-quality snowboards. With a user-friendly interface and robust features, Snowboarder's Haven aims to replicate the thrill of browsing through physical stores while offering the convenience of online shopping. 🛍️
+Welcome to our eCommerce application! Our team would like to introduce you to our app called Frost Glide. 🏂🏼❄️ Frost Glide is an eCommerce platform dedicated to providing snowboarding enthusiasts with a seamless online shopping experience. Our platform offers a diverse range of high-quality snowboards. With a user-friendly interface and robust features, Frost Glide aims to replicate the thrill of browsing through physical stores while offering the convenience of online shopping. 🛍️
+
+![Logo](doc/logo.png)
 
 ## Purpose:
 
-The purpose of Snowboarder's Haven is to create a one-stop destination for snowboarders to discover, explore, and purchase premium snowboards. We strive to enhance the snowboarding experience by providing easy access to top-notch products, detailed descriptions, and a streamlined checkout process.
-
-Key pages in the application include:
-
-- Login and Registration pages 🖥️
-- Main page 🏠
-- Catalog Product page 📋
-- Detailed Product page 🔎
-- User Profile page 👤
-- Basket page 🛒
-- About Us page 🙋‍♂️🙋‍♀️
+The purpose of Frost Glide is to create a one-stop destination for snowboarders to discover, explore, and purchase premium snowboards. We strive to enhance the snowboarding experience by providing easy access to top-notch products, detailed descriptions, and a streamlined checkout process.
 
 ## Technology Stack 💻📚
 
+- Vite: Local development server.
 - HTML5: Standard markup language for creating the structure of web pages.
 - Tailwind CSS: Utility-first CSS framework for building custom designs with ease and efficiency.
 - TypeScript: TypeScript adds optional static types to JavaScript, providing improved code quality, readability, and maintainability.
@@ -30,16 +23,16 @@ The application is powered by CommerceTools 🌐, a leading provider of commerce
 - [Viktoria](https://github.com/kitakiv)
 - [Andrey](https://github.com/andrey257686)
 
-## Installation
+## Installation and usage
 
-1. Clone the repository [eCommerce-Application](https://github.com/ksarise/eCommerce-Application.git)
-2. Navigate to the project directory in your terminal.
-3. Install dependencies using npm or yarn:
-   ```
-   npm install
-   ```
-4. Start the development server:
-   ```
-   npm run dev
-   ```
-5. Open web application in your browser at http://localhost:8080/.
+- Clone [repository](https://github.com/ksarise/eCommerce-Application.git)
+- Navigate to the project directory in your terminal.
+- Install dependencies using npm:
+  ```
+  npm install
+  ```
+- Start the development server:
+  ```
+  npm run dev
+  ```
+- Open web application in your browser at http://localhost:8080/.
