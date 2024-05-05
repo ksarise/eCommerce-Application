@@ -29,3 +29,17 @@ The application is powered by CommerceTools 🌐, a leading provider of commerce
 - [Sergey](https://github.com/ksarise)
 - [Viktoria](https://github.com/kitakiv)
 - [Andrey](https://github.com/andrey257686)
+
+## Installation
+
+1. Clone the repository [eCommerce-Application](https://github.com/ksarise/eCommerce-Application.git)
+2. Navigate to the project directory in your terminal.
+3. Install dependencies using npm or yarn:
+   ```
+   npm install
+   ```
+4. Start the development server:
+   ```
+   npm run dev
+   ```
+5. Open web application in your browser at http://localhost:8080/.
