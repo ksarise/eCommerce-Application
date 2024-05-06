@@ -46,7 +46,7 @@
     "sass": "^1.76.0"
   },
   "validate-branch-name": {
-    "pattern": "^(chore|doc|feat|fix|refactor)/RSS-ECOMM-[0-9]_[a-zA-Z0-9-/]+$",
+    "pattern": "^(chore|docs|feat|fix|refactor)/RSS-ECOMM-[0-9]_[a-zA-Z0-9-/]+$",
     "errorMsg": "Error: wrong name for branch!"
   }
 }
