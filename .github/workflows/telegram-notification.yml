@@ -3,18 +3,65 @@ name: Telegram Notification
 on:
   pull_request:
     types: [opened, reopened, review_requested]
+  pull_request_review:
+    types: [submitted]
 
 jobs:
   telegram_notification:
     runs-on: ubuntu-latest
     steps:
+      - name: Check if Review Requested
+        id: check_review_requested
+        if: github.event_name == 'pull_request_review' && github.event.action == 'submitted'
+        run: |
+          if [ "${{ github.event.review.state }}" == "requested" ]; then
+            echo "::set-output name=requested::true"
+            echo "::set-output name=requested_reviewers::${{ join(github.event.pull_request.requested_reviewers.*.login, ', ') }}"
+          else
+            echo "::set-output name=requested::false"
+          fi
+
+      - name: Check Reviews Status
+        id: check_reviews
+        if: github.event_name == 'pull_request_review' && github.event.action == 'submitted'
+        run: |
+          reviews=$(curl -s -H "Authorization: Bearer ${{ secrets.GITHUB_TOKEN }}" \
+            "https://api.github.com/repos/${{ github.repository }}/pulls/${{ github.event.pull_request.number }}/reviews")
+          approved_reviews=$(echo "$reviews" | jq -r '.[] | select(.state == "APPROVED") | .id')
+          total_reviews=$(echo "$reviews" | jq -r '. | length')
+
+          if [ "$(echo "$approved_reviews" | wc -l)" -eq "$total_reviews" ]; then
+            echo "::set-output name=all_approved::true"
+          else
+            echo "::set-output name=all_approved::false"
+          fi
+
+      - name: Set Notification Message
+        id: set_notification_message
+        run: |
+          if [ "${{ github.event_name }}" == "pull_request_review" ]; then
+            author="${{ github.actor }} request review"
+            event="Pull Request Review"
+            requested_reviewers="${{ steps.check_review_requested.outputs.requested_reviewers }}"
+          else
+            author="${{ github.actor }}"
+            event="Pull Request"
+            requested_reviewers=""
+          fi
+
+          if [ "${{ steps.check_reviews.outputs.all_approved }}" == "true" ]; then
+            special_message="🎉 All reviews approved for this pull request! 🎉"
+          else
+            special_message=""
+          fi
+
+          message="🚨 $event Event 🚨\nAuthor: $author\n$([[ ! -z $requested_reviewers ]] && echo 'Requested Reviewers: '$requested_reviewers)\nTitle: ${{ github.event.pull_request.title }}\nLink: ${{ github.event.pull_request.html_url }}\n$special_message"
+          echo "::set-output name=message::$message"
+
       - name: Send Telegram Notification
+        if: github.event_name == 'pull_request' || steps.check_review_requested.outputs.requested == 'true' || steps.check_reviews.outputs.all_approved == 'true'
         uses: appleboy/telegram-action@master
         with:
           to: ${{ secrets.TELEGRAM_CHAT_ID }}
           token: ${{ secrets.TELEGRAM_BOT_TOKEN }}
-          message: |
-            🚨 Pull Request Event 🚨
-            Author: ${{ github.actor }}
-            Title: ${{ github.event.pull_request.title }}
-            Link: ${{ github.event.pull_request.html_url }}
+          message: ${{ steps.set_notification_message.outputs.message }}
