@@ -36,3 +36,51 @@ The application is powered by CommerceTools 🌐, a leading provider of commerce
   npm run dev
   ```
 - Open web application in your browser at http://localhost:8080/.
+
+## Scenarios
+
+### Build
+
+- To build the project, use the following command:
+ ```
+  npm run build
+  ```
+
+### Preview
+
+- To preview the built project, use the following command:
+ ```
+  npm run preview
+  ```
+### Linting
+
+- To run ESLint for static code analysis, use the following command:
+ ```
+  npm run lint
+  ```
+### Formatting
+
+- To format the code using Prettier, use the following command:
+ ```
+  npm run format
+  ```
+### CI Formatting Check
+
+- To check code formatting in CI using Prettier, use the following command:
+ ```
+  npm run ci:format
+  ```
+### Testing
+
+- To run tests, use the following command:
+ ```
+  npm run test
+  ```
+
+### Git Hooks Setup
+
+To set up Git hooks for this project, run the following command:
+ ```
+  npm run prepare
+  ```
+
