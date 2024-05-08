@@ -1,8 +1,8 @@
 ## 🏷️ Pull Request Naming Convention
 - **Title of Pull Request** all inside should follow [Our Naming Convention](#our-naming-convention) 
 ##### 🤝 Our Naming Convention :
-- **Title of Pull Request:** ```[feat|fix|refactor|chore|docs|style]:RSS-ECOMM-1_*```
-- **Branches:** ```[feat|fix|refactor|chore|docs|style]/RSS-ECOMM-1_*```
+- **Title of Pull Request:** ```[feat|fix|refactor|chore|docs|style]:RSS-ECOMM-[1-9]_*```
+- **Branches:** ```[feat|fix|refactor|chore|docs|style]/RSS-ECOMM-[1-9]_*```
 - **Commits:** ```feat|fix|refactor|chore|docs|style: Present tense verb and short description of the commit ``` 
   
  - [ ] I followed naming convention rules
