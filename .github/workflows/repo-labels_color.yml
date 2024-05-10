@@ -10,8 +10,6 @@ jobs:
       contents: read
       pull-requests: write
     steps:
-      # Do something with labels
-      # Then run this Action
       - name: Color all labels
         uses: AnandChowdhary/color-labels-action@v1
         env:
