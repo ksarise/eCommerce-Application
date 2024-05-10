@@ -1,0 +1,11 @@
+feature :sparkles:: ['feature/*', 'feat/*']
+fix :wrench:: 'fix/*'
+chore :hammer:: 'chore/*'
+style :art:: 'style/*'
+docs :memo:: 'docs/*'
+test :test_tube:: 'test/*'
+refactor :hammer_and_wrench:: 'refactor/*'
+sprint:one:: '*-1_*'
+sprint:two:: '*-2_*'
+sprint:three:: '*-3_*'
+sprint:four:: '*-4_*'
