@@ -1,23 +1,43 @@
 import Navigo from 'navigo';
-import mainView from '../views/main';
-import loginVeiw from '../views/login';
-import registrationView from '../views/registration';
 
-const router = new Navigo('/');
+class Router {
+  public router: Navigo;
 
-router.on('/', () => {
-  document.getElementById('content')!.innerHTML = mainView;
-  router.resolve();
-});
+  public root: string = '/';
 
-router.on('/login', () => {
-  document.getElementById('content')!.innerHTML = loginVeiw;
-  router.resolve();
-});
+  public changeContent: ((page: string) => void) | undefined;
 
-router.on('/registration', () => {
-  document.getElementById('content')!.innerHTML = registrationView;
-  router.resolve();
-});
+  constructor() {
+    this.router = new Navigo(this.root);
+    this.routerListeners();
+  }
 
-export default router;
+  public routerListeners() {
+    this.router.on('/', () => {
+      this.changeContent?.('main');
+      this.router.resolve();
+    });
+
+    this.router.on('/login', () => {
+      this.changeContent?.('login');
+      this.router.resolve();
+    });
+
+    this.router.on('/registration', () => {
+      this.changeContent?.('registration');
+      this.router.resolve();
+    });
+  }
+
+  public goToPage(page: string) {
+    this.router.navigate(page);
+  }
+
+  public handleLocation() {
+    const path = window.location.pathname;
+    this.goToPage(path);
+  }
+}
+
+const routerController = new Router();
+export default routerController;
