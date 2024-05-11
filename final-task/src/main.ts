@@ -10,7 +10,6 @@ function initializeListeners() {
     link.addEventListener('click', (event) => {
       event.preventDefault();
       const path = link.getAttribute('href');
-      console.log(path);
       if (path) {
         router.navigate(path);
       }
