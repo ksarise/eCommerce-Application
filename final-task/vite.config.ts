@@ -5,7 +5,11 @@ export default defineConfig({
   base: './',
 
   plugins: [eslint()],
-
+  resolve: {
+    alias: {
+      'node-fetch': 'isomorphic-fetch',
+    },
+  },
   server: {
     port: 8080,
     open: true,
