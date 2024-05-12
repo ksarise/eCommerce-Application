@@ -13,6 +13,7 @@ const appViewHeader = `
     <a href="/registration" class="navigation__link" data-navigo>
       Registration
     </a>
+    <button class="customers">Get Customers</button>
     <div id="content" class="view"></div>
   </div>
 `;
