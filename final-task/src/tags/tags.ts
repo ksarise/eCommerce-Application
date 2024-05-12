@@ -113,5 +113,53 @@ const li = (
     attributes,
   });
 };
-const tags = { div, h1, h2, h3, img, a, p, ul, li };
+
+const input = (
+  classNames: string[],
+  attributes: { [key: string]: string } = {},
+): BaseComponentGenerator => {
+  return new BaseComponentGenerator({
+    tag: 'input',
+    classNames,
+    attributes,
+  });
+};
+
+const form = (
+  classNames: string[],
+  attributes: { [key: string]: string } = {},
+): BaseComponentGenerator => {
+  return new BaseComponentGenerator({
+    tag: 'form',
+    classNames,
+    attributes,
+  });
+};
+const label = (
+  classNames: string[],
+  content?: string,
+  attributes: { [key: string]: string } = {},
+): BaseComponentGenerator => {
+  return new BaseComponentGenerator({
+    tag: 'label',
+    classNames,
+    content,
+    attributes,
+  });
+};
+
+const button = (
+  classNames: string[],
+  content?: string,
+  attributes: { [key: string]: string } = {},
+): BaseComponentGenerator => {
+  return new BaseComponentGenerator({
+    tag: 'button',
+    classNames,
+    content,
+    attributes,
+  });
+};
+
+const tags = { div, h1, h2, h3, img, a, p, ul, li, input, form, label, button };
 export default tags;

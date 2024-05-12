@@ -1,5 +1,5 @@
 import mainView from './main';
-import loginView from './login';
+import LoginView from './login';
 import registrationView from './registration';
 
 const appViewHeader = `
@@ -22,20 +22,22 @@ export default class AppView {
 
   public mainView: string = mainView;
 
-  public loginView: string = loginView;
+  public loginView: LoginView = new LoginView();
 
   public registrationView: string = registrationView;
 
   public renderContent(page: string) {
+    const content = document.getElementById('content');
     switch (page) {
       case 'main':
-        document.getElementById('content')!.innerHTML = this.mainView;
+        content!.innerHTML = this.mainView;
         break;
       case 'login':
-        document.getElementById('content')!.innerHTML = this.loginView;
+        content!.innerHTML = '';
+        content!.append(this.loginView.createLogin() as HTMLElement);
         break;
       case 'registration':
-        document.getElementById('content')!.innerHTML = this.registrationView;
+        content!.innerHTML = this.registrationView;
         break;
       default:
         console.log('Page not found');
