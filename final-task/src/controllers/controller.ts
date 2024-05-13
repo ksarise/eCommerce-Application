@@ -2,7 +2,7 @@ import AppView from '../views/appView';
 import AppModel from '../models/model';
 import routerController from '../services/router';
 
-export default class Controller {
+export default class AppController {
   public appView: AppView;
 
   public appModel: AppModel;

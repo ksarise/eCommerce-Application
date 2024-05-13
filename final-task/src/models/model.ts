@@ -1,6 +1,6 @@
 import API from '../services/ApiRoot';
 
-export default class Model {
+export default class AppModel {
   private apiService: API;
 
   constructor() {
