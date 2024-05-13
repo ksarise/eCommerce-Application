@@ -16,6 +16,7 @@ const appViewHeader = `
     <button class="customers">Get Customers</button>
     <div id="content" class="view"></div>
   </div>
+  <div id="content" class="view"></div>
 `;
 
 export default class AppView {
