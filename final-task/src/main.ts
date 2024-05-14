@@ -1,11 +1,11 @@
 import './style.scss';
-import Controller from './controllers/controller';
+import AppController from './controllers/controller';
 
 class App {
-  public appController: Controller;
+  public appController: AppController;
 
   constructor() {
-    this.appController = new Controller();
+    this.appController = new AppController();
   }
 
   public start() {

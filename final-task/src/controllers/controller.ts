@@ -1,13 +1,17 @@
 import AppView from '../views/appView';
+import AppModel from '../models/model';
 import routerController from '../services/router';
 
-export default class Controller {
+export default class AppController {
   public appView: AppView;
+
+  public appModel: AppModel;
 
   private routerController = routerController;
 
   constructor() {
     this.appView = new AppView();
+    this.appModel = new AppModel();
   }
 
   public initialize() {
@@ -29,6 +33,11 @@ export default class Controller {
       });
     });
     this.routerController.changeContent = this.changeContent.bind(this);
+    const customersButton = document.querySelector('.customers');
+    customersButton?.addEventListener('click', async () => {
+      const customers = await this.appModel.requestGetCustomers();
+      console.log(customers);
+    });
   }
 
   public changePage(path: string) {
