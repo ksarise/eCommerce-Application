@@ -33,13 +33,16 @@ export default class AppView {
     switch (page) {
       case 'main':
         content!.innerHTML = this.mainView;
+        this.loginView.addClassToLogin(false);
         break;
       case 'login':
         content!.innerHTML = '';
         content!.append(this.loginView.createLogin() as HTMLElement);
+        this.loginView.addClassToLogin(true);
         break;
       case 'registration':
         content!.innerHTML = this.registrationView;
+        this.loginView.addClassToLogin(false);
         break;
       default:
         console.log('Page not found');

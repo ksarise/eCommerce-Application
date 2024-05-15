@@ -1,3 +1,5 @@
+@import url('./styles/login.scss');
+
 $light-blue: #646cff;
 
 :root {
@@ -114,6 +116,7 @@ button:focus-visible {
 }
 
 .form {
+  width: 300px;
   padding: 0.5em 2em;
   display: flex;
   justify-content: center;
@@ -122,40 +125,34 @@ button:focus-visible {
   flex-direction: column;
   border: $light-blue 0.2em solid;
   border-radius: 1em;
+}
 
-  input {
-    width: 100%;
-    border-radius: 0.2em;
-    border:  0.2em solid;
+input {
+  font-size: 1em;
+  width: 100%;
+  border-radius: 0.2em;
+  border: 0.2em solid;
+  transition: 0.5s;
+  padding-top: 0.5em;
+  padding-bottom: 0.5em;
+  border: #bababaaa 0.2em solid;
+
+  &:focus {
+    outline: none;
+    border-color: #646cff;
+    border: $light-blue 0.2em solid;
     transition: 0.5s;
-    padding-top: 0.5em;
-    padding-bottom: 0.5em;
-    border: #bababaaa 0.2em solid;
-
-    &:focus {
-      border: $light-blue 0.2em solid;
-      transition: 0.5s;
-    }
   }
 }
 
 label {
+  font-size: 1.5em;
   color: $light-blue;
-}
-
-.block-input {
-  display: flex;
-  flex-direction: column;
-  width: 100%;
-  align-items: flex-start;
-  gap: 0.5em;
 }
 
 .navigation {
   width: 100%;
   align-self: self-start;
   display: flex;
-  justify-content:space-around;
+  justify-content: space-around;
 }
-
-
