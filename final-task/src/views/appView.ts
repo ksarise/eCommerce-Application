@@ -35,6 +35,10 @@ export default class AppView {
     this.mainView = new MainView();
   }
 
+  public create() {
+    this.headerView.create();
+  }
+
   public renderContent(page: string) {
     document.querySelector('.body')!.prepend(this.headerView.getContent());
     switch (page) {

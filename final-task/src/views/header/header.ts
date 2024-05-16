@@ -11,22 +11,24 @@ export default class HeaderView {
 
   private buttonContainer: BaseComponentGenerator;
 
+  public handleClickLoginButton: ((event?: Event) => void) | undefined;
+
   constructor() {
     this.header = tags.header(['header', 'container'], '', {});
     this.logoContainer = tags.div(['header__logo-container'], '', {});
     this.linkContainer = tags.div(['header__navigation'], '', {});
     this.buttonContainer = tags.div(['header__buttons'], '', {});
-    this.createHeader();
   }
 
   public getContent(): HTMLElement {
     return this.header.getElement();
   }
 
+  public create() {
+    this.createHeader();
+  }
+
   public createHeader(): void {
-    // const logoLink = tags.a(['header__logo-container_link'], '/main', '', {
-    //   'data-navigo': 'true',
-    // });
     const linkHome = tags.a(['header__logo-container_link'], '/', '', {
       title: 'Link',
       'data-navigo': 'true',
@@ -64,7 +66,7 @@ export default class HeaderView {
     const linkRegistration = tags.a(
       ['header__navigation_link', 'header__navigation_register'],
       '/registration',
-      'Register',
+      'Registration',
       {
         title: 'Link',
         'data-navigo': 'true',
@@ -101,10 +103,9 @@ export default class HeaderView {
     const buttonCustomers = tags.button(
       ['header__button', 'header__button_login'],
       'Login',
-      {
-        title: 'Button',
-        'data-navigo': 'true',
-      },
+      {},
+      'click',
+      this.handleClickLoginButton,
     );
     this.buttonContainer.appendChild(buttonCustomers);
     return this.buttonContainer;
