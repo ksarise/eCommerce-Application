@@ -1,6 +1,7 @@
 import MainView from './main';
 import loginView from './login';
 import registrationView from './registration';
+import HeaderView from './header/header';
 
 const appViewHeader = `
   <div class="navigation">
@@ -27,11 +28,15 @@ export default class AppView {
 
   public registrationView: string = registrationView;
 
+  public headerView: HeaderView;
+
   public constructor() {
+    this.headerView = new HeaderView();
     this.mainView = new MainView();
   }
 
   public renderContent(page: string) {
+    document.querySelector('.body')!.prepend(this.headerView.getContent());
     switch (page) {
       case 'main':
         document.getElementById('content')!.innerHTML = '';

@@ -161,5 +161,33 @@ const button = (
   });
 };
 
-const tags = { div, h1, h2, h3, img, a, p, ul, li, input, form, label, button };
+const header = (
+  classNames: string[],
+  content?: string,
+  attributes: { [key: string]: string } = {},
+): BaseComponentGenerator => {
+  return new BaseComponentGenerator({
+    tag: 'header',
+    classNames,
+    content,
+    attributes,
+  });
+};
+
+const tags = {
+  div,
+  h1,
+  h2,
+  h3,
+  img,
+  a,
+  p,
+  ul,
+  li,
+  input,
+  form,
+  label,
+  button,
+  header,
+};
 export default tags;
