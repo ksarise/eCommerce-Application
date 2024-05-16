@@ -1,4 +1,4 @@
-import mainView from './main';
+import MainView from './main';
 import loginView from './login';
 import registrationView from './registration';
 
@@ -21,16 +21,23 @@ const appViewHeader = `
 export default class AppView {
   public innerHTML: string = appViewHeader;
 
-  public mainView: string = mainView;
+  public mainView: MainView;
 
   public loginView: string = loginView;
 
   public registrationView: string = registrationView;
 
+  public constructor() {
+    this.mainView = new MainView();
+  }
+
   public renderContent(page: string) {
     switch (page) {
       case 'main':
-        document.getElementById('content')!.innerHTML = this.mainView;
+        document.getElementById('content')!.innerHTML = '';
+        document
+          .getElementById('content')!
+          .appendChild(this.mainView.getContent());
         break;
       case 'login':
         document.getElementById('content')!.innerHTML = this.loginView;
