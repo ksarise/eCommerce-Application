@@ -80,7 +80,7 @@ export default class Login {
       button,
       register,
     );
-    this.newHistory = this.form as HTMLElement;
+    this.newHistory = this.form;
     return this.form;
   }
 
