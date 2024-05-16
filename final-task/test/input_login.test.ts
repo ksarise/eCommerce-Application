@@ -1,4 +1,4 @@
-import { checkEmail, checkPassword } from '../src/function/checkInput';
+import { checkEmail, checkPassword } from '../src/services/checkInput';
 import { LoginEmail, LoginPassword } from '../src/interface/login_interface';
 
 const validEmails: string[] = [

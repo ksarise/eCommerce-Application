@@ -1,7 +1,7 @@
 import tags from '../tags/tags';
 import BaseComponentGenerator from '../tags/base-component';
 import { LoginForm } from '../interface/interface';
-import * as check from '../function/checkInput';
+import * as check from '../services/checkInput';
 
 export default class Login {
   private form: BaseComponentGenerator;
