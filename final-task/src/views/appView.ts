@@ -1,4 +1,4 @@
-import mainView from './main';
+import MainView from './main';
 import LoginView from './login';
 import registrationView from './registration';
 import HeaderView from './header/header';
@@ -28,18 +28,21 @@ export default class AppView {
 
   public registrationView: string;
 
-  constructor() {
-    this.loginView = new LoginView();
-    this.innerHTML = appViewHeader;
-    this.mainView = mainView;
-    this.registrationView = registrationView;
-  }
+  // constructor() {
+  //   this.loginView = new LoginView();
+  //   this.innerHTML = appViewHeader;
+  //   this.mainView = mainView;
+  //   this.registrationView = registrationView;
+  // }
 
   public headerView: HeaderView;
 
   public constructor() {
+    this.loginView = new LoginView();
+    this.innerHTML = appViewHeader;
     this.headerView = new HeaderView();
     this.mainView = new MainView();
+    this.registrationView = registrationView;
   }
 
   public create() {
@@ -48,6 +51,7 @@ export default class AppView {
 
   public renderContent(page: string) {
     document.querySelector('.body')!.prepend(this.headerView.getContent());
+    const content = document.getElementById('content');
     switch (page) {
       case 'main':
         document.getElementById('content')!.innerHTML = '';

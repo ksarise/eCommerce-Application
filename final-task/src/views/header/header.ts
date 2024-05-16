@@ -5,11 +5,11 @@ import tags from '../../tags/tags';
 export default class HeaderView {
   private header: BaseComponentGenerator;
 
-  private logoContainer: BaseComponentGenerator;
+  private logoContainer: HTMLDivElement;
 
-  private linkContainer: BaseComponentGenerator;
+  private linkContainer: HTMLDivElement;
 
-  private buttonContainer: BaseComponentGenerator;
+  private buttonContainer: HTMLDivElement;
 
   public handleClickLoginButton: ((event?: Event) => void) | undefined;
 
@@ -33,7 +33,7 @@ export default class HeaderView {
       title: 'Link',
       'data-navigo': 'true',
     });
-    linkHome.getElement().innerHTML = `<svg version="1.0" xmlns="http://www.w3.org/2000/svg"
+    linkHome.innerHTML = `<svg version="1.0" xmlns="http://www.w3.org/2000/svg"
     width="40.000000pt" height="40.000000pt" viewBox="0 0 115.000000 134.000000"
     preserveAspectRatio="xMidYMid meet">
    
@@ -53,7 +53,7 @@ export default class HeaderView {
     this.header.appendChild(this.createbuttonNavigation());
   }
 
-  private createLinkNavigation(): BaseComponentGenerator {
+  private createLinkNavigation(): HTMLDivElement {
     const linkHome = tags.a(
       ['header__navigation_link', 'header__navigation_login'],
       '/',
@@ -99,7 +99,7 @@ export default class HeaderView {
     return this.linkContainer;
   }
 
-  private createbuttonNavigation(): BaseComponentGenerator {
+  private createbuttonNavigation(): HTMLDivElement {
     const buttonCustomers = tags.button(
       ['header__button', 'header__button_login'],
       'Login',
