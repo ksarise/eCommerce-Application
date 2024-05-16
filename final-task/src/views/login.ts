@@ -26,7 +26,7 @@ export default class Login {
       type: 'submit',
     });
     this.inputEmail = tags.input(['input', 'input-login'], {
-      type: 'email',
+      type: 'text',
       placeholder: 'Email...',
       id: 'inputEmail',
     });

@@ -25,6 +25,7 @@ const invalidEmails: { email: string; error: string }[] = [
   { email: 'user.example.com', error: LoginEmail.AT },
   { email: 'user@tes  tcom', error: LoginEmail.SPACE },
   { email: 'user@domain', error: LoginEmail.SAMPLE },
+  { email: '  user@domain.com', error: LoginEmail.SPACE },
 ];
 describe('test email', () => {
   validEmails.forEach((testCase, index) => {
