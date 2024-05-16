@@ -50,12 +50,12 @@ export function checkEmail(inputString: string): [boolean, LoginEmail] {
     return [rightValue, LoginEmail.AT];
   }
   if (
-    !/[a-z0-9._-]+@[a-z0-9-]+\.[a-z]{2,4}$/.test(value) ||
+    !/[a-z0-9._-]+@[a-z]+\.[a-z]{2,4}$/.test(value) ||
     value.match(/--/) ||
     value.match(/__/) ||
     value.startsWith('-') ||
     value.startsWith('_') ||
-    !/^[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,}$/i.test(value) ||
+    !/^[a-z0-9._-]+@[a-z]+\.[a-z]{2,}$/i.test(value) ||
     value.split('@')[1].startsWith('_') ||
     value.split('@')[1].startsWith('-')
   ) {
