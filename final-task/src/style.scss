@@ -88,6 +88,7 @@ button {
 }
 button:not(:disabled):hover {
   border-color: $light-blue;
+  cursor: default;
 }
 button:focus,
 button:focus-visible {
