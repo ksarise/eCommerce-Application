@@ -152,12 +152,16 @@ const button = (
   classNames: string[],
   content?: string,
   attributes: { [key: string]: string } = {},
+  event?: string,
+  eventCallback?: (event?: Event) => void,
 ): BaseComponentGenerator => {
   return new BaseComponentGenerator({
     tag: 'button',
     classNames,
     content,
     attributes,
+    event,
+    eventCallback,
   });
 };
 
