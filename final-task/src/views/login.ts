@@ -1,22 +1,21 @@
 import tags from '../tags/tags';
-import BaseComponentGenerator from '../tags/base-component';
 import { LoginForm } from '../interface/interface';
 import * as check from '../services/checkInput';
 
 export default class Login {
-  private form: BaseComponentGenerator;
+  private form: HTMLFormElement;
 
-  private inputEmail: BaseComponentGenerator;
+  private inputEmail: HTMLInputElement;
 
-  private inputPassword: BaseComponentGenerator;
+  private inputPassword: HTMLInputElement;
 
   private history: HTMLElement | null;
 
-  private errorEmail: BaseComponentGenerator;
+  private errorEmail: HTMLElement;
 
-  private errorPassword: BaseComponentGenerator;
+  private errorPassword: HTMLElement;
 
-  private checkBox: BaseComponentGenerator;
+  private checkBox: HTMLInputElement;
 
   private body: HTMLBodyElement;
 
@@ -74,15 +73,15 @@ export default class Login {
       'Did you registered? Register',
       { title: 'Register', 'data-navigo': 'true' },
     );
-    this.form.appendChildren([
+    this.form.append(
       h1,
       this.createBlockInput(LoginForm.EMAIL),
       this.createBlockInput(LoginForm.PASSWORD),
       button,
       register,
-    ]);
-    this.newHistory = this.form.getElement() as HTMLElement;
-    return this.form.getElement();
+    );
+    this.newHistory = this.form as HTMLElement;
+    return this.form;
   }
 
   private createBlockInput(labelText: LoginForm) {
@@ -93,14 +92,14 @@ export default class Login {
       { for: `input${labelText}` },
     );
     if (labelText === LoginForm.EMAIL) {
-      block.appendChildren([label, this.inputEmail, this.errorEmail]);
+      block.append(label, this.inputEmail, this.errorEmail);
     } else {
-      block.appendChildren([
+      block.append(
         label,
         this.inputPassword,
         this.checkBox,
         this.errorPassword,
-      ]);
+      );
     }
     return block;
   }
@@ -115,26 +114,24 @@ export default class Login {
   }
 
   private addListenerToLogin() {
-    this.form.getElement().addEventListener('submit', (event: Event) => {
+    this.form.addEventListener('submit', (event: Event) => {
       event.preventDefault();
-      (this.checkBox.getElement() as HTMLInputElement).checked = false;
+      this.checkBox.checked = false;
       (document.getElementById('buttonLogin') as HTMLButtonElement).disabled =
         true;
-      (this.inputEmail.getElement() as HTMLInputElement).value = '';
-      (this.inputPassword.getElement() as HTMLInputElement).value = '';
+      this.inputEmail.value = '';
+      this.inputPassword.value = '';
     });
   }
 
   private addListenerToInput() {
-    this.inputEmail.getElement().addEventListener('input', () => {
-      const result: [boolean, string] = check.checkEmail(
-        (this.inputEmail.getElement() as HTMLInputElement).value,
-      );
+    this.inputEmail.addEventListener('input', () => {
+      const result: [boolean, string] = check.checkEmail(this.inputEmail.value);
       this.writeError(result, true);
     });
-    this.inputPassword.getElement().addEventListener('input', () => {
+    this.inputPassword.addEventListener('input', () => {
       const result: [boolean, string] = check.checkPassword(
-        (this.inputPassword.getElement() as HTMLInputElement).value,
+        this.inputPassword.value,
       );
       this.writeError(result, false);
     });
@@ -142,13 +139,13 @@ export default class Login {
 
   writeError([right, error]: [boolean, string], flag: boolean) {
     if (flag) {
-      this.errorEmail.getElement().classList.toggle('error-hidden', right);
-      this.errorEmail.getElement().innerHTML = error;
-      this.inputEmail.getElement().classList.toggle('input-error', !right);
+      this.errorEmail.classList.toggle('error-hidden', right);
+      this.errorEmail.innerHTML = error;
+      this.inputEmail.classList.toggle('input-error', !right);
     } else {
-      this.inputPassword.getElement().classList.toggle('input-error', !right);
-      this.errorPassword.getElement().classList.toggle('error-hidden', right);
-      this.errorPassword.getElement().innerHTML = error;
+      this.inputPassword.classList.toggle('input-error', !right);
+      this.errorPassword.classList.toggle('error-hidden', right);
+      this.errorPassword.innerHTML = error;
     }
     this.checkButton();
   }
@@ -156,11 +153,10 @@ export default class Login {
   checkButton() {
     const buttonLogin = document.getElementById('buttonLogin');
     if (
-      this.errorPassword.getElement().classList.contains('error-hidden') &&
-      this.errorEmail.getElement().classList.contains('error-hidden') &&
-      (this.inputEmail.getElement() as HTMLInputElement).value?.length !== 0 &&
-      (this.inputPassword.getElement() as HTMLInputElement).value?.length !==
-        0 &&
+      this.errorPassword.classList.contains('error-hidden') &&
+      this.errorEmail.classList.contains('error-hidden') &&
+      this.inputEmail.value?.length !== 0 &&
+      this.inputPassword.value?.length !== 0 &&
       buttonLogin
     ) {
       (buttonLogin as HTMLButtonElement).disabled = false;
@@ -170,14 +166,11 @@ export default class Login {
   }
 
   private addCheckboxListener() {
-    this.checkBox.getElement().addEventListener('click', () => {
-      if (
-        (this.inputPassword.getElement() as HTMLInputElement).type ===
-        'password'
-      ) {
-        (this.inputPassword.getElement() as HTMLInputElement).type = 'text';
+    this.checkBox.addEventListener('click', () => {
+      if (this.inputPassword.type === 'password') {
+        this.inputPassword.type = 'text';
       } else {
-        (this.inputPassword.getElement() as HTMLInputElement).type = 'password';
+        this.inputPassword.type = 'password';
       }
     });
   }
