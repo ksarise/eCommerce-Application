@@ -7,3 +7,8 @@ export interface ElementProps {
   type?: string;
   eventCallback?: (event?: Event) => void;
 }
+
+export enum LoginForm {
+  EMAIL = 'Email',
+  PASSWORD = 'Password',
+}

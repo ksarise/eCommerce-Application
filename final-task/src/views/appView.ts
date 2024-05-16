@@ -1,5 +1,5 @@
-import MainView from './main';
-import loginView from './login';
+import mainView from './main';
+import LoginView from './login';
 import registrationView from './registration';
 import HeaderView from './header/header';
 
@@ -15,18 +15,25 @@ const appViewHeader = `
       Registration
     </a>
     <button class="customers">Get Customers</button>
-    <div id="content" class="view"></div>
   </div>
+  <div id="content" class="view"></div>
 `;
 
 export default class AppView {
-  public innerHTML: string = appViewHeader;
+  public innerHTML: string;
 
   public mainView: MainView;
 
-  public loginView: string = loginView;
+  public loginView: LoginView;
 
-  public registrationView: string = registrationView;
+  public registrationView: string;
+
+  constructor() {
+    this.loginView = new LoginView();
+    this.innerHTML = appViewHeader;
+    this.mainView = mainView;
+    this.registrationView = registrationView;
+  }
 
   public headerView: HeaderView;
 
@@ -47,12 +54,16 @@ export default class AppView {
         document
           .getElementById('content')!
           .appendChild(this.mainView.getContent());
+        this.loginView.addClassToLogin(false);
         break;
       case 'login':
-        document.getElementById('content')!.innerHTML = this.loginView;
+        content!.innerHTML = '';
+        content!.append(this.loginView.createLogin() as HTMLElement);
+        this.loginView.addClassToLogin(true);
         break;
       case 'registration':
-        document.getElementById('content')!.innerHTML = this.registrationView;
+        content!.innerHTML = this.registrationView;
+        this.loginView.addClassToLogin(false);
         break;
       default:
         console.log('Page not found');

@@ -4,63 +4,63 @@ const div = (
   classNames: string[],
   content?: string,
   attributes: { [key: string]: string } = {},
-): BaseComponentGenerator => {
+): HTMLDivElement => {
   return new BaseComponentGenerator({
     tag: 'div',
     classNames,
     content,
     attributes,
-  });
+  }).getElement() as HTMLDivElement;
 };
 
 const h1 = (
   classNames: string[],
   content?: string,
   attributes: { [key: string]: string } = {},
-): HTMLElement => {
+): HTMLHeadingElement => {
   return new BaseComponentGenerator({
     tag: 'h1',
     classNames,
     content,
     attributes,
-  }).getElement();
+  }).getElement() as HTMLHeadingElement;
 };
 
 const h2 = (
   classNames: string[],
   content?: string,
   attributes: { [key: string]: string } = {},
-): HTMLElement => {
+): HTMLHeadingElement => {
   return new BaseComponentGenerator({
     tag: 'h2',
     classNames,
     content,
     attributes,
-  }).getElement();
+  }).getElement() as HTMLHeadingElement;
 };
 
 const h3 = (
   classNames: string[],
   content?: string,
   attributes: { [key: string]: string } = {},
-): HTMLElement => {
+): HTMLHeadingElement => {
   return new BaseComponentGenerator({
     tag: 'h3',
     classNames,
     content,
     attributes,
-  }).getElement();
+  }).getElement() as HTMLHeadingElement;
 };
 
 const img = (
   classNames: string[],
   attributes: { [key: string]: string },
-): HTMLElement => {
+): HTMLImageElement => {
   return new BaseComponentGenerator({
     tag: 'img',
     classNames,
     attributes,
-  }).getElement();
+  }).getElement() as HTMLImageElement;
 };
 
 const a = (
@@ -68,84 +68,84 @@ const a = (
   href: string,
   content?: string,
   attributes: { [key: string]: string } = {},
-): BaseComponentGenerator => {
+): HTMLLinkElement => {
   return new BaseComponentGenerator({
     tag: 'a',
     classNames,
     content,
     attributes: { ...attributes, href },
-  });
+  }).getElement() as HTMLLinkElement;
 };
 
 const p = (
   classNames: string[],
   content?: string,
   attributes: { [key: string]: string } = {},
-): BaseComponentGenerator => {
+): HTMLParagraphElement => {
   return new BaseComponentGenerator({
     tag: 'p',
     classNames,
     content,
     attributes,
-  });
+  }).getElement() as HTMLParagraphElement;
 };
 
 const ul = (
   classNames: string[],
   attributes: { [key: string]: string } = {},
-): BaseComponentGenerator => {
+): HTMLUListElement => {
   return new BaseComponentGenerator({
     tag: 'ul',
     classNames,
     attributes,
-  });
+  }).getElement() as HTMLUListElement;
 };
 
 const li = (
   classNames: string[],
   content?: string,
   attributes: { [key: string]: string } = {},
-): BaseComponentGenerator => {
+): HTMLLIElement => {
   return new BaseComponentGenerator({
     tag: 'li',
     classNames,
     content,
     attributes,
-  });
+  }).getElement() as HTMLLIElement;
 };
 
 const input = (
   classNames: string[],
   attributes: { [key: string]: string } = {},
-): BaseComponentGenerator => {
+): HTMLInputElement => {
   return new BaseComponentGenerator({
     tag: 'input',
     classNames,
     attributes,
-  });
+  }).getElement() as HTMLInputElement;
 };
 
 const form = (
   classNames: string[],
   attributes: { [key: string]: string } = {},
-): BaseComponentGenerator => {
+): HTMLFormElement => {
   return new BaseComponentGenerator({
     tag: 'form',
     classNames,
     attributes,
-  });
+  }).getElement() as HTMLFormElement;
 };
 const label = (
   classNames: string[],
   content?: string,
   attributes: { [key: string]: string } = {},
-): BaseComponentGenerator => {
+): HTMLLabelElement => {
   return new BaseComponentGenerator({
     tag: 'label',
     classNames,
     content,
     attributes,
-  });
+  }).getElement() as HTMLLabelElement;
 };
 
 const button = (
@@ -154,7 +154,7 @@ const button = (
   attributes: { [key: string]: string } = {},
   event?: string,
   eventCallback?: (event?: Event) => void,
-): BaseComponentGenerator => {
+): HTMLInputElement => {
   return new BaseComponentGenerator({
     tag: 'button',
     classNames,
@@ -162,7 +162,7 @@ const button = (
     attributes,
     event,
     eventCallback,
-  });
+  }).getElement() as HTMLInputElement;
 };
 
 const header = (
@@ -194,4 +194,5 @@ const tags = {
   button,
   header,
 };
+
 export default tags;
