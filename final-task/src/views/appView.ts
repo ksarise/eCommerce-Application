@@ -19,13 +19,20 @@ const appViewHeader = `
 `;
 
 export default class AppView {
-  public innerHTML: string = appViewHeader;
+  public innerHTML: string;
 
-  public mainView: string = mainView;
+  public mainView: string;
 
-  public loginView: LoginView = new LoginView();
+  public loginView: LoginView;
 
-  public registrationView: string = registrationView;
+  public registrationView: string;
+
+  constructor() {
+    this.loginView = new LoginView();
+    this.innerHTML = appViewHeader;
+    this.mainView = mainView;
+    this.registrationView = registrationView;
+  }
 
   public renderContent(page: string) {
     const content = document.getElementById('content');
