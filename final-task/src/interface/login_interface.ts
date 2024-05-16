@@ -3,6 +3,7 @@ export enum LoginEmail {
   AT = 'Email should contain an "@" symbol separating local part and domain name',
   SPACE = 'Email should not contain leading or trailing whitespace',
   SAMPLE = 'Email should be properly formatted (e.g., user@example.com)',
+  NULL = '',
 }
 
 export enum LoginPassword {
@@ -13,4 +14,5 @@ export enum LoginPassword {
   SPACE = 'Password should not contain leading or trailing whitespace',
   DIGIT = 'Password should contain at least one digit',
   SPECIAL = 'Password should contain at least one special character (e.g., !@#$%^&*)',
+  NULL = '',
 }

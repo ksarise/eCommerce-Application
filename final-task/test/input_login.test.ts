@@ -31,7 +31,7 @@ describe('test email', () => {
   validEmails.forEach((testCase, index) => {
     it(`should return true first test number ${index + 1}`, () => {
       const actualResult = checkEmail(testCase);
-      expect(actualResult).toEqual([true, LoginEmail.SAMPLE]);
+      expect(actualResult).toEqual([true, LoginEmail.NULL]);
     });
   });
   invalidEmails.forEach((testCase, index) => {
@@ -76,7 +76,7 @@ describe('test password', () => {
   validPasswords.forEach((testCase, index) => {
     it(`should return true first test number ${index + 1}`, () => {
       const actualResult = checkPassword(testCase);
-      expect(actualResult).toEqual([true, LoginPassword.SPECIAL]);
+      expect(actualResult).toEqual([true, LoginPassword.NULL]);
     });
   });
   invalidPassword.forEach((testCase, index) => {

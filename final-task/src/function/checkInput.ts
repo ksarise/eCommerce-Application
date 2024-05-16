@@ -31,7 +31,7 @@ export function checkPassword(inputString: string): [boolean, LoginPassword] {
     rightValue = false;
     return [rightValue, LoginPassword.SPACE];
   }
-  return [rightValue, LoginPassword.SPECIAL];
+  return [rightValue, LoginPassword.NULL];
 }
 
 export function checkEmail(inputString: string): [boolean, LoginEmail] {
@@ -53,5 +53,5 @@ export function checkEmail(inputString: string): [boolean, LoginEmail] {
     rightValue = false;
     return [rightValue, LoginEmail.SAMPLE];
   }
-  return [rightValue, LoginEmail.SAMPLE];
+  return [rightValue, LoginEmail.NULL];
 }
