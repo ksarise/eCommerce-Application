@@ -14,7 +14,10 @@ export default class HeaderView {
   public handleClickLoginButton: ((event?: Event) => void) | undefined;
 
   constructor() {
-    this.header = tags.header(['header', 'container'], '', {});
+    this.header = new BaseComponentGenerator({
+      tag: 'header',
+      classNames: ['header', 'container'],
+    });
     this.logoContainer = tags.div(['header__logo-container'], '', {});
     this.linkContainer = tags.div(['header__navigation'], '', {});
     this.buttonContainer = tags.div(['header__buttons'], '', {});

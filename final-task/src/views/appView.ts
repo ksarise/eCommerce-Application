@@ -28,13 +28,6 @@ export default class AppView {
 
   public registrationView: string;
 
-  // constructor() {
-  //   this.loginView = new LoginView();
-  //   this.innerHTML = appViewHeader;
-  //   this.mainView = mainView;
-  //   this.registrationView = registrationView;
-  // }
-
   public headerView: HeaderView;
 
   public constructor() {

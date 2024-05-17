@@ -165,19 +165,6 @@ const button = (
   }).getElement() as HTMLInputElement;
 };
 
-const header = (
-  classNames: string[],
-  content?: string,
-  attributes: { [key: string]: string } = {},
-): BaseComponentGenerator => {
-  return new BaseComponentGenerator({
-    tag: 'header',
-    classNames,
-    content,
-    attributes,
-  });
-};
-
 const tags = {
   div,
   h1,
@@ -192,7 +179,6 @@ const tags = {
   form,
   label,
   button,
-  header,
 };
 
 export default tags;
