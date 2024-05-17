@@ -15,29 +15,22 @@ export default class AppController {
   }
 
   public initialize() {
+    this.initializeListeners();
+    this.appView.create();
     document.querySelector<HTMLDivElement>('.body')!.innerHTML =
       this.appView.innerHTML;
-    this.initializeListeners();
     routerController.handleLocation();
   }
 
   public initializeListeners() {
-    const navLinks = document.querySelectorAll('.navigation__link');
-    navLinks.forEach((link) => {
-      link.addEventListener('click', (event) => {
-        event.preventDefault();
-        const path = link.getAttribute('href');
-        if (path) {
-          this.changePage(path);
-        }
-      });
-    });
     this.routerController.changeContent = this.changeContent.bind(this);
     const customersButton = document.querySelector('.customers');
     customersButton?.addEventListener('click', async () => {
       const customers = await this.appModel.requestGetCustomers();
       console.log(customers);
     });
+    this.appView.headerView.handleClickLoginButton =
+      this.handleClickLoginButton.bind(this);
   }
 
   public changePage(path: string) {
@@ -46,5 +39,9 @@ export default class AppController {
 
   public changeContent(page: string) {
     this.appView.renderContent(page);
+  }
+
+  public handleClickLoginButton() {
+    this.routerController.goToPage('/login');
   }
 }

@@ -1,6 +1,7 @@
-import mainView from './main';
+import MainView from './main';
 import LoginView from './login';
 import registrationView from './registration';
+import HeaderView from './header/header';
 
 const appViewHeader = `
   <div class="navigation">
@@ -21,24 +22,35 @@ const appViewHeader = `
 export default class AppView {
   public innerHTML: string;
 
-  public mainView: string;
+  public mainView: MainView;
 
   public loginView: LoginView;
 
   public registrationView: string;
 
-  constructor() {
+  public headerView: HeaderView;
+
+  public constructor() {
     this.loginView = new LoginView();
     this.innerHTML = appViewHeader;
-    this.mainView = mainView;
+    this.headerView = new HeaderView();
+    this.mainView = new MainView();
     this.registrationView = registrationView;
   }
 
+  public create() {
+    this.headerView.create();
+  }
+
   public renderContent(page: string) {
+    document.querySelector('.body')!.prepend(this.headerView.getContent());
     const content = document.getElementById('content');
     switch (page) {
       case 'main':
-        content!.innerHTML = this.mainView;
+        document.getElementById('content')!.innerHTML = '';
+        document
+          .getElementById('content')!
+          .appendChild(this.mainView.getContent());
         this.loginView.addClassToLogin(false);
         break;
       case 'login':

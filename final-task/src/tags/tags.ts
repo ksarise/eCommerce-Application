@@ -152,14 +152,33 @@ const button = (
   classNames: string[],
   content?: string,
   attributes: { [key: string]: string } = {},
+  event?: string,
+  eventCallback?: (event?: Event) => void,
 ): HTMLInputElement => {
   return new BaseComponentGenerator({
     tag: 'button',
     classNames,
     content,
     attributes,
+    event,
+    eventCallback,
   }).getElement() as HTMLInputElement;
 };
 
-const tags = { div, h1, h2, h3, img, a, p, ul, li, input, form, label, button };
+const tags = {
+  div,
+  h1,
+  h2,
+  h3,
+  img,
+  a,
+  p,
+  ul,
+  li,
+  input,
+  form,
+  label,
+  button,
+};
+
 export default tags;
