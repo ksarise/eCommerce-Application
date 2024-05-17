@@ -31,6 +31,8 @@ export default class AppController {
     });
     this.appView.headerView.handleClickLoginButton =
       this.handleClickLoginButton.bind(this);
+    this.appView.notFoundView.handleClickGoHomeButton =
+      this.handleClickGoHomeButton.bind(this);
   }
 
   public changePage(path: string) {
@@ -43,5 +45,9 @@ export default class AppController {
 
   public handleClickLoginButton() {
     this.routerController.goToPage('/login');
+  }
+
+  public handleClickGoHomeButton() {
+    this.routerController.goToPage('/');
   }
 }

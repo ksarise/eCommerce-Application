@@ -1,0 +1,12 @@
+.not-found {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+  gap: 20px;
+  &__button {
+    width: 200px;
+    padding: 20px 78px;
+    cursor: pointer !important;
+  }
+}
