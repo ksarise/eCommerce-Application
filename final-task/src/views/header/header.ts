@@ -103,14 +103,14 @@ export default class HeaderView {
   }
 
   private createbuttonNavigation(): HTMLDivElement {
-    const buttonCustomers = tags.button(
+    const buttonLogin = tags.button(
       ['header__button', 'header__button_login'],
       'Login',
       {},
       'click',
       this.handleClickLoginButton,
     );
-    this.buttonContainer.appendChild(buttonCustomers);
+    this.buttonContainer.appendChild(buttonLogin);
     return this.buttonContainer;
   }
 }
