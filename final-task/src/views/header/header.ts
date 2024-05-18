@@ -75,42 +75,20 @@ export default class HeaderView {
         'data-navigo': 'true',
       },
     );
-    // -----Next are the non-working links to see the UI
-    const linkCatalog = tags.a(
-      ['header__navigation_link', 'header__navigation_catalog'],
-      '/catalog',
-      'Catalog',
-      {
-        title: 'Link',
-        'data-navigo': 'true',
-      },
-    );
-    const linkAbout = tags.a(
-      ['header__navigation_link', 'header__navigation_about'],
-      '/about',
-      'About',
-      {
-        title: 'Link',
-        'data-navigo': 'true',
-      },
-    );
-    // -----
     this.linkContainer.appendChild(linkHome);
-    this.linkContainer.appendChild(linkCatalog);
-    this.linkContainer.appendChild(linkAbout);
     this.linkContainer.appendChild(linkRegistration);
     return this.linkContainer;
   }
 
   private createbuttonNavigation(): HTMLDivElement {
-    const buttonCustomers = tags.button(
+    const buttonLogin = tags.button(
       ['header__button', 'header__button_login'],
       'Login',
       {},
       'click',
       this.handleClickLoginButton,
     );
-    this.buttonContainer.appendChild(buttonCustomers);
+    this.buttonContainer.appendChild(buttonLogin);
     return this.buttonContainer;
   }
 }

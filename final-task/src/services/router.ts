@@ -27,6 +27,11 @@ class Router {
       this.changeContent?.('registration');
       this.router.resolve();
     });
+
+    this.router.notFound(() => {
+      this.changeContent?.('404');
+      this.router.resolve();
+    });
   }
 
   public goToPage(page: string) {
