@@ -4,21 +4,7 @@ import registrationView from './registration';
 import HeaderView from './header/header';
 import NotFoundView from './404/404';
 
-const appViewHeader = `
-  <div class="navigation">
-    <a href="/" class="navigation__link" data-navigo>
-      Main
-    </a>
-    <a href="/login" class="navigation__link" data-navigo>
-      Login
-    </a>
-    <a href="/registration" class="navigation__link" data-navigo>
-      Registration
-    </a>
-    <button class="customers">Get Customers</button>
-  </div>
-  <div id="content" class="view"></div>
-`;
+const appViewHeader = `<div id="content" class="view container"></div>`;
 
 export default class AppView {
   public innerHTML: string;

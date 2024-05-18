@@ -1,3 +1,5 @@
+@import './variables.scss';
+
 .header {
   position: relative;
   top: 0;
@@ -7,12 +9,47 @@
   width: 100%;
   justify-content: space-between;
   height: 70px;
-  background-color: #fff;
-  border: 1px solid black;
   &__navigation {
     display: flex;
     align-items: center;
     gap: 10px;
     justify-content: space-between;
+    font-size: 16px;
+    font-weight: 500;
+    line-height: 24px;
+    &_link {
+      text-decoration: none;
+      color: $text;
+      &:after {
+        content: '';
+        display: block;
+        width: 0;
+        height: 2px;
+        background-color: $primary;
+        transition: width 0.3s;
+      }
+      &:hover {
+        color: $primary;
+        &:after {
+          width: 100%;
+        }
+      }
+    }
+  }
+  &__button {
+    padding: 5px 15px;
+    cursor: pointer;
+    border: 2px solid $primary;
+    background: #fff;
+    font-size: 16px;
+    font-weight: 500;
+    line-height: 150%;
+    color: $primary;
+    transition: 0.3s;
+    border-radius: 5px;
+    &:hover {
+      background-color: $primary;
+      color: #fff;
+    }
   }
 }
