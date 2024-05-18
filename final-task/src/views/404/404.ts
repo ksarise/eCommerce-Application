@@ -29,7 +29,6 @@ export default class NotFoundView {
 
   public createNotFound(): void {
     this.assignAnimation();
-    // this.notFoundContainer.innerHTML = `<lottie-player src="${animation}" background="transparent"  speed="1"  style="width: 600px; height: 600px;" loop autoplay></lottie-player>`;
     const buttonGoHome = tags.button(
       ['not-found__button'],
       'Go Home',
