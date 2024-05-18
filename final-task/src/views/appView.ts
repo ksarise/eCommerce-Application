@@ -72,6 +72,7 @@ export default class AppView {
         document
           .getElementById('content')!
           .appendChild(this.notFoundView.getContent());
+        this.notFoundView.assignAnimation();
         this.loginView.addClassToLogin(false);
         break;
       default:
