@@ -42,6 +42,6 @@ export default class NotFoundView {
   }
 
   public assignAnimation(): void {
-    this.notFoundContainer.innerHTML = `<lottie-player src="${animation}" background="transparent"  speed="1"  style="width: 600px; height: 600px;" loop autoplay></lottie-player>`;
+    this.notFoundContainer.innerHTML = `<lottie-player src="${animation}" background="transparent"  class="lottie-player" speed="1"  style="width: 600px; height: 600px;" loop autoplay></lottie-player>`;
   }
 }
