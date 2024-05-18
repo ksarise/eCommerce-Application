@@ -2,7 +2,7 @@ import BaseComponentGenerator from '../../tags/base-component';
 import tags from '../../tags/tags';
 // eslint-disable-next-line import/no-absolute-path
 import animation from '/NotFoundAnimation.json?url';
-import './404.scss';
+// import './404.scss';
 
 export default class NotFoundView {
   private notFound: BaseComponentGenerator;
