@@ -1,4 +1,4 @@
-import './header.scss';
+// import './header.scss';
 import BaseComponentGenerator from '../../tags/base-component';
 import tags from '../../tags/tags';
 

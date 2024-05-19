@@ -2,7 +2,7 @@ import BaseComponentGenerator from '../../tags/base-component';
 import tags from '../../tags/tags';
 // eslint-disable-next-line import/no-absolute-path
 import animation from '/NotFoundAnimation.json?url';
-import './404.scss';
+// import './404.scss';
 
 export default class NotFoundView {
   private notFound: BaseComponentGenerator;
@@ -29,7 +29,6 @@ export default class NotFoundView {
 
   public createNotFound(): void {
     this.assignAnimation();
-    // this.notFoundContainer.innerHTML = `<lottie-player src="${animation}" background="transparent"  speed="1"  style="width: 600px; height: 600px;" loop autoplay></lottie-player>`;
     const buttonGoHome = tags.button(
       ['not-found__button'],
       'Go Home',
@@ -42,6 +41,6 @@ export default class NotFoundView {
   }
 
   public assignAnimation(): void {
-    this.notFoundContainer.innerHTML = `<lottie-player src="${animation}" background="transparent"  speed="1"  style="width: 600px; height: 600px;" loop autoplay></lottie-player>`;
+    this.notFoundContainer.innerHTML = `<lottie-player src="${animation}" background="transparent"  class="lottie-player" speed="1"  style="width: 600px; height: 600px;" loop autoplay></lottie-player>`;
   }
 }

@@ -17,6 +17,8 @@ export default class Login {
 
   private checkBox: HTMLInputElement;
 
+  private checkBoxLabel: HTMLLabelElement;
+
   private body: HTMLBodyElement;
 
   constructor() {
@@ -46,6 +48,9 @@ export default class Login {
       name: 'password-visible',
       id: 'VisiblePassword',
       title: 'view password',
+    });
+    this.checkBoxLabel = tags.label(['password-visible-label'], '', {
+      for: 'VisiblePassword',
     });
     this.body = document.querySelector('body')!;
   }
@@ -98,6 +103,7 @@ export default class Login {
         label,
         this.inputPassword,
         this.checkBox,
+        this.checkBoxLabel,
         this.errorPassword,
       );
     }
@@ -169,8 +175,12 @@ export default class Login {
     this.checkBox.addEventListener('click', () => {
       if (this.inputPassword.type === 'password') {
         this.inputPassword.type = 'text';
+        this.checkBoxLabel.style.backgroundImage =
+          'url(/eye-password-show.svg)';
       } else {
         this.inputPassword.type = 'password';
+        this.checkBoxLabel.style.backgroundImage =
+          'url(/eye-password-hide.svg)';
       }
     });
   }

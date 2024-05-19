@@ -1,12 +1,41 @@
-$dark-red: rgb(192, 0, 0);
+@import 'variables';
+
+.form-login {
+  width: 300px;
+  padding: 0.5em 2em;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 0.5em;
+  flex-direction: column;
+  border: $primary 0.1em solid;
+  background-color: $secondary;
+  border-radius: 1em;
+}
+
+.input {
+  width: 100%;
+  border-radius: 0.5em;
+  border: $primary 0.1em solid;
+  padding: 0.5em;
+  transition: 0.5s;
+  font-size: 1em;
+  &:focus {
+    outline: none;
+  }
+  &-password {
+    padding-right: 2.5em;
+  }
+}
 
 .error {
   margin: -0.5em;
+  padding-top: 0.5em;
   text-align: center;
   min-height: 3.2em;
   width: 100%;
   overflow-wrap: break-word;
-  color: $dark-red;
+  color: $light-red;
   font-weight: 600;
   font-size: 0.8em;
   opacity: 1;
@@ -21,12 +50,12 @@ $dark-red: rgb(192, 0, 0);
 }
 
 .input-error {
-  border-color: $dark-red;
+  border-color: $light-red;
   transition: 0.5s;
-  box-shadow: 0 0 0.2em 0.1em $dark-red;
+  box-shadow: 0 0 0.2em 0.1em $light-red;
 
   &:focus {
-    border-color: $dark-red;
+    border-color: $light-red;
   }
 }
 
@@ -40,12 +69,26 @@ $dark-red: rgb(192, 0, 0);
 }
 
 .password-visible {
+  display: none;
   position: absolute;
-  right: 0em;
-  top: 3em;
+  right: 0.5em;
+  top: 2em;
   width: 1.5em;
   height: 1.5em;
   border: grey 0.2em solid;
+}
+
+.password-visible-label {
+  position: absolute;
+  right: 0.5em;
+  top: 2em;
+  width: 1.5em;
+  height: 1.5em;
+  cursor: pointer;
+  background-image: url('/eye-password-hide.svg');
+  background-size: 30px 30px;
+  background-repeat: no-repeat;
+  background-position: center;
 }
 
 .view-login {
@@ -58,4 +101,47 @@ $dark-red: rgb(192, 0, 0);
 
 .button-login {
   width: 100%;
+  padding: 5px 15px;
+  cursor: pointer;
+  border: 2px solid $primary;
+  background: #fff;
+  font-size: 16px;
+  font-weight: 500;
+  line-height: 150%;
+  color: $primary;
+  transition: 0.3s;
+  border-radius: 5px;
+  &:not(:disabled):hover {
+    background-color: $primary;
+    color: #fff;
+  }
+  &:disabled {
+    opacity: 0.3;
+    cursor: default;
+  }
+}
+
+.register-link {
+  padding-top: 20px;
+  text-align: center;
+  font-size: 14px;
+  font-weight: 400;
+  text-decoration: none;
+  color: $text;
+  &:after {
+    content: '';
+    display: block;
+    width: 10%;
+    margin: 0 auto;
+    height: 2px;
+    background-color: $text;
+    transition: width 0.3s;
+  }
+  &:hover {
+    color: $primary;
+    &:after {
+      background-color: $primary;
+      width: 100%;
+    }
+  }
 }

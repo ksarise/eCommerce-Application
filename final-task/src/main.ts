@@ -1,5 +1,5 @@
 import './style.scss';
-import './styles/normalize.scss';
+// import './styles/normalize.scss';
 import AppController from './controllers/controller';
 
 class App {

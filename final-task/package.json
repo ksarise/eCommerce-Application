@@ -53,7 +53,7 @@
     "vite-plugin-eslint": "^1.8.1"
   },
   "validate-branch-name": {
-    "pattern": "^(chore|docs|feat|fix|refactor)/RSS-ECOMM-[0-9]_[a-zA-Z0-9-/]+$",
+    "pattern": "^(chore|docs|feat|fix|refactor|style)/RSS-ECOMM-[0-9]_[a-zA-Z0-9-/]+$",
     "errorMsg": "Error: wrong name for branch!"
   }
 }
