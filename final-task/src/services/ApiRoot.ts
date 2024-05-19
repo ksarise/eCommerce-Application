@@ -46,12 +46,11 @@ export default class API {
       })
       .execute()
       .then((response) => {
-        console.log(response);
         this.login = true;
+        return { result: true, obj: response };
       })
       .catch((error) => {
-        this.login = false;
-        console.error(error);
+        return { result: false, obj: error };
       });
   }
 }

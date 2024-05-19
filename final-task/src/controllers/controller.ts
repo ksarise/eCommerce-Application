@@ -40,11 +40,14 @@ export default class AppController {
     const loginViewVariables = this.appView.loginView;
     loginViewVariables.form.addEventListener('submit', async (event) => {
       event.preventDefault();
-      await this.appModel.postLoginCustomer(
-        loginViewVariables.inputEmail.value,
-        loginViewVariables.inputPassword.value,
-      );
-      await loginViewVariables.addListenerToLogin();
+      const result: { result: boolean; obj: unknown } =
+        await this.appModel.postLoginCustomer(
+          loginViewVariables.inputEmail.value,
+          loginViewVariables.inputPassword.value,
+        );
+      if (result.result) {
+        await loginViewVariables.addListenerToLogin();
+      }
     });
     loginViewVariables.inputEmail.addEventListener('input', () => {
       loginViewVariables.addListenerToEmail();
