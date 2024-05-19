@@ -1,6 +1,7 @@
 import AppView from '../views/appView';
 import AppModel from '../models/model';
 import routerController from '../services/router';
+// import { createPasswordFlow } from '../services/client';
 
 export default class AppController {
   public appView: AppView;
@@ -43,7 +44,22 @@ export default class AppController {
     this.appView.renderContent(page);
   }
 
-  public handleClickLoginButton() {
+  public async handleClickLoginButton() {
+    try {
+      // const customers = await this.appModel.requestGetProducts();
+      // console.log(customers);
+      const body = await this.appModel.requestLogin();
+      // const body = await this.appModel.requestGetCustomers();
+      // createPasswordFlow();
+      setTimeout(async () => {
+        this.appModel.createNewApiRoot();
+        const body2 = await this.appModel.requestGetProducts();
+        console.log(body2);
+      }, 2000);
+      console.log(body);
+    } catch (err) {
+      console.log(err);
+    }
     this.routerController.goToPage('/login');
   }
 

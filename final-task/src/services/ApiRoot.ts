@@ -2,13 +2,18 @@ import {
   createApiBuilderFromCtpClient,
   ByProjectKeyRequestBuilder,
 } from '@commercetools/platform-sdk';
-import ctpClient from './client';
+import { anonymousClient, createPasswordFlow } from './client';
+// import { createPasswordFlow } from './client';
+// import { ctpClient } from './client';
+// import { passwordClient2 } from './client';
 
 export default class API {
-  private apiRoot: ByProjectKeyRequestBuilder;
+  public apiRoot: ByProjectKeyRequestBuilder;
 
   constructor() {
-    this.apiRoot = createApiBuilderFromCtpClient(ctpClient).withProjectKey({
+    this.apiRoot = createApiBuilderFromCtpClient(
+      anonymousClient,
+    ).withProjectKey({
       projectKey: import.meta.env.VITE_CTP_PROJECT_KEY,
     });
   }
@@ -21,7 +26,28 @@ export default class API {
     return this.apiRoot.customers().get().execute();
   }
 
+  public getProducts() {
+    return this.apiRoot.products().get().execute();
+  }
+
   public getCustomerWithId(id: string) {
     return this.apiRoot.customers().withId({ ID: id }).get().execute();
+  }
+
+  public createPasswordFlow() {
+    console.log(this.apiRoot);
+    this.apiRoot = createApiBuilderFromCtpClient(
+      createPasswordFlow(),
+    ).withProjectKey({
+      projectKey: import.meta.env.VITE_CTP_PROJECT_KEY,
+    });
+    this.apiRoot
+      .customers()
+      .get()
+      .execute()
+      .then((response) => {
+        console.log(response.body);
+      });
+    console.log(this.apiRoot);
   }
 }
