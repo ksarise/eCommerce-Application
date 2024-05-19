@@ -1,0 +1,15 @@
+.registration__page {
+  display: flex;
+  align-items: center;
+  flex-direction: column;
+}
+.registration__field {
+  display: flex;
+  flex-direction: column;
+}
+.invalid {
+  border-color: red;
+}
+.valid {
+  border-color: green;
+}

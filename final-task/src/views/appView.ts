@@ -1,6 +1,7 @@
 import MainView from './main';
 import LoginView from './login';
-import RegistrationPageView from './RegistrationPage/RegistrationPageView';
+import RegistrationView from './Registration/RegistrationView';
+import RegistrationController from '../controllers/Registration/RegistrationController';
 import HeaderView from './header/header';
 import NotFoundView from './404/404';
 
@@ -13,7 +14,9 @@ export default class AppView {
 
   public loginView: LoginView;
 
-  public registrationView: HTMLElement;
+  private registrationView: RegistrationView;
+
+  private registrationController: RegistrationController;
 
   public headerView: HeaderView;
 
@@ -25,7 +28,10 @@ export default class AppView {
     this.headerView = new HeaderView();
     this.mainView = new MainView();
     this.notFoundView = new NotFoundView();
-    this.registrationView = new RegistrationPageView().RenderPage();
+    this.registrationView = new RegistrationView();
+    this.registrationController = new RegistrationController(
+      this.registrationView,
+    );
   }
 
   public create() {
@@ -51,7 +57,7 @@ export default class AppView {
         break;
       case 'registration':
         content!.innerHTML = '';
-        content!.append(this.registrationView as HTMLElement);
+        content!.append(this.registrationView.RenderPage() as HTMLElement);
         this.loginView.addClassToLogin(false);
         break;
       case '404':

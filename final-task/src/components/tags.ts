@@ -15,15 +15,12 @@ const div = (
 
 const input = (
   classNames: string[],
-  eventCallback: () => void,
   attributes: { [key: string]: string } = {},
 ): HTMLInputElement => {
   return new BaseComponentGenerator({
     tag: 'input',
     classNames,
     attributes,
-    event: 'input',
-    eventCallback,
   }).getElement() as HTMLInputElement;
 };
 
@@ -137,6 +134,12 @@ const legend = (
     attributes,
   }).getElement();
 };
+const span = (classNames: string[]): HTMLElement => {
+  return new BaseComponentGenerator({
+    tag: 'span',
+    classNames,
+  }).getElement();
+};
 const tags = {
   div,
   input,
@@ -149,5 +152,6 @@ const tags = {
   li,
   button,
   legend,
+  span,
 };
 export default tags;
