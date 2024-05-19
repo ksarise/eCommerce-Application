@@ -3,19 +3,19 @@ import { LoginForm } from '../interface/interface';
 import * as check from '../services/checkInput';
 
 export default class Login {
-  private form: HTMLFormElement;
+  public form: HTMLFormElement;
 
-  private inputEmail: HTMLInputElement;
+  public inputEmail: HTMLInputElement;
 
-  private inputPassword: HTMLInputElement;
+  public inputPassword: HTMLInputElement;
 
-  private history: HTMLElement | null;
+  public history: HTMLElement | null;
 
-  private errorEmail: HTMLElement;
+  public errorEmail: HTMLElement;
 
-  private errorPassword: HTMLElement;
+  public errorPassword: HTMLElement;
 
-  private checkBox: HTMLInputElement;
+  public checkBox: HTMLInputElement;
 
   private checkBoxLabel: HTMLLabelElement;
 
@@ -59,9 +59,6 @@ export default class Login {
     if (this.history) {
       return this.history;
     }
-    this.addCheckboxListener();
-    this.addListenerToInput();
-    this.addListenerToLogin();
     return this.addLoginForm();
   }
 
@@ -119,28 +116,24 @@ export default class Login {
     document.querySelector('.view')!.classList.toggle('view-login', flag);
   }
 
-  private addListenerToLogin() {
-    this.form.addEventListener('submit', (event: Event) => {
-      event.preventDefault();
-      this.checkBox.checked = false;
-      (document.getElementById('buttonLogin') as HTMLButtonElement).disabled =
-        true;
-      this.inputEmail.value = '';
-      this.inputPassword.value = '';
-    });
+  public addListenerToLogin() {
+    this.checkBox.checked = false;
+    (document.getElementById('buttonLogin') as HTMLButtonElement).disabled =
+      true;
+    this.inputEmail.value = '';
+    this.inputPassword.value = '';
   }
 
-  private addListenerToInput() {
-    this.inputEmail.addEventListener('input', () => {
-      const result: [boolean, string] = check.checkEmail(this.inputEmail.value);
-      this.writeError(result, true);
-    });
-    this.inputPassword.addEventListener('input', () => {
-      const result: [boolean, string] = check.checkPassword(
-        this.inputPassword.value,
-      );
-      this.writeError(result, false);
-    });
+  public addListenerToEmail() {
+    const result: [boolean, string] = check.checkEmail(this.inputEmail.value);
+    this.writeError(result, true);
+  }
+
+  public addListenerToPassword() {
+    const result: [boolean, string] = check.checkPassword(
+      this.inputPassword.value,
+    );
+    this.writeError(result, false);
   }
 
   writeError([right, error]: [boolean, string], flag: boolean) {
@@ -171,17 +164,13 @@ export default class Login {
     }
   }
 
-  private addCheckboxListener() {
-    this.checkBox.addEventListener('click', () => {
-      if (this.inputPassword.type === 'password') {
-        this.inputPassword.type = 'text';
-        this.checkBoxLabel.style.backgroundImage =
-          'url(/eye-password-show.svg)';
-      } else {
-        this.inputPassword.type = 'password';
-        this.checkBoxLabel.style.backgroundImage =
-          'url(/eye-password-hide.svg)';
-      }
-    });
+  public addCheckboxListener() {
+    if (this.inputPassword.type === 'password') {
+      this.inputPassword.type = 'text';
+      this.checkBoxLabel.style.backgroundImage = 'url(/eye-password-show.svg)';
+    } else {
+      this.inputPassword.type = 'password';
+      this.checkBoxLabel.style.backgroundImage = 'url(/eye-password-hide.svg)';
+    }
   }
 }

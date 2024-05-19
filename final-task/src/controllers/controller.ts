@@ -16,6 +16,7 @@ export default class AppController {
 
   public initialize() {
     this.initializeListeners();
+    this.initializeLoginListeners();
     this.appView.create();
     document.querySelector<HTMLDivElement>('.body')!.innerHTML =
       this.appView.innerHTML;
@@ -33,6 +34,27 @@ export default class AppController {
       this.handleClickLoginButton.bind(this);
     this.appView.notFoundView.handleClickGoHomeButton =
       this.handleClickGoHomeButton.bind(this);
+  }
+
+  public initializeLoginListeners() {
+    const loginViewVariables = this.appView.loginView;
+    loginViewVariables.form.addEventListener('submit', async (event) => {
+      event.preventDefault();
+      await this.appModel.postLoginCustomer(
+        loginViewVariables.inputEmail.value,
+        loginViewVariables.inputPassword.value,
+      );
+      await loginViewVariables.addListenerToLogin();
+    });
+    loginViewVariables.inputEmail.addEventListener('input', () => {
+      loginViewVariables.addListenerToEmail();
+    });
+    loginViewVariables.inputPassword.addEventListener('input', () => {
+      loginViewVariables.addListenerToPassword();
+    });
+    loginViewVariables.checkBox.addEventListener('click', () => {
+      loginViewVariables.addCheckboxListener();
+    });
   }
 
   public changePage(path: string) {
