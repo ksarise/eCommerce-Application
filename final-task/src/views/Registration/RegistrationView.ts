@@ -111,11 +111,18 @@ export default class RegistrationView {
       this.nextButton,
       this.SubmitButton,
     ]);
+    const loginLink = tags.a(
+      ['register-link'],
+      '/login',
+      'Already have an account? Login',
+      { title: 'Login', 'data-navigo': 'true' },
+    );
     this.page.appendChildren([
       this.GeneralInfoBlock.getElement(),
       this.BillingAddressBlock.getElement(),
       this.ShippingAddressBlock.getElement(),
       buttonsBlock.getElement(),
+      loginLink,
     ]);
 
     this.currentStep = 0;
