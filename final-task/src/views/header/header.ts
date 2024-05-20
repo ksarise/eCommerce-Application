@@ -13,6 +13,8 @@ export default class HeaderView {
 
   public handleClickLoginButton: ((event?: Event) => void) | undefined;
 
+  public handleClickRegistrationButton: ((event?: Event) => void) | undefined;
+
   constructor() {
     this.header = new BaseComponentGenerator({
       tag: 'header',
@@ -88,7 +90,15 @@ export default class HeaderView {
       'click',
       this.handleClickLoginButton,
     );
+    const buttonRegistration = tags.button(
+      ['header__button', 'header__button_login'],
+      'Sign Up',
+      {},
+      'click',
+      this.handleClickRegistrationButton,
+    );
     this.buttonContainer.appendChild(buttonLogin);
+    this.buttonContainer.appendChild(buttonRegistration);
     return this.buttonContainer;
   }
 }
