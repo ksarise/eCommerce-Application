@@ -64,6 +64,16 @@ export default class RegistrationPageModel {
       this.errors.password.push(rule.errorMessages.number);
     }
 
+    if (
+      !RegistrationPageModel.validatePattern(password, rule.specialCharacter)
+    ) {
+      this.errors.password.push(rule.errorMessages.specialCharacter);
+    }
+
+    if (!RegistrationPageModel.validatePattern(password, rule.noSpace)) {
+      this.errors.password.push(rule.errorMessages.noSpace);
+    }
+
     if (this.errors.password.length === 0) {
       delete this.errors.password;
     }

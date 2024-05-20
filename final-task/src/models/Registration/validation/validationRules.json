@@ -1,6 +1,6 @@
 {
   "email": {
-    "pattern": "^[^\\s@]+@[^\\s@]+\\.[^\\s@]+$",
+    "pattern": "^[^\\s@]+@[a-zA-Z0-9.-]+\\.[a-zA-Z]{2,}$",
     "errorMessage": "Invalid email address"
   },
   "password": {
@@ -8,11 +8,15 @@
     "uppercase": "(?=.*[A-Z])",
     "lowercase": "(?=.*[a-z])",
     "number": "(?=.*\\d)",
+    "specialCharacter": "(?=.*[!@#$%^&*()_+\\-=\\[\\]{};':\"\\\\|,.<>\\/?])",
+    "noSpace": "(?=\\S)",
     "errorMessages": {
       "minLength": "Password must be at least 8 characters long",
       "uppercase": "Password must contain at least one uppercase letter",
       "lowercase": "Password must contain at least one lowercase letter",
-      "number": "Password must contain at least one number"
+      "number": "Password must contain at least one number",
+      "specialCharacter": "Password must contain at least one special character",
+      "noSpace": "Password cannot contain spaces"
     }
   },
   "name": {

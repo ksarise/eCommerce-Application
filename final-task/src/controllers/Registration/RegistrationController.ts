@@ -1,4 +1,4 @@
-import { ErrorResponse } from '@commercetools/platform-sdk';
+import { type ErrorResponse } from '@commercetools/platform-sdk';
 import Toastify from 'toastify-js';
 import RegistrationModel from '../../models/Registration/RegistrationModel';
 import RegistrationView from '../../views/Registration/RegistrationView';
