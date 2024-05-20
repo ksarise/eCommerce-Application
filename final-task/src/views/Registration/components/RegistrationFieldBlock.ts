@@ -22,6 +22,7 @@ export default class RegistrationFieldBlock {
       type: inputType,
       name,
       placeholder,
+      autocomplete: 'on',
     });
     this.fieldError = tags.span(['error', 'error-hidden']);
     const blockContainer = tags.div(['registration__block', 'block-input']);
