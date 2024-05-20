@@ -2,15 +2,21 @@ import RegistrationModel from '../../models/Registration/RegistrationModel';
 import RegistrationView from '../../views/Registration/RegistrationView';
 import { FormData } from '../../types/types';
 import CreateCustomerDraft from './components/CustomerDraftParser';
+import CustomerService from '../../services/CustomerService';
+import API from '../../services/ApiRoot';
 
 export default class RegistrationController {
   private view: RegistrationView;
 
   private model: RegistrationModel;
 
+  private customerService: CustomerService;
+
   constructor(view: RegistrationView) {
     this.view = view;
     this.model = new RegistrationModel();
+    const api = new API();
+    this.customerService = new CustomerService(api);
     this.init();
   }
 
@@ -20,12 +26,20 @@ export default class RegistrationController {
     this.view.bindFieldInput(this.handleFieldInput.bind(this));
   }
 
-  private handleFormSubmit(formData: FormData) {
+  private async handleFormSubmit(formData: FormData) {
     const validCountries = ['USA'];
     const errors = this.model.validateForm(formData, validCountries);
-    console.log(CreateCustomerDraft(formData));
+
     if (Object.keys(errors).length === 0) {
       console.log('Form submitted successfully', formData);
+      const customerDraft = CreateCustomerDraft(formData);
+      try {
+        const response =
+          await this.customerService.createCustomer(customerDraft);
+        console.log('Customer created with ID:', response.body.customer.id);
+      } catch (error) {
+        console.error('Error creating customer:', error);
+      }
     } else {
       console.log('Form validation errors', errors);
       Object.entries(errors).forEach(([field, errorMessages]) => {

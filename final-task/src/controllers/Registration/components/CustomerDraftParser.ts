@@ -1,6 +1,6 @@
-import { FormData } from '../../../types/types';
+import { FormData, Address, CustomerDraft } from '../../../types/types';
 
-export default function CreateCustomerDraft(formData: FormData) {
+export default function createCustomerDraft(formData: FormData): CustomerDraft {
   const {
     email,
     password,
@@ -20,17 +20,17 @@ export default function CreateCustomerDraft(formData: FormData) {
     isSameAddress,
   } = formData;
 
-  const billingAddress = {
+  const billingAddress: Address = {
     key: 'billingAddress',
     firstName,
     lastName,
     streetName: street,
     city,
     postalCode,
-    country,
+    country: country.slice(0, 2),
   };
 
-  const shippingAddress = isSameAddress
+  const shippingAddress: Address = isSameAddress
     ? billingAddress
     : {
         key: 'shippingAddress',
@@ -39,10 +39,10 @@ export default function CreateCustomerDraft(formData: FormData) {
         streetName: shippinGstreet,
         city: shippinGcity,
         postalCode: shippinGpostalCode,
-        country: shippinGcountry,
+        country: shippinGcountry.slice(0, 2),
       };
 
-  const addresses = [billingAddress];
+  const addresses: Address[] = [billingAddress];
   if (!isSameAddress) {
     addresses.push(shippingAddress);
   }
@@ -60,7 +60,7 @@ export default function CreateCustomerDraft(formData: FormData) {
   } else {
     defaultShippingAddress = undefined;
   }
-  const customerDraft = {
+  const customerDraft: CustomerDraft = {
     email,
     password,
     firstName,

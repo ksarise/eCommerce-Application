@@ -3,6 +3,7 @@ import {
   ByProjectKeyRequestBuilder,
 } from '@commercetools/platform-sdk';
 import ctpClient, { createPasswordClient } from './client';
+import { CustomerDraft, ApiResponse } from '../types/types';
 
 export default class API {
   private apiRoot: ByProjectKeyRequestBuilder;
@@ -58,5 +59,9 @@ export default class API {
         }
         return { result: false, obj: error };
       });
+  }
+
+  public createCustomer(customerDraft: CustomerDraft): Promise<ApiResponse> {
+    return this.apiRoot.customers().post({ body: customerDraft }).execute();
   }
 }

@@ -27,3 +27,33 @@ export interface FormData {
 }
 export type FieldEventCallback = (field: string, value: string) => void;
 export type FormSubmitCallback = (formData: FormData) => void;
+export interface Address {
+  key: string;
+  firstName: string;
+  lastName: string;
+  streetName: string;
+  city: string;
+  postalCode: string;
+  country: string;
+}
+
+export interface CustomerDraft {
+  email: string;
+  password: string;
+  firstName: string;
+  lastName: string;
+  dateOfBirth: string;
+  addresses: Address[];
+  defaultBillingAddress?: number;
+  defaultShippingAddress?: number;
+  shippingAddressIds: string[];
+  billingAddressIds: string[];
+}
+
+export interface ApiResponse {
+  body: {
+    customer: {
+      id: string;
+    };
+  };
+}
