@@ -3,7 +3,7 @@ import Toastify from 'toastify-js';
 import RegistrationModel from '../../models/Registration/RegistrationModel';
 import RegistrationView from '../../views/Registration/RegistrationView';
 import { FormData } from '../../types/types';
-import CreateCustomerDraft from './components/CustomerDraftParser';
+import createCustomerDraft from './components/CreateCustomerDraft';
 import CustomerService from '../../services/CustomerService';
 import API from '../../services/ApiRoot';
 import 'toastify-js/src/toastify.css';
@@ -15,11 +15,13 @@ export default class RegistrationController {
 
   private customerService: CustomerService;
 
+  private api: API;
+
   constructor(view: RegistrationView) {
     this.view = view;
     this.model = new RegistrationModel();
-    const api = new API();
-    this.customerService = new CustomerService(api);
+    this.api = new API();
+    this.customerService = new CustomerService(this.api);
     this.init();
   }
 
@@ -42,12 +44,11 @@ export default class RegistrationController {
   }
 
   private async handleFormSubmit(formData: FormData) {
-    console.log('ooops');
     const validCountries = ['USA'];
     const errors = this.model.validateForm(formData, validCountries);
 
     if (Object.keys(errors).length === 0) {
-      const customerDraft = CreateCustomerDraft(formData);
+      const customerDraft = createCustomerDraft(formData);
       try {
         const response =
           await this.customerService.createCustomer(customerDraft);
@@ -59,6 +60,7 @@ export default class RegistrationController {
           backgroundColor:
             'linear-gradient(5deg, rgba(5,162,31,1) 51%, rgba(232,231,225,1) 100%)',
         }).showToast();
+        this.afterLogin(formData);
       } catch (error) {
         const errmessage = (error as ErrorResponse).message;
         Toastify({
@@ -94,6 +96,32 @@ export default class RegistrationController {
   private handleFieldInput(field: string, value: string) {
     this.validateField(field, value);
     this.view.toggleNextButton();
+  }
+
+  public async afterLogin(data: FormData) {
+    try {
+      await this.api.postCustomerLogin(data.email, data.password);
+      Toastify({
+        text: 'Successfully logged in!Redirecting...',
+        duration: 3000,
+        gravity: 'top',
+        position: 'right',
+        backgroundColor:
+          'linear-gradient(5deg, rgba(5,162,31,1) 51%, rgba(232,231,225,1) 100%)',
+      }).showToast();
+      setTimeout(() => {
+        document.dispatchEvent(new CustomEvent('registrationSuccess'));
+      }, 2000);
+    } catch (error) {
+      const errmessage = (error as ErrorResponse).message;
+      Toastify({
+        text: `${errmessage}`,
+        duration: 3000,
+        gravity: 'top',
+        position: 'right',
+        backgroundColor: 'red',
+      }).showToast();
+    }
   }
 
   private validateField(field: string, value: string) {

@@ -17,6 +17,7 @@ export default class AppController {
   public initialize() {
     this.initializeListeners();
     this.initializeLoginListeners();
+    this.initializeRegistrationListener();
     this.appView.create();
     document.querySelector<HTMLDivElement>('.body')!.innerHTML =
       this.appView.innerHTML;
@@ -63,6 +64,12 @@ export default class AppController {
     });
     loginViewVariables.cross.addEventListener('click', () => {
       loginViewVariables.addCrossListener();
+    });
+  }
+
+  private initializeRegistrationListener() {
+    document.addEventListener('registrationSuccess', () => {
+      this.routerController.goToPage('/');
     });
   }
 
