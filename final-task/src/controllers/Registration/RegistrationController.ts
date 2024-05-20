@@ -1,6 +1,7 @@
 import RegistrationModel from '../../models/Registration/RegistrationModel';
 import RegistrationView from '../../views/Registration/RegistrationView';
 import { FormData } from '../../types/types';
+import CreateCustomerDraft from './components/CustomerDraftParser';
 
 export default class RegistrationController {
   private view: RegistrationView;
@@ -22,6 +23,7 @@ export default class RegistrationController {
   private handleFormSubmit(formData: FormData) {
     const validCountries = ['USA'];
     const errors = this.model.validateForm(formData, validCountries);
+    console.log(CreateCustomerDraft(formData));
     if (Object.keys(errors).length === 0) {
       console.log('Form submitted successfully', formData);
     } else {
