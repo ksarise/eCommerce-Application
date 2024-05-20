@@ -46,6 +46,7 @@ export default class API {
       })
       .execute()
       .then((response) => {
+        console.log(response, 'lll');
         this.login = true;
         return { result: true, obj: response };
       })
