@@ -1,9 +1,12 @@
+import { ErrorResponse } from '@commercetools/platform-sdk';
+import Toastify from 'toastify-js';
 import RegistrationModel from '../../models/Registration/RegistrationModel';
 import RegistrationView from '../../views/Registration/RegistrationView';
 import { FormData } from '../../types/types';
 import CreateCustomerDraft from './components/CustomerDraftParser';
 import CustomerService from '../../services/CustomerService';
 import API from '../../services/ApiRoot';
+import 'toastify-js/src/toastify.css';
 
 export default class RegistrationController {
   private view: RegistrationView;
@@ -31,17 +34,40 @@ export default class RegistrationController {
     const errors = this.model.validateForm(formData, validCountries);
 
     if (Object.keys(errors).length === 0) {
-      console.log('Form submitted successfully', formData);
       const customerDraft = CreateCustomerDraft(formData);
       try {
         const response =
           await this.customerService.createCustomer(customerDraft);
-        console.log('Customer created with ID:', response.body.customer.id);
+        Toastify({
+          text: `Customer created with ID: ${response.body.customer.id}`,
+          duration: 3000,
+          gravity: 'top',
+          position: 'right',
+          backgroundColor:
+            'linear-gradient(5deg, rgba(5,162,31,1) 51%, rgba(232,231,225,1) 100%)',
+        }).showToast();
       } catch (error) {
-        console.error('Error creating customer:', error);
+        // console.log('Error', typeof error, error);
+        const errmessage = (error as ErrorResponse).message;
+        Toastify({
+          text: `${errmessage}`,
+          duration: 3000,
+          gravity: 'top',
+          position: 'right',
+          backgroundColor:
+            'linear-gradient(5deg, rgba(255,38,0,1) 51%, rgba(255,215,0,1) 100%)',
+        }).showToast();
       }
     } else {
-      console.log('Form validation errors', errors);
+      Toastify({
+        text: 'Form validation errors',
+        duration: 3000,
+        gravity: 'top',
+        position: 'right',
+        backgroundColor:
+          'linear-gradient(5deg, rgba(255,38,0,1) 51%, rgba(255,215,0,1) 100%)',
+      }).showToast();
+
       Object.entries(errors).forEach(([field, errorMessages]) => {
         this.view.displayFieldError(field, errorMessages[0]);
       });
