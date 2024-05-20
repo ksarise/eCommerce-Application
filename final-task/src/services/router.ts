@@ -28,7 +28,12 @@ class Router {
     });
 
     this.router.on('/registration', () => {
-      this.changeContent?.('registration');
+      if (localStorage.getItem('key-token')) {
+        console.log('already logged in');
+        this.goToPage('/');
+      } else {
+        this.changeContent?.('registration');
+      }
       this.router.resolve();
     });
 
