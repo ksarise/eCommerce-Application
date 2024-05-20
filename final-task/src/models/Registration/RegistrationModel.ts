@@ -19,7 +19,6 @@ export default class RegistrationPageModel {
 
   static validateMinLength(value: string, minLength: number): boolean {
     if (!value) {
-      console.log('eror');
       return false;
     }
 
@@ -106,7 +105,6 @@ export default class RegistrationPageModel {
   validateDOB(dob: string): void {
     const rule = validationRules.dob;
     const dateOfBirth = new Date(dob);
-    console.log(dateOfBirth.getFullYear() >= 1900, dateOfBirth.getFullYear());
     const today = new Date();
     let age = today.getFullYear() - dateOfBirth.getFullYear();
     const month = today.getMonth() - dateOfBirth.getMonth();
@@ -193,7 +191,6 @@ export default class RegistrationPageModel {
   }
 
   validateForm(data: FormData, validCountries: string[]): Errors {
-    console.log(data);
     this.errors = {};
     this.validateEmail(data.email);
     this.validatePassword(data.password);
