@@ -1,5 +1,6 @@
 import BaseComponentGenerator from '../../../components/base-component';
 import RegistrationFieldBlock from './RegistrationFieldBlock';
+import tags from '../../../tags/tags';
 
 export default class GeneralInfoBlock extends BaseComponentGenerator {
   private emailBlock: RegistrationFieldBlock;
@@ -10,10 +11,18 @@ export default class GeneralInfoBlock extends BaseComponentGenerator {
 
   private lastNameBlock: RegistrationFieldBlock;
 
+  private checkBox: HTMLInputElement;
+
+  private checkBoxLabel: HTMLLabelElement;
+
   private dobBlock: RegistrationFieldBlock;
 
   constructor() {
-    super({ tag: 'div', classNames: ['general-info-block'] });
+    super({ tag: 'div', classNames: ['general-info-block', 'form-login'] });
+    const title = tags.h2(
+      ['general-info-block__title', 'block-title', 'h1-login'],
+      'General Info',
+    );
     this.emailBlock = new RegistrationFieldBlock(
       'Email',
       'email',
@@ -26,6 +35,16 @@ export default class GeneralInfoBlock extends BaseComponentGenerator {
       'password',
       'Password',
     );
+    this.checkBox = tags.input(['password-visible'], {
+      type: 'checkbox',
+      name: 'password-visible',
+      id: 'VisiblePassword',
+      title: 'view password',
+    });
+    this.checkBoxLabel = tags.label(['password-visible-label'], '', {
+      for: 'VisiblePassword',
+    });
+    this.passwordBlock.getBlock().append(this.checkBox, this.checkBoxLabel);
     this.firstNameBlock = new RegistrationFieldBlock(
       'First Name',
       'text',
@@ -46,6 +65,7 @@ export default class GeneralInfoBlock extends BaseComponentGenerator {
     );
     const todayDate = new Date();
     [this.dobBlock.getInput().max] = todayDate.toISOString().split('T');
+    [this.dobBlock.getInput().min] = '1900-01-01';
     this.dobBlock.getInput().addEventListener('input', () => {
       const selectedDate = new Date(this.dobBlock.getInput().value);
       if (selectedDate > todayDate) {
@@ -53,12 +73,28 @@ export default class GeneralInfoBlock extends BaseComponentGenerator {
       }
     });
     this.appendChildren([
+      title,
       this.emailBlock.getBlock(),
       this.passwordBlock.getBlock(),
       this.firstNameBlock.getBlock(),
       this.lastNameBlock.getBlock(),
       this.dobBlock.getBlock(),
     ]);
+    this.togglePasswordVisibility();
+  }
+
+  private togglePasswordVisibility() {
+    this.checkBox.addEventListener('click', () => {
+      if (this.passwordBlock.getInput().type === 'password') {
+        this.passwordBlock.getInput().type = 'text';
+        this.checkBoxLabel.style.backgroundImage =
+          'url(/eye-password-show.svg)';
+      } else {
+        this.passwordBlock.getInput().type = 'password';
+        this.checkBoxLabel.style.backgroundImage =
+          'url(/eye-password-hide.svg)';
+      }
+    });
   }
 
   public getInputs(): HTMLInputElement[] {

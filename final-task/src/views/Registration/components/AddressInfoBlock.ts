@@ -11,9 +11,18 @@ export default class AddressBlock extends BaseComponentGenerator {
 
   private countryBlock: RegistrationFieldBlock;
 
+  private titleBlock: string = 'Billing Address';
+
   constructor(prefix: string = '') {
-    super({ tag: 'div', classNames: [`${prefix}address-block`] });
-    const title = tags.p([`${prefix}address-block__title`], `${prefix}Address`);
+    super({
+      tag: 'div',
+      classNames: [`${prefix}address-block`, 'form-login'],
+    });
+    this.isPrefixTitle(prefix);
+    const title = tags.h2(
+      [`${prefix}address-block__title`, 'block-title', 'h1-login'],
+      this.titleBlock,
+    );
     this.streetBlock = new RegistrationFieldBlock(
       'Street',
       'text',
@@ -46,6 +55,12 @@ export default class AddressBlock extends BaseComponentGenerator {
       this.postalCodeBlock.getBlock(),
       this.countryBlock.getBlock(),
     ]);
+  }
+
+  private isPrefixTitle(prefix: string) {
+    if (prefix.length > 1) {
+      this.titleBlock = 'Shipping Address';
+    }
   }
 
   public getInputs(): HTMLInputElement[] {

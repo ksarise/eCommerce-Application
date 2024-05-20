@@ -7,20 +7,29 @@ export default class RegistrationFieldBlock {
 
   public fieldInput: HTMLInputElement;
 
+  public fieldError: HTMLElement;
+
   constructor(
-    legend: string,
+    label: string,
     inputType: string,
     name: string,
     placeholder: string,
   ) {
-    this.fieldLabel = tags.legend(['registration__label'], legend);
-    this.fieldInput = tags.input(['registration__field__input'], {
+    this.fieldLabel = tags.label(['registration__label', 'label'], label, {
+      for: name,
+    });
+    this.fieldInput = tags.input(['registration__field__input', 'input'], {
       type: inputType,
       name,
       placeholder,
     });
-    const blockContainer = tags.fieldset(['registration__field']);
-    blockContainer.appendChildren([this.fieldLabel, this.fieldInput]);
+    this.fieldError = tags.span(['error', 'error-hidden']);
+    const blockContainer = tags.div(['registration__block', 'block-input']);
+    blockContainer.appendChildren([
+      this.fieldLabel,
+      this.fieldInput,
+      this.fieldError,
+    ]);
     this.fieldBlock = blockContainer.getElement();
   }
 

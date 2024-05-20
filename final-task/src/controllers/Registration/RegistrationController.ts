@@ -24,12 +24,25 @@ export default class RegistrationController {
   }
 
   public init() {
+    this.view.bindNextButton(this.handleNextButtonClick.bind(this));
+    this.view.bindPrevButton(this.handlePrevButtonClick.bind(this));
     this.view.bindFormSubmit(this.handleFormSubmit.bind(this));
     this.view.bindFieldBlur(this.handleFieldBlur.bind(this));
     this.view.bindFieldInput(this.handleFieldInput.bind(this));
   }
 
+  private handleNextButtonClick() {
+    this.view.nextStep();
+    this.view.toggleNextButton();
+  }
+
+  private handlePrevButtonClick() {
+    this.view.prevStep();
+    this.view.toggleNextButton();
+  }
+
   private async handleFormSubmit(formData: FormData) {
+    console.log('ooops');
     const validCountries = ['USA'];
     const errors = this.model.validateForm(formData, validCountries);
 
@@ -47,7 +60,6 @@ export default class RegistrationController {
             'linear-gradient(5deg, rgba(5,162,31,1) 51%, rgba(232,231,225,1) 100%)',
         }).showToast();
       } catch (error) {
-        // console.log('Error', typeof error, error);
         const errmessage = (error as ErrorResponse).message;
         Toastify({
           text: `${errmessage}`,
@@ -76,10 +88,12 @@ export default class RegistrationController {
 
   private handleFieldBlur(field: string, value: string) {
     this.validateField(field, value);
+    this.view.toggleNextButton();
   }
 
   private handleFieldInput(field: string, value: string) {
     this.validateField(field, value);
+    this.view.toggleNextButton();
   }
 
   private validateField(field: string, value: string) {

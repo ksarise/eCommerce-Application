@@ -96,6 +96,7 @@ export default class RegistrationPageModel {
   validateDOB(dob: string): void {
     const rule = validationRules.dob;
     const dateOfBirth = new Date(dob);
+    console.log(dateOfBirth.getFullYear() >= 1900, dateOfBirth.getFullYear());
     const today = new Date();
     let age = today.getFullYear() - dateOfBirth.getFullYear();
     const month = today.getMonth() - dateOfBirth.getMonth();
@@ -107,7 +108,15 @@ export default class RegistrationPageModel {
     if (age < rule.minAge) {
       this.errors.dob.push(rule.errorMessage);
     }
-
+    if (Number.isNaN(dateOfBirth.getTime())) {
+      this.errors.dob.push('Invalid date. Please enter a valid date.');
+      return;
+    }
+    if (dateOfBirth.getFullYear() < 1900) {
+      this.errors.dob.push(
+        'You are too old for it! Year must be 1900 or later.',
+      );
+    }
     if (this.errors.dob.length === 0) {
       delete this.errors.dob;
     }
