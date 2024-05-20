@@ -46,10 +46,16 @@ export default class API {
       })
       .execute()
       .then((response) => {
+        if (!localStorage.getItem('true-key')) {
+          localStorage.setItem('true-key', JSON.stringify(true));
+        }
         this.login = true;
         return { result: true, obj: response };
       })
       .catch((error) => {
+        if (!localStorage.getItem('true-key')) {
+          localStorage.removeItem('key-token');
+        }
         return { result: false, obj: error };
       });
   }
