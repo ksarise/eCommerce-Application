@@ -17,6 +17,7 @@ export default class AppController {
   public initialize() {
     this.initializeListeners();
     this.initializeLoginListeners();
+    this.initializeRegistrationListener();
     this.appView.create();
     document.querySelector<HTMLDivElement>('.body')!.innerHTML =
       this.appView.innerHTML;
@@ -32,6 +33,8 @@ export default class AppController {
     });
     this.appView.headerView.handleClickLoginButton =
       this.handleClickLoginButton.bind(this);
+    this.appView.headerView.handleClickRegistrationButton =
+      this.handleClickRegistrationButton.bind(this);
     this.appView.notFoundView.handleClickGoHomeButton =
       this.handleClickGoHomeButton.bind(this);
   }
@@ -66,6 +69,12 @@ export default class AppController {
     });
   }
 
+  private initializeRegistrationListener() {
+    document.addEventListener('registrationSuccess', () => {
+      this.routerController.goToPage('/');
+    });
+  }
+
   public changePage(path: string) {
     this.routerController.goToPage(path);
   }
@@ -76,6 +85,10 @@ export default class AppController {
 
   public handleClickLoginButton() {
     this.routerController.goToPage('/login');
+  }
+
+  public handleClickRegistrationButton() {
+    this.routerController.goToPage('/registration');
   }
 
   public handleClickGoHomeButton() {

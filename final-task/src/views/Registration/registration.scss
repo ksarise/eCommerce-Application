@@ -1,0 +1,59 @@
+.registration__page {
+  display: flex;
+  align-items: center;
+  flex-direction: column;
+  justify-content: center;
+}
+.general-info-block,
+.address-block,
+.shippinGaddress-block {
+  height: 630px;
+}
+.block-title {
+  height: 150px;
+}
+.registration__block {
+  display: flex;
+  flex-direction: column;
+}
+.registration__button-block {
+  display: flex;
+  margin-top: 5px;
+  flex-direction: row;
+  justify-content: space-around;
+  gap: 20px;
+}
+.registration__checkbox {
+  display: flex;
+  flex-direction: row;
+  align-items: flex-start;
+  justify-content: flex-start;
+  width: 235px;
+  gap: 2px;
+}
+.registration__checkbox__label {
+  width: 100%;
+}
+.prev-btn,
+.next-btn,
+.submit-btn {
+  width: 100px;
+  height: 40px;
+  border-radius: 5px;
+  display: flex;
+  justify-content: center;
+  border: none;
+  cursor: pointer;
+  transition: 0.5s ease-in-out;
+  &:disabled {
+    cursor: not-allowed;
+    transition: 0.5s ease-in-out;
+  }
+}
+
+.invalid {
+  border-color: red;
+}
+.valid {
+  border-color: green;
+}
