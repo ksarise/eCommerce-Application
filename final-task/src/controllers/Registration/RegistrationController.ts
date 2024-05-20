@@ -22,7 +22,6 @@ export default class RegistrationController {
   private handleFormSubmit(formData: FormData) {
     const validCountries = ['USA'];
     const errors = this.model.validateForm(formData, validCountries);
-
     if (Object.keys(errors).length === 0) {
       console.log('Form submitted successfully', formData);
     } else {
@@ -61,22 +60,33 @@ export default class RegistrationController {
         this.model.validateDOB(value);
         break;
       case 'street':
-        this.model.validateStreet(value);
+        this.model.validateStreet(value, 'street');
+        break;
+      case 'shippinGstreet':
+        this.model.validateStreet(value, 'shippinGstreet');
         break;
       case 'city':
-        this.model.validateCity(value);
+        this.model.validateCity(value, 'city');
+        break;
+      case 'shippinGcity':
+        this.model.validateCity(value, 'shippinGcity');
         break;
       case 'postalCode':
-        this.model.validatePostalCode(value);
+        this.model.validatePostalCode(value, 'postalCode');
+        break;
+      case 'shippinGpostalCode':
+        this.model.validatePostalCode(value, 'shippinGpostalCode');
         break;
       case 'country':
-        this.model.validateCountry(value, validCountries);
+        this.model.validateCountry(value, validCountries, 'country');
+        break;
+      case 'shippinGcountry':
+        this.model.validateCountry(value, validCountries, 'shippinGcountry');
         break;
       default:
         break;
     }
     const errorMessages = this.model.errors[field];
-
     // set input field validity
     if (errorMessages && errorMessages.length > 0) {
       isValid = false;

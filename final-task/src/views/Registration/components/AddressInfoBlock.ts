@@ -1,5 +1,6 @@
 import BaseComponentGenerator from '../../../components/base-component';
 import RegistrationFieldBlock from './RegistrationFieldBlock';
+import tags from '../../../components/tags';
 
 export default class AddressBlock extends BaseComponentGenerator {
   private streetBlock: RegistrationFieldBlock;
@@ -10,29 +11,36 @@ export default class AddressBlock extends BaseComponentGenerator {
 
   private countryBlock: RegistrationFieldBlock;
 
-  constructor() {
-    super({ tag: 'div', classNames: ['address-block'] });
+  constructor(prefix: string = '') {
+    super({ tag: 'div', classNames: [`${prefix}address-block`] });
+    const title = tags.p([`${prefix}address-block__title`], `${prefix}Address`);
     this.streetBlock = new RegistrationFieldBlock(
       'Street',
       'text',
-      'street',
+      `${prefix}street`,
       'Street',
     );
-    this.cityBlock = new RegistrationFieldBlock('City', 'text', 'city', 'City');
+    this.cityBlock = new RegistrationFieldBlock(
+      'City',
+      'text',
+      `${prefix}city`,
+      'City',
+    );
     this.postalCodeBlock = new RegistrationFieldBlock(
       'Postal Code',
       'text',
-      'postalCode',
+      `${prefix}postalCode`,
       'Postal Code',
     );
     this.countryBlock = new RegistrationFieldBlock(
       'Country',
       'text',
-      'country',
+      `${prefix}country`,
       'Country',
     );
 
     this.appendChildren([
+      title,
       this.streetBlock.getBlock(),
       this.cityBlock.getBlock(),
       this.postalCodeBlock.getBlock(),

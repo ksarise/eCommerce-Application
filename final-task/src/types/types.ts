@@ -17,6 +17,13 @@ export interface FormData {
   city: string;
   postalCode: string;
   country: string;
+  shippinGstreet: string;
+  shippinGcity: string;
+  shippinGpostalCode: string;
+  shippinGcountry: string;
+  defaultBilling: boolean;
+  defaultShipping: boolean;
+  isSameAddress: boolean;
 }
 export type FieldEventCallback = (field: string, value: string) => void;
 export type FormSubmitCallback = (formData: FormData) => void;

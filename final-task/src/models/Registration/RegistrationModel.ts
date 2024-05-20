@@ -18,6 +18,11 @@ export default class RegistrationPageModel {
   }
 
   static validateMinLength(value: string, minLength: number): boolean {
+    if (!value) {
+      console.log('eror');
+      return false;
+    }
+
     return value.length >= minLength;
   }
 
@@ -108,72 +113,86 @@ export default class RegistrationPageModel {
     }
   }
 
-  validateStreet(street: string): void {
+  validateStreet(street: string, field: string): void {
     const rule = validationRules.street;
-    this.errors.street = [];
+    this.errors[field] = [];
 
     if (!RegistrationPageModel.validateMinLength(street, rule.minLength)) {
-      this.errors.street.push(rule.errorMessage);
+      this.errors[field].push(rule.errorMessage);
     }
 
-    if (this.errors.street.length === 0) {
-      delete this.errors.street;
+    if (this.errors[field].length === 0) {
+      delete this.errors[field];
     }
   }
 
-  validateCity(city: string): void {
+  validateCity(city: string, field: string): void {
     const rule = validationRules.city;
-    this.errors.city = [];
+    this.errors[field] = [];
 
     if (!RegistrationPageModel.validatePattern(city, rule.pattern)) {
-      this.errors.city.push(rule.errorMessages.pattern);
+      this.errors[field].push(rule.errorMessages.pattern);
     }
 
     if (!RegistrationPageModel.validateMinLength(city, rule.minLength)) {
-      this.errors.city.push(rule.errorMessages.minLength);
+      this.errors[field].push(rule.errorMessages.minLength);
     }
 
-    if (this.errors.city.length === 0) {
-      delete this.errors.city;
+    if (this.errors[field].length === 0) {
+      delete this.errors[field];
     }
   }
 
-  validatePostalCode(postalCode: string): void {
+  validatePostalCode(postalCode: string, field: string): void {
     const rule = validationRules.postalCode;
-    this.errors.postalCode = [];
+    this.errors[field] = [];
 
     if (!RegistrationPageModel.validatePattern(postalCode, rule.pattern)) {
-      this.errors.postalCode.push(rule.errorMessage);
+      this.errors[field].push(rule.errorMessage);
     }
 
-    if (this.errors.postalCode.length === 0) {
-      delete this.errors.postalCode;
+    if (this.errors[field].length === 0) {
+      delete this.errors[field];
     }
   }
 
-  validateCountry(country: string, validCountries: string[]): void {
+  validateCountry(
+    country: string,
+    validCountries: string[],
+    field: string,
+  ): void {
     const rule = validationRules.country;
-    this.errors.country = [];
+    this.errors[field] = [];
 
     if (!validCountries.includes(country)) {
-      this.errors.country.push(rule.errorMessage);
+      this.errors[field].push(rule.errorMessage);
     }
 
-    if (this.errors.country.length === 0) {
-      delete this.errors.country;
+    if (this.errors[field].length === 0) {
+      delete this.errors[field];
     }
   }
 
-  validateForm(data: FormData, validCountries: string[]) {
+  validateForm(data: FormData, validCountries: string[]): Errors {
+    console.log(data);
+    this.errors = {};
     this.validateEmail(data.email);
     this.validatePassword(data.password);
     this.validateName(data.firstName, 'firstName');
     this.validateName(data.lastName, 'lastName');
     this.validateDOB(data.dob);
-    this.validateStreet(data.street);
-    this.validateCity(data.city);
-    this.validatePostalCode(data.postalCode);
-    this.validateCountry(data.country, validCountries);
+    this.validateStreet(data.street, 'street');
+    this.validateCity(data.city, 'city');
+    this.validatePostalCode(data.postalCode, 'postalCode');
+    this.validateCountry(data.country, validCountries, 'country');
+    this.validateStreet(data.shippinGstreet, 'shippinGstreet');
+    this.validateCity(data.shippinGcity, 'shippinGcity');
+    this.validatePostalCode(data.shippinGpostalCode, 'shippinGpostalCode');
+    this.validateCountry(
+      data.shippinGcountry,
+      validCountries,
+      'shippinGcountry',
+    );
     return this.errors;
   }
 }

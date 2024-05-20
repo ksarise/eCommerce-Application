@@ -41,7 +41,7 @@
       "minLength": "City must be at least one character long"
     }
   },
-  "postalCode": { 
+  "postalCode": {
     "pattern": "^\\d{5}$",
     "errorMessage": "Invalid postal code"
   },

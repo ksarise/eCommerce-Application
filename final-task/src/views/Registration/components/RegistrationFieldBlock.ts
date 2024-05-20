@@ -1,7 +1,7 @@
 import tags from '../../../components/tags';
 
 export default class RegistrationFieldBlock {
-  private fieldBlock: HTMLElement;
+  public fieldBlock: HTMLElement;
 
   private fieldLabel: HTMLElement;
 

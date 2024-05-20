@@ -4,6 +4,7 @@ import GeneralInfoBlock from './components/GeneralInfoBlock';
 import AddressBlock from './components/AddressInfoBlock';
 import './registration.scss';
 import { FormSubmitCallback, FieldEventCallback } from '../../types/types';
+import RegistrationCheckboxBlock from './components/CheckboxBlock';
 
 // Cant import interface from types wtf
 interface FormData {
@@ -16,6 +17,13 @@ interface FormData {
   city: string;
   postalCode: string;
   country: string;
+  shippinGstreet: string;
+  shippinGcity: string;
+  shippinGpostalCode: string;
+  shippinGcountry: string;
+  defaultBilling: boolean;
+  defaultShipping: boolean;
+  isSameAddress: boolean;
 }
 
 export default class RegistrationView {
@@ -25,9 +33,15 @@ export default class RegistrationView {
 
   private AddressInfoBlock: AddressBlock;
 
+  private ShippingAddressBlock: AddressBlock;
+
   private SubmitButton: HTMLButtonElement;
 
-  private errorContainer: HTMLElement;
+  private useSameForShippingCheckbox: RegistrationCheckboxBlock;
+
+  private defaultBillingCheckbox: RegistrationCheckboxBlock;
+
+  private defaultShippingCheckbox: RegistrationCheckboxBlock;
 
   constructor() {
     this.page = new BaseComponentGenerator({
@@ -36,18 +50,45 @@ export default class RegistrationView {
     });
     this.GeneralInfoBlock = new GeneralInfoBlock();
     this.AddressInfoBlock = new AddressBlock();
+    this.useSameForShippingCheckbox = new RegistrationCheckboxBlock(
+      'Use the same for shipping',
+      'useSameForShipping',
+    );
+    this.defaultBillingCheckbox = new RegistrationCheckboxBlock(
+      'Set as default billing address',
+      'defaultBilling',
+    );
+    this.defaultShippingCheckbox = new RegistrationCheckboxBlock(
+      'Set as default shipping address',
+      'defaultShipping',
+    );
+    this.useSameForShippingCheckbox
+      .getBlock()
+      .addEventListener('change', () => {
+        if (this.useSameForShippingCheckbox.getInput().checked) {
+          for (let i = 0; i < 4; i += 1) {
+            this.ShippingAddressBlock.getInputs()[i].value =
+              this.AddressInfoBlock.getInputs()[i].value;
+          }
+        }
+      });
+
+    // TODO: stop being lazy and set a normal prefix
+    this.ShippingAddressBlock = new AddressBlock('shippinG');
     this.SubmitButton = tags.button(
       ['submit-btn'],
       'Register',
     ) as HTMLButtonElement;
     this.SubmitButton.disabled = true;
-    this.errorContainer = tags.div(['error-container'], '').getElement();
 
     this.page.appendChildren([
       this.GeneralInfoBlock.getElement(),
       this.AddressInfoBlock.getElement(),
+      this.useSameForShippingCheckbox.getBlock(),
+      this.defaultBillingCheckbox.getBlock(),
+      this.ShippingAddressBlock.getElement(),
+      this.defaultShippingCheckbox.getBlock(),
       this.SubmitButton,
-      this.errorContainer,
     ]);
   }
 
@@ -65,6 +106,16 @@ export default class RegistrationView {
         city: formData.get('city') as string,
         postalCode: formData.get('postalCode') as string,
         country: formData.get('country') as string,
+        shippinGstreet: formData.get('shippinGstreet') as string,
+        shippinGcity: formData.get('shippinGcity') as string,
+        shippinGpostalCode: formData.get('shippinGpostalCode') as string,
+        shippinGcountry: formData.get('shippinGcountry') as string,
+        defaultBilling: this.defaultBillingCheckbox.getInput()
+          .checked as boolean,
+        defaultShipping: this.defaultShippingCheckbox.getInput()
+          .checked as boolean,
+        isSameAddress: this.useSameForShippingCheckbox.getInput()
+          .checked as boolean,
       };
       callback(data);
     });
@@ -138,6 +189,13 @@ export default class RegistrationView {
   public toggleSubmitButton(disabled: boolean): void {
     this.SubmitButton.disabled = disabled;
   }
+
+  // private copyAddress(): void {
+  //   if (this.useSameForShippingCheckbox.getInput().checked) {
+  //     const addressData = this.getAddressData();
+  //     this.setAddressData(addressData, 'shipping');
+  //   }
+  // }
 
   public RenderPage(): HTMLElement {
     return this.page.getElement();

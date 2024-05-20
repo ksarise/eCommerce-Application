@@ -140,6 +140,19 @@ const span = (classNames: string[]): HTMLElement => {
     classNames,
   }).getElement();
 };
+
+const label = (
+  classNames: string[],
+  content: string,
+  attributes: { [key: string]: string } = {},
+): HTMLElement => {
+  return new BaseComponentGenerator({
+    tag: 'label',
+    classNames,
+    content,
+    attributes,
+  }).getElement();
+};
 const tags = {
   div,
   input,
@@ -153,5 +166,6 @@ const tags = {
   button,
   legend,
   span,
+  label,
 };
 export default tags;
