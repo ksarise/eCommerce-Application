@@ -19,7 +19,11 @@ class Router {
     });
 
     this.router.on('/login', () => {
-      this.changeContent?.('login');
+      if (localStorage.getItem('key-token')) {
+        this.goToPage('/');
+      } else {
+        this.changeContent?.('login');
+      }
       this.router.resolve();
     });
 

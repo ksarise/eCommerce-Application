@@ -47,6 +47,7 @@ export default class AppController {
         );
       if (result.result) {
         await loginViewVariables.addListenerToLogin();
+        this.routerController.goToPage('/');
       } else {
         loginViewVariables.addPopUpWithError(result.obj as string);
       }
