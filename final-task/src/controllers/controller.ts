@@ -47,6 +47,8 @@ export default class AppController {
         );
       if (result.result) {
         await loginViewVariables.addListenerToLogin();
+      } else {
+        loginViewVariables.addPopUpWithError(result.obj as string);
       }
     });
     loginViewVariables.inputEmail.addEventListener('input', () => {
@@ -57,6 +59,9 @@ export default class AppController {
     });
     loginViewVariables.checkBox.addEventListener('click', () => {
       loginViewVariables.addCheckboxListener();
+    });
+    loginViewVariables.cross.addEventListener('click', () => {
+      loginViewVariables.addCrossListener();
     });
   }
 

@@ -21,6 +21,14 @@ export default class Login {
 
   private body: HTMLBodyElement;
 
+  private popUp: HTMLElement;
+
+  private popText: HTMLElement;
+
+  private container: HTMLElement;
+
+  public cross: HTMLElement;
+
   constructor() {
     this.form = tags.form(['form', 'form-login'], {
       id: 'formLogin',
@@ -53,6 +61,18 @@ export default class Login {
       for: 'VisiblePassword',
     });
     this.body = document.querySelector('body')!;
+    this.popUp = tags.div(['pop-up', 'pop-up-hidden'], '', {
+      id: 'popLogin',
+    });
+    this.popText = tags.div(['pop-up-text'], '', {
+      id: 'popText',
+    });
+    this.container = tags.div(['container-login'], '', {
+      id: 'container',
+    });
+    this.cross = tags.div(['cross'], '', {
+      id: 'cross',
+    });
   }
 
   public createLogin() {
@@ -82,8 +102,18 @@ export default class Login {
       button,
       register,
     );
-    this.newHistory = this.form;
-    return this.form;
+    this.container.append(this.createPopUp(), this.form);
+    this.newHistory = this.container;
+    return this.container;
+  }
+
+  private createPopUp() {
+    const error = tags.div(['error-pop-up'], 'Invalid email or password', {
+      id: 'error-pop-up',
+    });
+    this.popText.innerHTML = 'sdfghj';
+    this.popUp.append(this.cross, this.popText, error);
+    return this.popUp;
   }
 
   private createBlockInput(labelText: LoginForm) {
@@ -172,5 +202,16 @@ export default class Login {
       this.inputPassword.type = 'password';
       this.checkBoxLabel.style.backgroundImage = 'url(/eye-password-hide.svg)';
     }
+  }
+
+  public addCrossListener() {
+    this.popUp.classList.toggle('pop-up-hidden', true);
+  }
+
+  public addPopUpWithError(text: string) {
+    this.popText.innerHTML = text;
+    this.popUp.classList.toggle('pop-up-hidden', false);
+    this.inputEmail.classList.toggle('input-error', true);
+    this.inputPassword.classList.toggle('input-error', true);
   }
 }
