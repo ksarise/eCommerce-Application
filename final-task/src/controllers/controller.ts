@@ -16,6 +16,7 @@ export default class AppController {
 
   public initialize() {
     this.initializeListeners();
+    this.initializeLoginListeners();
     this.appView.create();
     document.querySelector<HTMLDivElement>('.body')!.innerHTML =
       this.appView.innerHTML;
@@ -33,6 +34,36 @@ export default class AppController {
       this.handleClickLoginButton.bind(this);
     this.appView.notFoundView.handleClickGoHomeButton =
       this.handleClickGoHomeButton.bind(this);
+  }
+
+  public initializeLoginListeners() {
+    const loginViewVariables = this.appView.loginView;
+    loginViewVariables.form.addEventListener('submit', async (event) => {
+      event.preventDefault();
+      const result: { result: boolean; obj: unknown } =
+        await this.appModel.postLoginCustomer(
+          loginViewVariables.inputEmail.value,
+          loginViewVariables.inputPassword.value,
+        );
+      if (result.result) {
+        await loginViewVariables.addListenerToLogin();
+        this.routerController.goToPage('/');
+      } else {
+        loginViewVariables.addPopUpWithError(result.obj as string);
+      }
+    });
+    loginViewVariables.inputEmail.addEventListener('input', () => {
+      loginViewVariables.addListenerToEmail();
+    });
+    loginViewVariables.inputPassword.addEventListener('input', () => {
+      loginViewVariables.addListenerToPassword();
+    });
+    loginViewVariables.checkBox.addEventListener('click', () => {
+      loginViewVariables.addCheckboxListener();
+    });
+    loginViewVariables.cross.addEventListener('click', () => {
+      loginViewVariables.addCrossListener();
+    });
   }
 
   public changePage(path: string) {

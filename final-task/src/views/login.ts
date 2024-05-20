@@ -3,23 +3,31 @@ import { LoginForm } from '../interface/interface';
 import * as check from '../services/checkInput';
 
 export default class Login {
-  private form: HTMLFormElement;
+  public form: HTMLFormElement;
 
-  private inputEmail: HTMLInputElement;
+  public inputEmail: HTMLInputElement;
 
-  private inputPassword: HTMLInputElement;
+  public inputPassword: HTMLInputElement;
 
-  private history: HTMLElement | null;
+  public history: HTMLElement | null;
 
-  private errorEmail: HTMLElement;
+  public errorEmail: HTMLElement;
 
-  private errorPassword: HTMLElement;
+  public errorPassword: HTMLElement;
 
-  private checkBox: HTMLInputElement;
+  public checkBox: HTMLInputElement;
 
   private checkBoxLabel: HTMLLabelElement;
 
   private body: HTMLBodyElement;
+
+  private popUp: HTMLElement;
+
+  private popText: HTMLElement;
+
+  private container: HTMLElement;
+
+  public cross: HTMLElement;
 
   constructor() {
     this.form = tags.form(['form', 'form-login'], {
@@ -53,15 +61,24 @@ export default class Login {
       for: 'VisiblePassword',
     });
     this.body = document.querySelector('body')!;
+    this.popUp = tags.div(['pop-up', 'pop-up-hidden'], '', {
+      id: 'popLogin',
+    });
+    this.popText = tags.div(['pop-up-text'], '', {
+      id: 'popText',
+    });
+    this.container = tags.div(['container-login'], '', {
+      id: 'container',
+    });
+    this.cross = tags.div(['cross'], '', {
+      id: 'cross',
+    });
   }
 
   public createLogin() {
     if (this.history) {
       return this.history;
     }
-    this.addCheckboxListener();
-    this.addListenerToInput();
-    this.addListenerToLogin();
     return this.addLoginForm();
   }
 
@@ -85,8 +102,18 @@ export default class Login {
       button,
       register,
     );
-    this.newHistory = this.form;
-    return this.form;
+    this.container.append(this.createPopUp(), this.form);
+    this.newHistory = this.container;
+    return this.container;
+  }
+
+  private createPopUp() {
+    const error = tags.div(['error-pop-up'], 'Invalid email or password', {
+      id: 'error-pop-up',
+    });
+    this.popText.innerHTML = 'sdfghj';
+    this.popUp.append(this.cross, this.popText, error);
+    return this.popUp;
   }
 
   private createBlockInput(labelText: LoginForm) {
@@ -119,28 +146,24 @@ export default class Login {
     document.querySelector('.view')!.classList.toggle('view-login', flag);
   }
 
-  private addListenerToLogin() {
-    this.form.addEventListener('submit', (event: Event) => {
-      event.preventDefault();
-      this.checkBox.checked = false;
-      (document.getElementById('buttonLogin') as HTMLButtonElement).disabled =
-        true;
-      this.inputEmail.value = '';
-      this.inputPassword.value = '';
-    });
+  public addListenerToLogin() {
+    this.checkBox.checked = false;
+    (document.getElementById('buttonLogin') as HTMLButtonElement).disabled =
+      true;
+    this.inputEmail.value = '';
+    this.inputPassword.value = '';
   }
 
-  private addListenerToInput() {
-    this.inputEmail.addEventListener('input', () => {
-      const result: [boolean, string] = check.checkEmail(this.inputEmail.value);
-      this.writeError(result, true);
-    });
-    this.inputPassword.addEventListener('input', () => {
-      const result: [boolean, string] = check.checkPassword(
-        this.inputPassword.value,
-      );
-      this.writeError(result, false);
-    });
+  public addListenerToEmail() {
+    const result: [boolean, string] = check.checkEmail(this.inputEmail.value);
+    this.writeError(result, true);
+  }
+
+  public addListenerToPassword() {
+    const result: [boolean, string] = check.checkPassword(
+      this.inputPassword.value,
+    );
+    this.writeError(result, false);
   }
 
   writeError([right, error]: [boolean, string], flag: boolean) {
@@ -171,17 +194,24 @@ export default class Login {
     }
   }
 
-  private addCheckboxListener() {
-    this.checkBox.addEventListener('click', () => {
-      if (this.inputPassword.type === 'password') {
-        this.inputPassword.type = 'text';
-        this.checkBoxLabel.style.backgroundImage =
-          'url(/eye-password-show.svg)';
-      } else {
-        this.inputPassword.type = 'password';
-        this.checkBoxLabel.style.backgroundImage =
-          'url(/eye-password-hide.svg)';
-      }
-    });
+  public addCheckboxListener() {
+    if (this.inputPassword.type === 'password') {
+      this.inputPassword.type = 'text';
+      this.checkBoxLabel.style.backgroundImage = 'url(/eye-password-show.svg)';
+    } else {
+      this.inputPassword.type = 'password';
+      this.checkBoxLabel.style.backgroundImage = 'url(/eye-password-hide.svg)';
+    }
+  }
+
+  public addCrossListener() {
+    this.popUp.classList.toggle('pop-up-hidden', true);
+  }
+
+  public addPopUpWithError(text: string) {
+    this.popText.innerHTML = text;
+    this.popUp.classList.toggle('pop-up-hidden', false);
+    this.inputEmail.classList.toggle('input-error', true);
+    this.inputPassword.classList.toggle('input-error', true);
   }
 }

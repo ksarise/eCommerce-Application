@@ -145,3 +145,65 @@
     }
   }
 }
+
+.pop-up {
+  position: fixed;
+  top: 1em;
+  max-width: 300px;
+  display: flex;
+  flex-direction: column;
+  overflow-wrap: break-word;
+  height: auto;
+  padding: 0.2em 0.5em;
+  color: $text;
+  transition: top 0.6s;
+  min-width: 250px;
+  border-radius: 1em;
+  background-color: $secondary;
+  border: $primary 0.1em solid;
+  gap: 5px;
+  text-align: start;
+
+  &-text {
+    width: 100%;
+    color: $light-red;
+    font-size: 1.2em;
+
+    &::before {
+      content: url('/red-cross.svg');
+      margin-top: -35px;
+      display: block;
+      width: 30px;
+      height: 30px;
+    }
+  }
+
+  .cross {
+    cursor: pointer;
+    align-self: flex-end;
+    background-image: url('/cross-mark-svgrepo-com.svg');
+    width: 25px;
+    height: 25px;
+    transition: 0.6s;
+    background-size: 22px 22px;
+    background-repeat: no-repeat;
+    background-position: center;
+
+    &:hover {
+      transform: rotate(90deg);
+    }
+  }
+}
+
+.pop-up-hidden {
+  top: -300px;
+  width: 0;
+  height: 0;
+  opacity: 0;
+  transition: top 0.6s;
+}
+
+.container-login {
+  display: flex;
+  justify-content: center;
+}
