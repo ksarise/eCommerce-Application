@@ -9,6 +9,8 @@ export default class AppModel {
     this.apiService = new API();
     if (localStorage.getItem('userCreds')) {
       this.isLogined = true;
+    } else {
+      this.isLogined = false;
     }
     console.log(this.isLogined);
     console.log(this.requestGetProducts());
