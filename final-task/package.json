@@ -53,8 +53,7 @@
     "node-fetch": "^3.3.2",
     "sass": "^1.76.0",
     "toastify-js": "^1.12.0",
-    "vite": "^5.2.0",
-    "vite-plugin-eslint": "^1.8.1"
+    "vite": "^5.2.0"
   },
   "validate-branch-name": {
     "pattern": "^(chore|docs|feat|fix|refactor|style)/RSS-ECOMM-[0-9]_[a-zA-Z0-9-/]+$",
