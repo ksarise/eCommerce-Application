@@ -5,6 +5,8 @@ class Router {
 
   public root: string = '/';
 
+  public isLogined: boolean | undefined;
+
   public changeContent: ((page: string) => void) | undefined;
 
   constructor() {
@@ -19,7 +21,7 @@ class Router {
     });
 
     this.router.on('/login', () => {
-      if (localStorage.getItem('true-key')) {
+      if (this.isLogined) {
         this.goToPage('/');
       } else {
         this.changeContent?.('login');
@@ -28,8 +30,7 @@ class Router {
     });
 
     this.router.on('/registration', () => {
-      if (localStorage.getItem('true-key')) {
-        console.log('already logged in');
+      if (this.isLogined) {
         this.goToPage('/');
       } else {
         this.changeContent?.('registration');
@@ -43,7 +44,10 @@ class Router {
     });
   }
 
-  public goToPage(page: string) {
+  public goToPage(page: string, isLogined?: boolean) {
+    if (isLogined) {
+      this.isLogined = isLogined;
+    }
     this.router.navigate(page);
   }
 
