@@ -150,11 +150,11 @@ export default class AppController {
   }
 
   public handleClickLoginButton() {
-    this.routerController.goToPage('/login', this.appModel.isLogined);
+    this.routerController.goToPage('/login');
   }
 
   public handleClickRegistrationButton() {
-    this.routerController.goToPage('/registration', this.appModel.isLogined);
+    this.routerController.goToPage('/registration');
   }
 
   public handleClickLogoutButton() {
