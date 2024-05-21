@@ -2,7 +2,12 @@ import {
   createApiBuilderFromCtpClient,
   ByProjectKeyRequestBuilder,
 } from '@commercetools/platform-sdk';
-import ctpClient, { createPasswordClient } from './client';
+// import ctpClient, { createPasswordClient } from './client';
+import {
+  createPasswordClient,
+  createAnonymousClient,
+  createRefreshTokenClient,
+} from './client';
 import { CustomerDraft, ApiResponse } from '../types/types';
 
 export default class API {
@@ -11,9 +16,27 @@ export default class API {
   private login: boolean;
 
   constructor() {
-    this.apiRoot = createApiBuilderFromCtpClient(ctpClient).withProjectKey({
-      projectKey: import.meta.env.VITE_CTP_PROJECT_KEY,
-    });
+    const keyToken = localStorage.getItem('key-token');
+    if (keyToken) {
+      const { refreshToken } = JSON.parse(keyToken);
+      console.log(keyToken);
+      this.apiRoot = createApiBuilderFromCtpClient(
+        createRefreshTokenClient(refreshToken),
+      ).withProjectKey({
+        projectKey: import.meta.env.VITE_CTP_PROJECT_KEY,
+      });
+    } else {
+      this.apiRoot = createApiBuilderFromCtpClient(
+        createAnonymousClient(),
+      ).withProjectKey({
+        projectKey: import.meta.env.VITE_CTP_PROJECT_KEY,
+      });
+    }
+    // this.apiRoot = createApiBuilderFromCtpClient(
+    //   createAnonymousClient(),
+    // ).withProjectKey({
+    //   projectKey: import.meta.env.VITE_CTP_PROJECT_KEY,
+    // });
     this.login = false;
   }
 
@@ -29,7 +52,16 @@ export default class API {
     return this.apiRoot.customers().withId({ ID: id }).get().execute();
   }
 
-  public postCustomerLogin(email: string, password: string) {
+  public getProducts() {
+    return this.apiRoot.products().get().execute();
+  }
+
+  public postCustomerLogin(
+    email: string,
+    password: string,
+    isLogined: boolean,
+  ) {
+    this.login = isLogined;
     if (!this.login) {
       this.apiRoot = createApiBuilderFromCtpClient(
         createPasswordClient(email, password),
