@@ -1,7 +1,5 @@
-import showToast from '../../services/ToastMessages';
 import RegistrationModel from '../../models/Registration/RegistrationModel';
 import RegistrationView from '../../views/Registration/RegistrationView';
-import { RegistrationFormData } from '../../types/types';
 
 export default class RegistrationController {
   private view: RegistrationView;
@@ -16,7 +14,6 @@ export default class RegistrationController {
   public init() {
     this.view.bindNextButton(this.handleNextButtonClick.bind(this));
     this.view.bindPrevButton(this.handlePrevButtonClick.bind(this));
-    this.view.bindFormSubmit(this.handleFormSubmit.bind(this));
     this.view.bindFieldBlur(this.handleFieldBlur.bind(this));
     this.view.bindFieldInput(this.handleFieldInput.bind(this));
   }
@@ -29,24 +26,6 @@ export default class RegistrationController {
   private handlePrevButtonClick() {
     this.view.prevStep();
     this.view.toggleNextButton();
-  }
-
-  private async handleFormSubmit(formData: RegistrationFormData) {
-    const errors = this.model.validateForm(formData);
-
-    if (Object.keys(errors).length === 0) {
-      const event = new CustomEvent('createCustomer', { detail: formData });
-      document.dispatchEvent(event);
-    } else {
-      showToast({
-        text: 'Form validation errors',
-        type: 'negative',
-      });
-
-      Object.entries(errors).forEach(([field, errorMessages]) => {
-        this.view.displayFieldError(field, errorMessages[0]);
-      });
-    }
   }
 
   private handleFieldBlur(field: string, value: string) {

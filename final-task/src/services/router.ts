@@ -19,21 +19,21 @@ class Router {
     });
 
     this.router.on('/login', () => {
-      if (localStorage.getItem('key-token')) {
-        this.goToPage('/');
-      } else {
-        this.changeContent?.('login');
-      }
+      // if (localStorage.getItem('key-token')) {
+      //   this.goToPage('/');
+      // } else {
+      this.changeContent?.('login');
+
       this.router.resolve();
     });
 
     this.router.on('/registration', () => {
-      if (localStorage.getItem('key-token')) {
-        console.log('already logged in');
-        this.goToPage('/');
-      } else {
-        this.changeContent?.('registration');
-      }
+      // if (localStorage.getItem('key-token')) {
+      //   console.log('already logged in');
+      //   this.goToPage('/');
+      // } else {
+      this.changeContent?.('registration');
+
       this.router.resolve();
     });
 

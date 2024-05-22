@@ -66,4 +66,18 @@ export default class AppView {
         console.log('Page not found');
     }
   }
+
+  public toglleButtonsVisiblity(isLogin: boolean) {
+    const buttons = this.headerView.buttonContainer
+      .children as HTMLCollectionOf<HTMLElement>;
+    if (isLogin) {
+      buttons[0].style.display = 'none';
+      buttons[1].style.display = 'none';
+      buttons[2].style.display = 'flex';
+    } else {
+      buttons[0].style.display = 'flex';
+      buttons[1].style.display = 'flex';
+      buttons[2].style.display = 'none';
+    }
+  }
 }

@@ -23,7 +23,7 @@ export default class AppController {
       this.appModel.registrationModel,
     );
     this.appView.registrationView.bindFormSubmit(
-      this.handleFormSubmit.bind(this),
+      this.handleRegistrationFormSubmit.bind(this),
     );
   }
 
@@ -35,6 +35,7 @@ export default class AppController {
     document.querySelector<HTMLDivElement>('.body')!.innerHTML =
       this.appView.innerHTML;
     routerController.handleLocation();
+    this.handleVisiblityButtons();
   }
 
   public initializeListeners() {
@@ -48,6 +49,8 @@ export default class AppController {
       this.handleClickLoginButton.bind(this);
     this.appView.headerView.handleClickRegistrationButton =
       this.handleClickRegistrationButton.bind(this);
+    this.appView.headerView.handleClickLogoutButton =
+      this.handleClickLogoutButton.bind(this);
     this.appView.notFoundView.handleClickGoHomeButton =
       this.handleClickGoHomeButton.bind(this);
   }
@@ -64,6 +67,7 @@ export default class AppController {
       if (result.result) {
         await loginViewVariables.addListenerToLogin();
         this.routerController.goToPage('/');
+        this.handleVisiblityButtons();
       } else {
         loginViewVariables.addPopUpWithError(result.obj as string);
       }
@@ -82,7 +86,7 @@ export default class AppController {
     });
   }
 
-  private async handleFormSubmit(formData: RegistrationFormData) {
+  private async handleRegistrationFormSubmit(formData: RegistrationFormData) {
     const errors = this.appModel.registrationModel.validateForm(formData);
     if (Object.keys(errors).length === 0) {
       await this.createCustomer(formData);
@@ -127,6 +131,7 @@ export default class AppController {
       setTimeout(() => {
         this.routerController.goToPage('/');
       }, 2000);
+      this.handleVisiblityButtons();
     } catch (error) {
       const errmessage = (error as ErrorResponse).message;
       showToast({
@@ -150,6 +155,18 @@ export default class AppController {
 
   public handleClickRegistrationButton() {
     this.routerController.goToPage('/registration');
+  }
+
+  public handleClickLogoutButton() {
+    this.routerController.goToPage('/');
+    localStorage.removeItem('true-key');
+    this.handleVisiblityButtons();
+  }
+
+  public handleVisiblityButtons() {
+    const isLogin = !!localStorage.getItem('true-key');
+    console.log(isLogin);
+    this.appView.toglleButtonsVisiblity(isLogin);
   }
 
   public handleClickGoHomeButton() {
