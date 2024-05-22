@@ -190,7 +190,7 @@ export default class RegistrationPageModel {
     }
   }
 
-  validateForm(data: RegistrationFormData, validCountries: string[]): Errors {
+  validateForm(data: RegistrationFormData): Errors {
     this.errors = {};
     this.validateEmail(data.email);
     this.validatePassword(data.password);
@@ -200,15 +200,11 @@ export default class RegistrationPageModel {
     this.validateStreet(data.street, 'street');
     this.validateCity(data.city, 'city');
     this.validatePostalCode(data.postalCode, 'postalCode');
-    this.validateCountry(data.country, validCountries, 'country');
+    this.validateCountry(data.country, ['USA'], 'country');
     this.validateStreet(data.shippinGstreet, 'shippinGstreet');
     this.validateCity(data.shippinGcity, 'shippinGcity');
     this.validatePostalCode(data.shippinGpostalCode, 'shippinGpostalCode');
-    this.validateCountry(
-      data.shippinGcountry,
-      validCountries,
-      'shippinGcountry',
-    );
+    this.validateCountry(data.shippinGcountry, ['USA'], 'shippinGcountry');
     return this.errors;
   }
 }

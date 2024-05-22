@@ -1,27 +1,16 @@
-import { type ErrorResponse } from '@commercetools/platform-sdk';
-import Toastify from 'toastify-js';
+import showToast from '../../services/ToastMessages';
 import RegistrationModel from '../../models/Registration/RegistrationModel';
 import RegistrationView from '../../views/Registration/RegistrationView';
 import { RegistrationFormData } from '../../types/types';
-import createCustomerDraft from './components/CreateCustomerDraft';
-import CustomerService from '../../services/CustomerService';
-import API from '../../services/ApiRoot';
-import 'toastify-js/src/toastify.css';
 
 export default class RegistrationController {
   private view: RegistrationView;
 
   private model: RegistrationModel;
 
-  private customerService: CustomerService;
-
-  private api: API;
-
-  constructor(view: RegistrationView) {
+  constructor(view: RegistrationView, model: RegistrationModel) {
     this.view = view;
-    this.model = new RegistrationModel();
-    this.api = new API();
-    this.customerService = new CustomerService(this.api);
+    this.model = model;
   }
 
   public init() {
@@ -43,57 +32,16 @@ export default class RegistrationController {
   }
 
   private async handleFormSubmit(formData: RegistrationFormData) {
-    const validCountries = ['USA'];
-    const errors = this.model.validateForm(formData, validCountries);
+    const errors = this.model.validateForm(formData);
 
     if (Object.keys(errors).length === 0) {
-      const customerDraft = createCustomerDraft(formData);
-      try {
-        const response =
-          await this.customerService.createCustomer(customerDraft);
-        Toastify({
-          text: `Customer created with ID: ${response.body.customer.id}`,
-          duration: 3000,
-          gravity: 'top',
-          position: 'right',
-          style: {
-            background:
-              'linear-gradient(5deg, rgba(5,162,31,1) 51%, rgba(232,231,225,1) 100%)',
-          },
-        }).showToast();
-        this.afterLogin(formData);
-      } catch (error) {
-        const errmessage = (error as ErrorResponse).message;
-        Toastify({
-          text: `${errmessage}`,
-          duration: 3000,
-          gravity: 'top',
-          position: 'right',
-          style: {
-            background:
-              'linear-gradient(5deg, rgba(255,38,0,1) 51%, rgba(255,215,0,1) 100%)',
-          },
-        }).showToast();
-        // const errorResponse = error as ErrorResponse;
-        // const errCode = errorResponse.errors && errorResponse.errors[0].code;
-        // const errField = errorResponse.errors && errorResponse.errors[0].field;
-        // console.log(error, errCode, errField);
-        // if (errCode === 'DuplicateField' && errField === 'email') {
-        //   this.view.setStep(0);
-        //   this.view.displayFieldError('email', 'Email already exists!');
-        // }
-      }
+      const event = new CustomEvent('createCustomer', { detail: formData });
+      document.dispatchEvent(event);
     } else {
-      Toastify({
+      showToast({
         text: 'Form validation errors',
-        duration: 3000,
-        gravity: 'top',
-        position: 'right',
-        style: {
-          background:
-            'linear-gradient(5deg, rgba(255,38,0,1) 51%, rgba(255,215,0,1) 100%)',
-        },
-      }).showToast();
+        type: 'negative',
+      });
 
       Object.entries(errors).forEach(([field, errorMessages]) => {
         this.view.displayFieldError(field, errorMessages[0]);
@@ -109,34 +57,6 @@ export default class RegistrationController {
   private handleFieldInput(field: string, value: string) {
     this.validateField(field, value);
     this.view.toggleNextButton();
-  }
-
-  public async afterLogin(data: RegistrationFormData) {
-    try {
-      await this.api.postCustomerLogin(data.email, data.password);
-      Toastify({
-        text: 'Successfully logged in!Redirecting...',
-        duration: 3000,
-        gravity: 'top',
-        position: 'right',
-        style: {
-          background:
-            'linear-gradient(5deg, rgba(5,162,31,1) 51%, rgba(232,231,225,1) 100%)',
-        },
-      }).showToast();
-      setTimeout(() => {
-        document.dispatchEvent(new CustomEvent('registrationSuccess'));
-      }, 2000);
-    } catch (error) {
-      const errmessage = (error as ErrorResponse).message;
-      Toastify({
-        text: `${errmessage}`,
-        duration: 3000,
-        gravity: 'top',
-        position: 'right',
-        backgroundColor: 'red',
-      }).showToast();
-    }
   }
 
   private validateField(field: string, value: string) {

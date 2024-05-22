@@ -1,6 +1,8 @@
-import { FormData, Address, CustomerDraft } from '../../../types/types';
+import { RegistrationFormData, Address, CustomerDraft } from '../types/types';
 
-export default function createCustomerDraft(formData: FormData): CustomerDraft {
+export default function createCustomerDraft(
+  formData: RegistrationFormData,
+): CustomerDraft {
   const {
     email,
     password,
