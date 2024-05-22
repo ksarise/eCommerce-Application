@@ -1,6 +1,7 @@
 import AppView from '../views/appView';
 import AppModel from '../models/model';
 import routerController from '../services/router';
+import RegistrationController from './Registration/RegistrationController';
 
 export default class AppController {
   public appView: AppView;
@@ -9,9 +10,14 @@ export default class AppController {
 
   private routerController = routerController;
 
+  private registrationController: RegistrationController;
+
   constructor() {
     this.appView = new AppView();
     this.appModel = new AppModel();
+    this.registrationController = new RegistrationController(
+      this.appView.registrationView,
+    );
   }
 
   public initialize() {
@@ -19,6 +25,7 @@ export default class AppController {
     this.initializeLoginListeners();
     this.initializeRegistrationListener();
     this.appView.create();
+    this.registrationController.init();
     document.querySelector<HTMLDivElement>('.body')!.innerHTML =
       this.appView.innerHTML;
     routerController.handleLocation();

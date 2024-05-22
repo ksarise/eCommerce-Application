@@ -22,7 +22,6 @@ export default class RegistrationController {
     this.model = new RegistrationModel();
     this.api = new API();
     this.customerService = new CustomerService(this.api);
-    this.init();
   }
 
   public init() {
