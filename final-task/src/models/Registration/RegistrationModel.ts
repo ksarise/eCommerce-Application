@@ -1,4 +1,4 @@
-import { FormData } from '../../types/types';
+import { RegistrationFormData } from '../../types/types';
 import validationRules from './validation/validationRules.json';
 
 type Errors = {
@@ -190,7 +190,7 @@ export default class RegistrationPageModel {
     }
   }
 
-  validateForm(data: FormData, validCountries: string[]): Errors {
+  validateForm(data: RegistrationFormData, validCountries: string[]): Errors {
     this.errors = {};
     this.validateEmail(data.email);
     this.validatePassword(data.password);

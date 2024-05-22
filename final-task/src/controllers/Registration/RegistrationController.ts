@@ -2,7 +2,7 @@ import { type ErrorResponse } from '@commercetools/platform-sdk';
 import Toastify from 'toastify-js';
 import RegistrationModel from '../../models/Registration/RegistrationModel';
 import RegistrationView from '../../views/Registration/RegistrationView';
-import { FormData } from '../../types/types';
+import { RegistrationFormData } from '../../types/types';
 import createCustomerDraft from './components/CreateCustomerDraft';
 import CustomerService from '../../services/CustomerService';
 import API from '../../services/ApiRoot';
@@ -43,7 +43,7 @@ export default class RegistrationController {
     this.view.toggleNextButton();
   }
 
-  private async handleFormSubmit(formData: FormData) {
+  private async handleFormSubmit(formData: RegistrationFormData) {
     const validCountries = ['USA'];
     const errors = this.model.validateForm(formData, validCountries);
 
@@ -57,8 +57,10 @@ export default class RegistrationController {
           duration: 3000,
           gravity: 'top',
           position: 'right',
-          backgroundColor:
-            'linear-gradient(5deg, rgba(5,162,31,1) 51%, rgba(232,231,225,1) 100%)',
+          style: {
+            background:
+              'linear-gradient(5deg, rgba(5,162,31,1) 51%, rgba(232,231,225,1) 100%)',
+          },
         }).showToast();
         this.afterLogin(formData);
       } catch (error) {
@@ -68,9 +70,19 @@ export default class RegistrationController {
           duration: 3000,
           gravity: 'top',
           position: 'right',
-          backgroundColor:
-            'linear-gradient(5deg, rgba(255,38,0,1) 51%, rgba(255,215,0,1) 100%)',
+          style: {
+            background:
+              'linear-gradient(5deg, rgba(255,38,0,1) 51%, rgba(255,215,0,1) 100%)',
+          },
         }).showToast();
+        // const errorResponse = error as ErrorResponse;
+        // const errCode = errorResponse.errors && errorResponse.errors[0].code;
+        // const errField = errorResponse.errors && errorResponse.errors[0].field;
+        // console.log(error, errCode, errField);
+        // if (errCode === 'DuplicateField' && errField === 'email') {
+        //   this.view.setStep(0);
+        //   this.view.displayFieldError('email', 'Email already exists!');
+        // }
       }
     } else {
       Toastify({
@@ -78,8 +90,10 @@ export default class RegistrationController {
         duration: 3000,
         gravity: 'top',
         position: 'right',
-        backgroundColor:
-          'linear-gradient(5deg, rgba(255,38,0,1) 51%, rgba(255,215,0,1) 100%)',
+        style: {
+          background:
+            'linear-gradient(5deg, rgba(255,38,0,1) 51%, rgba(255,215,0,1) 100%)',
+        },
       }).showToast();
 
       Object.entries(errors).forEach(([field, errorMessages]) => {
@@ -98,7 +112,7 @@ export default class RegistrationController {
     this.view.toggleNextButton();
   }
 
-  public async afterLogin(data: FormData) {
+  public async afterLogin(data: RegistrationFormData) {
     try {
       await this.api.postCustomerLogin(data.email, data.password);
       Toastify({
@@ -106,8 +120,10 @@ export default class RegistrationController {
         duration: 3000,
         gravity: 'top',
         position: 'right',
-        backgroundColor:
-          'linear-gradient(5deg, rgba(5,162,31,1) 51%, rgba(232,231,225,1) 100%)',
+        style: {
+          background:
+            'linear-gradient(5deg, rgba(5,162,31,1) 51%, rgba(232,231,225,1) 100%)',
+        },
       }).showToast();
       setTimeout(() => {
         document.dispatchEvent(new CustomEvent('registrationSuccess'));

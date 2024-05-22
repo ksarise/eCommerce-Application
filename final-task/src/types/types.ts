@@ -7,7 +7,7 @@ export interface ElementProps {
   eventCallback?: (event?: Event) => void;
 }
 
-export interface FormData {
+export interface RegistrationFormData {
   email: string;
   password: string;
   firstName: string;
@@ -26,7 +26,7 @@ export interface FormData {
   isSameAddress: boolean;
 }
 export type FieldEventCallback = (field: string, value: string) => void;
-export type FormSubmitCallback = (formData: FormData) => void;
+export type FormSubmitCallback = (formData: RegistrationFormData) => void;
 export interface Address {
   key: string;
   firstName: string;

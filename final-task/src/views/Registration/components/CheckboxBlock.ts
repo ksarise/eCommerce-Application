@@ -11,6 +11,7 @@ export default class RegistrationCheckboxBlock {
     this.checkboxInput = tags.input(['registration__checkbox__input'], {
       type: 'checkbox',
       name,
+      id: name,
     });
     this.checkboxLabel = tags.label(
       ['registration__checkbox__label'],

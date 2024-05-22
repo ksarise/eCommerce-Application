@@ -2,28 +2,13 @@ import BaseComponentGenerator from '../../components/base-component';
 import tags from '../../components/tags';
 import GeneralInfoBlock from './components/GeneralInfoBlock';
 import AddressBlock from './components/AddressInfoBlock';
-import './registration.scss';
-import { FormSubmitCallback, FieldEventCallback } from '../../types/types';
-import RegistrationCheckboxBlock from './components/CheckboxBlock';
-
-interface FormData {
-  email: string;
-  password: string;
-  firstName: string;
-  lastName: string;
-  dob: string;
-  street: string;
-  city: string;
-  postalCode: string;
-  country: string;
-  shippinGstreet: string;
-  shippinGcity: string;
-  shippinGpostalCode: string;
-  shippinGcountry: string;
-  defaultBilling: boolean;
-  defaultShipping: boolean;
-  isSameAddress: boolean;
-}
+import '../../styles/registration.scss';
+import {
+  FormSubmitCallback,
+  FieldEventCallback,
+  RegistrationFormData,
+} from '../../types/types';
+import NavigationButtons from './components/NavigationButtons';
 
 export default class RegistrationView {
   private page: BaseComponentGenerator;
@@ -34,17 +19,7 @@ export default class RegistrationView {
 
   private ShippingAddressBlock: AddressBlock;
 
-  private SubmitButton: HTMLButtonElement;
-
-  private useSameForShippingCheckbox: RegistrationCheckboxBlock;
-
-  private defaultBillingCheckbox: RegistrationCheckboxBlock;
-
-  private defaultShippingCheckbox: RegistrationCheckboxBlock;
-
-  private nextButton: HTMLButtonElement;
-
-  private prevButton: HTMLButtonElement;
+  private navigationButtons: NavigationButtons;
 
   private currentStep: number;
 
@@ -56,92 +31,41 @@ export default class RegistrationView {
 
     this.GeneralInfoBlock = new GeneralInfoBlock();
     this.BillingAddressBlock = new AddressBlock();
-    this.useSameForShippingCheckbox = new RegistrationCheckboxBlock(
-      'Use the same for shipping',
-      'useSameForShipping',
-    );
-    this.defaultBillingCheckbox = new RegistrationCheckboxBlock(
-      'Set as default billing address',
-      'defaultBilling',
-    );
-    this.BillingAddressBlock.appendChildren([
-      this.useSameForShippingCheckbox.getBlock(),
-      this.defaultBillingCheckbox.getBlock(),
-    ]);
-    this.useSameForShippingCheckbox
-      .getBlock()
-      .addEventListener('change', () => {
-        if (this.useSameForShippingCheckbox.getInput().checked) {
-          for (let i = 0; i < 4; i += 1) {
-            this.ShippingAddressBlock.getInputs()[i].value =
-              this.BillingAddressBlock.getInputs()[i].value;
-          }
-        }
-      });
-
     this.ShippingAddressBlock = new AddressBlock('shippinG');
-    this.defaultShippingCheckbox = new RegistrationCheckboxBlock(
-      'Set as default shipping address',
-      'defaultShipping',
-    );
-    this.ShippingAddressBlock.appendChild(
-      this.defaultShippingCheckbox.getBlock(),
-    );
 
-    this.SubmitButton = tags.button(
-      ['submit-btn', 'button-login'],
-      'Register',
-    ) as HTMLButtonElement;
-    this.SubmitButton.disabled = true;
+    this.navigationButtons = new NavigationButtons();
 
-    this.nextButton = tags.button(['next-btn', 'button-login'], 'Next', {
-      type: 'button',
-      disabled: 'on',
-    });
-    this.prevButton = tags.button(['prev-btn', 'button-login'], 'Previous', {
-      type: 'button',
-      disabled: 'on',
-    });
-    const buttonsBlock = new BaseComponentGenerator({
-      tag: 'div',
-      classNames: ['registration__button-block'],
-    });
-    buttonsBlock.appendChildren([
-      this.prevButton,
-      this.nextButton,
-      this.SubmitButton,
-    ]);
     const loginLink = tags.a(
       ['register-link'],
       '/login',
       'Already have an account? Login',
       { title: 'Login', 'data-navigo': 'true' },
     );
+
     this.page.appendChildren([
       this.GeneralInfoBlock.getElement(),
       this.BillingAddressBlock.getElement(),
       this.ShippingAddressBlock.getElement(),
-      buttonsBlock.getElement(),
+      this.navigationButtons.getButtonsBlock(),
       loginLink,
     ]);
-
+    this.useSameForShipping();
     this.currentStep = 0;
-
     this.updateFormView();
   }
 
   public bindNextButton(callback: () => void): void {
-    this.nextButton.addEventListener('click', callback);
+    this.navigationButtons.bindNextButton(callback);
   }
 
   public bindPrevButton(callback: () => void): void {
-    this.prevButton.addEventListener('click', callback);
+    this.navigationButtons.bindPrevButton(callback);
   }
 
   public nextStep() {
     this.currentStep += 1;
     this.updateFormView();
-    this.nextButton.disabled = true;
+    this.navigationButtons.toggleNextButton(true);
   }
 
   public prevStep() {
@@ -155,23 +79,7 @@ export default class RegistrationView {
       this.BillingAddressBlock.getElement(),
       this.ShippingAddressBlock.getElement(),
     ];
-
-    blocks.forEach((originalBlock, index) => {
-      const block = originalBlock;
-      block.style.display = this.currentStep === index ? 'flex' : 'none';
-      blocks[index] = block;
-    });
-
-    this.prevButton.style.display = this.currentStep > 0 ? 'flex' : 'none';
-    if (this.currentStep === 0) {
-      this.prevButton.disabled = true;
-    } else {
-      this.prevButton.disabled = false;
-    }
-    this.nextButton.style.display =
-      this.currentStep < blocks.length - 1 ? 'flex' : 'none';
-    this.SubmitButton.style.display =
-      this.currentStep === blocks.length - 1 ? 'flex' : 'none';
+    this.navigationButtons.updateFormView(blocks, this.currentStep);
   }
 
   public toggleNextButton() {
@@ -180,22 +88,14 @@ export default class RegistrationView {
       this.BillingAddressBlock.getElement(),
       this.ShippingAddressBlock.getElement(),
     ][this.currentStep];
-
-    const inputs = currentBlock.querySelectorAll('.registration__field__input');
-    const hasInvalidElements =
-      currentBlock.querySelectorAll('.invalid').length > 0;
-    const allFieldsFilled = Array.from(inputs).every(
-      (input) => (input as HTMLInputElement).value.trim() !== '',
-    );
-
-    this.nextButton.disabled = hasInvalidElements || !allFieldsFilled;
+    this.navigationButtons.validateCurrentBlock(currentBlock);
   }
 
   public bindFormSubmit(callback: FormSubmitCallback): void {
     this.page.getElement().addEventListener('submit', (event: Event) => {
       event.preventDefault();
       const formData = new FormData(event.target as HTMLFormElement);
-      const data: FormData = {
+      const data: RegistrationFormData = {
         email: formData.get('email') as string,
         password: formData.get('password') as string,
         firstName: formData.get('firstName') as string,
@@ -209,12 +109,15 @@ export default class RegistrationView {
         shippinGcity: formData.get('shippinGcity') as string,
         shippinGpostalCode: formData.get('shippinGpostalCode') as string,
         shippinGcountry: formData.get('shippinGcountry') as string,
-        defaultBilling: this.defaultBillingCheckbox.getInput()
-          .checked as boolean,
-        defaultShipping: this.defaultShippingCheckbox.getInput()
-          .checked as boolean,
-        isSameAddress: this.useSameForShippingCheckbox.getInput()
-          .checked as boolean,
+        defaultBilling: this.BillingAddressBlock.getCheckboxInput(
+          'defaultBilling',
+        )?.checked as boolean,
+        defaultShipping:
+          (this.ShippingAddressBlock.getCheckboxInput('defaultShipping')
+            ?.checked as boolean) || false,
+        isSameAddress:
+          (this.BillingAddressBlock.getCheckboxInput('useSameForShipping')
+            ?.checked as boolean) || false,
       };
       callback(data);
     });
@@ -223,7 +126,7 @@ export default class RegistrationView {
   public bindFieldInput(callback: FieldEventCallback): void {
     this.page
       .getElement()
-      .querySelectorAll('input, select')
+      .querySelectorAll('input')
       .forEach((element: Element) => {
         element.addEventListener('input', (event: Event) => {
           const target = event.target as HTMLInputElement | HTMLSelectElement;
@@ -237,7 +140,7 @@ export default class RegistrationView {
   public bindFieldBlur(callback: FieldEventCallback): void {
     this.page
       .getElement()
-      .querySelectorAll('input, select')
+      .querySelectorAll('input')
       .forEach((element: Element) => {
         element.addEventListener('blur', (event: Event) => {
           const target = event.target as HTMLInputElement | HTMLSelectElement;
@@ -278,13 +181,30 @@ export default class RegistrationView {
       } else {
         inputElement.classList.remove('valid');
         inputElement.classList.add('invalid');
-        this.SubmitButton.disabled = true;
+        this.navigationButtons.toggleSubmitButton(true);
       }
     }
   }
 
   public toggleSubmitButton(disabled: boolean): void {
-    this.SubmitButton.disabled = disabled;
+    this.navigationButtons.toggleSubmitButton(disabled);
+  }
+
+  public useSameForShipping() {
+    this.BillingAddressBlock.useSameForShippingCheckbox!.getBlock().addEventListener(
+      'change',
+      () => {
+        if (
+          this.BillingAddressBlock.useSameForShippingCheckbox!.getInput()
+            .checked
+        ) {
+          for (let i = 0; i < 4; i += 1) {
+            this.ShippingAddressBlock.getInputs()[i].value =
+              this.BillingAddressBlock.getInputs()[i].value;
+          }
+        }
+      },
+    );
   }
 
   public RenderPage(): HTMLElement {
