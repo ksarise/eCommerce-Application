@@ -1,7 +1,6 @@
 import MainView from './main';
 import LoginView from './login';
 import RegistrationView from './Registration/RegistrationView';
-import RegistrationController from '../controllers/Registration/RegistrationController';
 import HeaderView from './header/header';
 import NotFoundView from './404/404';
 
@@ -14,9 +13,7 @@ export default class AppView {
 
   public loginView: LoginView;
 
-  private registrationView: RegistrationView;
-
-  private registrationController: RegistrationController;
+  public registrationView: RegistrationView;
 
   public headerView: HeaderView;
 
@@ -29,9 +26,6 @@ export default class AppView {
     this.mainView = new MainView();
     this.notFoundView = new NotFoundView();
     this.registrationView = new RegistrationView();
-    this.registrationController = new RegistrationController(
-      this.registrationView,
-    );
   }
 
   public create() {

@@ -9,11 +9,13 @@ export default class HeaderView {
 
   private linkContainer: HTMLDivElement;
 
-  private buttonContainer: HTMLDivElement;
+  public buttonContainer: HTMLDivElement;
 
   public handleClickLoginButton: ((event?: Event) => void) | undefined;
 
   public handleClickRegistrationButton: ((event?: Event) => void) | undefined;
+
+  public handleClickLogoutButton: ((event?: Event) => void) | undefined;
 
   constructor() {
     this.header = new BaseComponentGenerator({
@@ -85,7 +87,7 @@ export default class HeaderView {
   private createbuttonNavigation(): HTMLDivElement {
     const buttonLogin = tags.button(
       ['header__button', 'header__button_login'],
-      'Login',
+      'Log In',
       {},
       'click',
       this.handleClickLoginButton,
@@ -97,8 +99,26 @@ export default class HeaderView {
       'click',
       this.handleClickRegistrationButton,
     );
+    const buttonLogout = tags.button(
+      ['header__button', 'header__button_login'],
+      'Log Out',
+      {},
+      'click',
+      this.handleClickLogoutButton,
+    );
     this.buttonContainer.appendChild(buttonLogin);
     this.buttonContainer.appendChild(buttonRegistration);
+    this.buttonContainer.appendChild(buttonLogout);
     return this.buttonContainer;
+  }
+
+  public toggleButtonVisibility(isLoggedIn: boolean): void {
+    if (isLoggedIn) {
+      this.buttonContainer.classList.add('loginned');
+      this.linkContainer.classList.add('loginned');
+    } else {
+      this.linkContainer.classList.remove('loginned');
+      this.buttonContainer.classList.remove('loginned');
+    }
   }
 }

@@ -63,15 +63,7 @@ export default class GeneralInfoBlock extends BaseComponentGenerator {
       'dob',
       'Date of Birth',
     );
-    const todayDate = new Date();
-    [this.dobBlock.getInput().max] = todayDate.toISOString().split('T');
-    [this.dobBlock.getInput().min] = '1900-01-01';
-    this.dobBlock.getInput().addEventListener('input', () => {
-      const selectedDate = new Date(this.dobBlock.getInput().value);
-      if (selectedDate > todayDate) {
-        [this.dobBlock.getInput().value] = todayDate.toISOString().split('T');
-      }
-    });
+    this.setDOBInputOptions();
     this.appendChildren([
       title,
       this.emailBlock.getBlock(),
@@ -93,6 +85,18 @@ export default class GeneralInfoBlock extends BaseComponentGenerator {
         this.passwordBlock.getInput().type = 'password';
         this.checkBoxLabel.style.backgroundImage =
           'url(/eye-password-hide.svg)';
+      }
+    });
+  }
+
+  private setDOBInputOptions() {
+    const todayDate = new Date();
+    [this.dobBlock.getInput().max] = todayDate.toISOString().split('T');
+    [this.dobBlock.getInput().min] = '1900-01-01';
+    this.dobBlock.getInput().addEventListener('input', () => {
+      const selectedDate = new Date(this.dobBlock.getInput().value);
+      if (selectedDate > todayDate) {
+        [this.dobBlock.getInput().value] = todayDate.toISOString().split('T');
       }
     });
   }

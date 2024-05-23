@@ -1,4 +1,4 @@
-import { FormData } from '../../types/types';
+import { RegistrationFormData } from '../../types/types';
 import validationRules from './validation/validationRules.json';
 
 type Errors = {
@@ -135,7 +135,11 @@ export default class RegistrationPageModel {
     this.errors[field] = [];
 
     if (!RegistrationPageModel.validateMinLength(street, rule.minLength)) {
-      this.errors[field].push(rule.errorMessage);
+      this.errors[field].push(rule.errorMessage.minLength);
+    }
+
+    if (!RegistrationPageModel.validatePattern(street, rule.pattern)) {
+      this.errors[field].push(rule.errorMessage.pattern);
     }
 
     if (this.errors[field].length === 0) {
@@ -160,12 +164,34 @@ export default class RegistrationPageModel {
     }
   }
 
-  validatePostalCode(postalCode: string, field: string): void {
+  validatePostalCode(postalCode: string, country: string, field: string): void {
     const rule = validationRules.postalCode;
     this.errors[field] = [];
 
-    if (!RegistrationPageModel.validatePattern(postalCode, rule.pattern)) {
-      this.errors[field].push(rule.errorMessage);
+    if (!country || !rule.patternUSA || !rule.patternCanada) {
+      this.errors[field].push(
+        'Please select a valid country before entering a postal code.',
+      );
+    } else {
+      let pattern;
+      if (country === 'USA') {
+        pattern = rule.patternUSA;
+      } else if (country === 'Canada') {
+        pattern = rule.patternCanada;
+      } else {
+        this.errors[field].push('Please select a valid country.');
+      }
+
+      if (
+        pattern &&
+        !RegistrationPageModel.validatePattern(postalCode, pattern)
+      ) {
+        if (country === 'USA') {
+          this.errors[field].push(rule.errorMessages.USA);
+        } else if (country === 'Canada') {
+          this.errors[field].push(rule.errorMessages.Canada);
+        }
+      }
     }
 
     if (this.errors[field].length === 0) {
@@ -190,7 +216,7 @@ export default class RegistrationPageModel {
     }
   }
 
-  validateForm(data: FormData, validCountries: string[]): Errors {
+  validateForm(data: RegistrationFormData): Errors {
     this.errors = {};
     this.validateEmail(data.email);
     this.validatePassword(data.password);
@@ -199,14 +225,18 @@ export default class RegistrationPageModel {
     this.validateDOB(data.dob);
     this.validateStreet(data.street, 'street');
     this.validateCity(data.city, 'city');
-    this.validatePostalCode(data.postalCode, 'postalCode');
-    this.validateCountry(data.country, validCountries, 'country');
+    this.validatePostalCode(data.postalCode, data.country, 'postalCode');
+    this.validateCountry(data.country, ['USA', 'Canada'], 'country');
     this.validateStreet(data.shippinGstreet, 'shippinGstreet');
     this.validateCity(data.shippinGcity, 'shippinGcity');
-    this.validatePostalCode(data.shippinGpostalCode, 'shippinGpostalCode');
+    this.validatePostalCode(
+      data.shippinGpostalCode,
+      data.shippinGcountry,
+      'shippinGpostalCode',
+    );
     this.validateCountry(
       data.shippinGcountry,
-      validCountries,
+      ['USA', 'Canada'],
       'shippinGcountry',
     );
     return this.errors;

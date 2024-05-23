@@ -1,6 +1,10 @@
+import { type ErrorResponse } from '@commercetools/platform-sdk';
 import AppView from '../views/appView';
-import AppModel from '../models/model';
+import AppModel from '../models/appModel';
 import routerController from '../services/router';
+import RegistrationController from './Registration/RegistrationController';
+import showToast from '../services/ToastMessages';
+import { RegistrationFormData } from '../types/types';
 
 export default class AppController {
   public appView: AppView;
@@ -9,19 +13,26 @@ export default class AppController {
 
   private routerController = routerController;
 
+  private registrationController: RegistrationController;
+
   constructor() {
     this.appView = new AppView();
     this.appModel = new AppModel();
+    this.registrationController = new RegistrationController(
+      this.appView.registrationView,
+      this.appModel.registrationModel,
+    );
   }
 
   public initialize() {
     this.initializeListeners();
     this.initializeLoginListeners();
-    this.initializeRegistrationListener();
     this.appView.create();
+    this.registrationController.init();
     document.querySelector<HTMLDivElement>('.body')!.innerHTML =
       this.appView.innerHTML;
     routerController.handleLocation();
+    this.handleVisiblityButtons();
   }
 
   public initializeListeners() {
@@ -35,8 +46,13 @@ export default class AppController {
       this.handleClickLoginButton.bind(this);
     this.appView.headerView.handleClickRegistrationButton =
       this.handleClickRegistrationButton.bind(this);
+    this.appView.headerView.handleClickLogoutButton =
+      this.handleClickLogoutButton.bind(this);
     this.appView.notFoundView.handleClickGoHomeButton =
       this.handleClickGoHomeButton.bind(this);
+    this.appView.registrationView.bindFormSubmit(
+      this.handleRegistrationFormSubmit.bind(this),
+    );
   }
 
   public initializeLoginListeners() {
@@ -51,6 +67,7 @@ export default class AppController {
       if (result.result) {
         await loginViewVariables.addListenerToLogin();
         this.routerController.goToPage('/');
+        this.handleVisiblityButtons();
       } else {
         loginViewVariables.addPopUpWithError(result.obj as string);
       }
@@ -69,10 +86,59 @@ export default class AppController {
     });
   }
 
-  private initializeRegistrationListener() {
-    document.addEventListener('registrationSuccess', () => {
-      this.routerController.goToPage('/');
-    });
+  private async handleRegistrationFormSubmit(formData: RegistrationFormData) {
+    const errors = this.appModel.registrationModel.validateForm(formData);
+    if (Object.keys(errors).length === 0) {
+      await this.createCustomer(formData);
+    } else {
+      showToast({
+        text: 'Form validation errors',
+        type: 'negative',
+      });
+      Object.entries(errors).forEach(([field, errorMessages]) => {
+        this.appView.registrationView.displayFieldError(
+          field,
+          errorMessages[0],
+        );
+      });
+    }
+  }
+
+  public async createCustomer(formData: RegistrationFormData) {
+    try {
+      const response = await this.appModel.createCustomer(formData);
+      showToast({
+        text: `Customer created with ID: ${response.body.customer.id}`,
+        type: 'positive',
+      });
+      this.afterLogin(formData);
+    } catch (error) {
+      const errmessage = (error as ErrorResponse).message;
+      showToast({
+        text: `${errmessage}`,
+        type: 'negative',
+      });
+    }
+  }
+
+  public async afterLogin(data: RegistrationFormData) {
+    try {
+      await this.appModel.postLoginCustomer(data.email, data.password);
+      showToast({
+        text: 'Successfully logged in! Redirecting...',
+        type: 'positive',
+      });
+      setTimeout(() => {
+        this.routerController.goToPage('/');
+      }, 2000);
+      this.handleVisiblityButtons();
+    } catch (error) {
+      const errmessage = (error as ErrorResponse).message;
+      showToast({
+        text: `${errmessage}`,
+        type: 'negative',
+      });
+    }
   }
 
   public changePage(path: string) {
@@ -89,6 +155,19 @@ export default class AppController {
 
   public handleClickRegistrationButton() {
     this.routerController.goToPage('/registration');
+  }
+
+  public handleClickLogoutButton() {
+    this.routerController.goToPage('/');
+    localStorage.removeItem('true-key');
+    localStorage.removeItem('key-token');
+    this.handleVisiblityButtons();
+  }
+
+  public handleVisiblityButtons() {
+    this.appView.headerView.toggleButtonVisibility(
+      !!localStorage.getItem('true-key'),
+    );
   }
 
   public handleClickGoHomeButton() {

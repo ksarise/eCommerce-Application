@@ -154,7 +154,7 @@ const button = (
   attributes: { [key: string]: string } = {},
   event?: string,
   eventCallback?: (event?: Event) => void,
-): HTMLInputElement => {
+): HTMLButtonElement => {
   return new BaseComponentGenerator({
     tag: 'button',
     classNames,
@@ -162,7 +162,7 @@ const button = (
     attributes,
     event,
     eventCallback,
-  }).getElement() as HTMLInputElement;
+  }).getElement() as HTMLButtonElement;
 };
 
 const tags = {

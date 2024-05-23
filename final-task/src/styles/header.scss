@@ -9,6 +9,7 @@
   width: 100%;
   justify-content: space-between;
   height: 70px;
+
   &__navigation {
     display: flex;
     align-items: center;
@@ -17,9 +18,11 @@
     font-size: 16px;
     font-weight: 500;
     line-height: 24px;
+
     &_link {
       text-decoration: none;
       color: $text;
+      
       &:after {
         content: '';
         display: block;
@@ -28,14 +31,26 @@
         background-color: $primary;
         transition: width 0.3s;
       }
+      
       &:hover {
         color: $primary;
+        
         &:after {
           width: 100%;
         }
       }
     }
+
+    &.loginned {
+      > *:not(:last-child) {
+        display: block;
+      }
+      > *:last-child {
+        display: none;
+      }
+    }
   }
+
   &__button {
     padding: 5px 15px;
     cursor: pointer;
@@ -47,9 +62,30 @@
     color: $primary;
     transition: 0.3s;
     border-radius: 5px;
+
     &:hover {
       background-color: $primary;
       color: #fff;
+    }
+  }
+
+  &__buttons {
+    &:not(.loginned) {
+      > *:last-child {
+        display: none;
+      }
+      > *:not(:last-child) {
+        display: block;
+      }
+    }
+
+    &.loginned {
+      > *:not(:last-child) {
+        display: none;
+      }
+      > *:last-child {
+        display: block;
+      }
     }
   }
 }

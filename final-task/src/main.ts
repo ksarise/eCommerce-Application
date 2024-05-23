@@ -1,6 +1,6 @@
 import './style.scss';
 // import './styles/normalize.scss';
-import AppController from './controllers/controller';
+import AppController from './controllers/appController';
 
 class App {
   public appController: AppController;

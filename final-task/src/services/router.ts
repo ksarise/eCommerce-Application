@@ -19,7 +19,7 @@ class Router {
     });
 
     this.router.on('/login', () => {
-      if (localStorage.getItem('key-token')) {
+      if (localStorage.getItem('true-key')) {
         this.goToPage('/');
       } else {
         this.changeContent?.('login');
@@ -28,7 +28,7 @@ class Router {
     });
 
     this.router.on('/registration', () => {
-      if (localStorage.getItem('key-token')) {
+      if (localStorage.getItem('true-key')) {
         console.log('already logged in');
         this.goToPage('/');
       } else {
