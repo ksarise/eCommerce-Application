@@ -37,8 +37,8 @@
     "pattern": "^[a-zA-Z]+$",
     "minLength": 1,
     "errorMessage": {
-      "pattern":"Address must contain only english letters",
-      "minLength":"Address must be at least one character long"
+      "pattern": "Address must contain only english letters",
+      "minLength": "Address must be at least one character long"
     }
   },
   "city": {
@@ -50,10 +50,14 @@
     }
   },
   "postalCode": {
-    "pattern": "^\\d{5}$",
-    "errorMessage": "Postal code of USA must be 5 digits"
+    "patternUSA": "^\\d{5}$",
+    "patternCanada": "^[A-Za-z]\\d[A-Za-z] ?\\d[A-Za-z]\\d$",
+    "errorMessages": {
+      "USA": "Postal code of USA must be 5 digits",
+      "Canada": "Postal code of Canada must be in the format A1A 1A1"
+    }
   },
   "country": {
-    "errorMessage": "Sorry, we only accept users from the USA"
+    "errorMessage": "Sorry, we only accept users from the USA or Canada"
   }
 }

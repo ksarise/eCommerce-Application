@@ -39,7 +39,7 @@ export default class RegistrationController {
   }
 
   private validateField(field: string, value: string) {
-    const validCountries = ['USA'];
+    const validCountries = ['USA', 'Canada'];
     let isValid = true;
     switch (field) {
       case 'email':

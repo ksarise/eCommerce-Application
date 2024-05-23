@@ -168,14 +168,30 @@ export default class RegistrationPageModel {
     const rule = validationRules.postalCode;
     this.errors[field] = [];
 
-    if (!country || country !== 'USA') {
+    if (!country || !rule.patternUSA || !rule.patternCanada) {
       this.errors[field].push(
-        'Please select a country before entering a postal code.',
+        'Please select a valid country before entering a postal code.',
       );
-    } else if (
-      !RegistrationPageModel.validatePattern(postalCode, rule.pattern)
-    ) {
-      this.errors[field].push(rule.errorMessage);
+    } else {
+      let pattern;
+      if (country === 'USA') {
+        pattern = rule.patternUSA;
+      } else if (country === 'Canada') {
+        pattern = rule.patternCanada;
+      } else {
+        this.errors[field].push('Please select a valid country.');
+      }
+
+      if (
+        pattern &&
+        !RegistrationPageModel.validatePattern(postalCode, pattern)
+      ) {
+        if (country === 'USA') {
+          this.errors[field].push(rule.errorMessages.USA);
+        } else if (country === 'Canada') {
+          this.errors[field].push(rule.errorMessages.Canada);
+        }
+      }
     }
 
     if (this.errors[field].length === 0) {
@@ -210,7 +226,7 @@ export default class RegistrationPageModel {
     this.validateStreet(data.street, 'street');
     this.validateCity(data.city, 'city');
     this.validatePostalCode(data.postalCode, data.country, 'postalCode');
-    this.validateCountry(data.country, ['USA'], 'country');
+    this.validateCountry(data.country, ['USA', 'Canada'], 'country');
     this.validateStreet(data.shippinGstreet, 'shippinGstreet');
     this.validateCity(data.shippinGcity, 'shippinGcity');
     this.validatePostalCode(
@@ -218,7 +234,11 @@ export default class RegistrationPageModel {
       data.shippinGcountry,
       'shippinGpostalCode',
     );
-    this.validateCountry(data.shippinGcountry, ['USA'], 'shippinGcountry');
+    this.validateCountry(
+      data.shippinGcountry,
+      ['USA', 'Canada'],
+      'shippinGcountry',
+    );
     return this.errors;
   }
 }
