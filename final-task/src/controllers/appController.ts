@@ -160,6 +160,7 @@ export default class AppController {
   public handleClickLogoutButton() {
     this.routerController.goToPage('/');
     localStorage.removeItem('true-key');
+    localStorage.removeItem('key-token');
     this.handleVisiblityButtons();
   }
 

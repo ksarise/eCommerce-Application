@@ -70,11 +70,16 @@ export default class AppView {
   public toglleButtonsVisiblity(isLogin: boolean) {
     const buttons = this.headerView.buttonContainer
       .children as HTMLCollectionOf<HTMLElement>;
+    const regNavLink = document.querySelector(
+      '.header__navigation_register',
+    )! as HTMLElement;
     if (isLogin) {
+      regNavLink.style.display = 'none';
       buttons[0].style.display = 'none';
       buttons[1].style.display = 'none';
       buttons[2].style.display = 'flex';
     } else {
+      regNavLink.style.display = 'block';
       buttons[0].style.display = 'flex';
       buttons[1].style.display = 'flex';
       buttons[2].style.display = 'none';

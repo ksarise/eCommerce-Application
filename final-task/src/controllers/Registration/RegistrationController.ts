@@ -70,10 +70,19 @@ export default class RegistrationController {
         this.model.validateCity(value, 'shippinGcity');
         break;
       case 'postalCode':
-        this.model.validatePostalCode(value, 'postalCode');
+        this.model.validatePostalCode(
+          value,
+          (document.getElementById('country') as HTMLInputElement).value,
+          'postalCode',
+        );
         break;
       case 'shippinGpostalCode':
-        this.model.validatePostalCode(value, 'shippinGpostalCode');
+        this.model.validatePostalCode(
+          value,
+          (document.getElementById('shippinGcountry') as HTMLInputElement)
+            .value,
+          'shippinGpostalCode',
+        );
         break;
       case 'country':
         this.model.validateCountry(value, validCountries, 'country');

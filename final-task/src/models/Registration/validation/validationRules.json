@@ -47,7 +47,7 @@
   },
   "postalCode": {
     "pattern": "^\\d{5}$",
-    "errorMessage": "Invalid postal code"
+    "errorMessage": "Postal code of USA must be 5 digits"
   },
   "country": {
     "errorMessage": "Sorry, we only accept users from the USA"

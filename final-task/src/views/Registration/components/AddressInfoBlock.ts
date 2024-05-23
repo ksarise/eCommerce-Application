@@ -54,7 +54,6 @@ export default class AddressBlock extends BaseComponentGenerator {
       `${prefix}country`,
       'Country',
     );
-
     this.defaultBillingCheckbox = new RegistrationCheckboxBlock(
       'Set as default billing address',
       'defaultBilling',
@@ -76,8 +75,8 @@ export default class AddressBlock extends BaseComponentGenerator {
       title,
       this.streetBlock.getBlock(),
       this.cityBlock.getBlock(),
-      this.postalCodeBlock.getBlock(),
       this.countryBlock.getBlock(),
+      this.postalCodeBlock.getBlock(),
     ]);
     this.appendCheckboxes(prefix);
   }

@@ -160,11 +160,17 @@ export default class RegistrationPageModel {
     }
   }
 
-  validatePostalCode(postalCode: string, field: string): void {
+  validatePostalCode(postalCode: string, country: string, field: string): void {
     const rule = validationRules.postalCode;
     this.errors[field] = [];
 
-    if (!RegistrationPageModel.validatePattern(postalCode, rule.pattern)) {
+    if (!country || country !== 'USA') {
+      this.errors[field].push(
+        'Please select a country before entering a postal code.',
+      );
+    } else if (
+      !RegistrationPageModel.validatePattern(postalCode, rule.pattern)
+    ) {
       this.errors[field].push(rule.errorMessage);
     }
 
@@ -199,11 +205,15 @@ export default class RegistrationPageModel {
     this.validateDOB(data.dob);
     this.validateStreet(data.street, 'street');
     this.validateCity(data.city, 'city');
-    this.validatePostalCode(data.postalCode, 'postalCode');
+    this.validatePostalCode(data.postalCode, data.country, 'postalCode');
     this.validateCountry(data.country, ['USA'], 'country');
     this.validateStreet(data.shippinGstreet, 'shippinGstreet');
     this.validateCity(data.shippinGcity, 'shippinGcity');
-    this.validatePostalCode(data.shippinGpostalCode, 'shippinGpostalCode');
+    this.validatePostalCode(
+      data.shippinGpostalCode,
+      data.shippinGcountry,
+      'shippinGpostalCode',
+    );
     this.validateCountry(data.shippinGcountry, ['USA'], 'shippinGcountry');
     return this.errors;
   }
