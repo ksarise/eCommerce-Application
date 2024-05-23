@@ -1,6 +1,6 @@
 {
   "email": {
-    "pattern": "^[^\\s@]+@[a-zA-Z0-9.-]+\\.[a-zA-Z]{2,}$",
+    "pattern": "^[a-z0-9._%+-]+@[a-z0-9.-]+\\.[a-z]{2,}$",
     "errorMessage": "Invalid email address"
   },
   "password": {
@@ -24,7 +24,7 @@
     "minLength": 1,
     "firstCapital": true,
     "errorMessages": {
-      "pattern": "Name must contain only letters",
+      "pattern": "Name must contain only english letters",
       "minLength": "Name must be at least one character long",
       "firstCapital": "Name must start with a capital letter"
     }
@@ -34,14 +34,18 @@
     "errorMessage": "You must be at least 13 years old"
   },
   "street": {
+    "pattern": "^[a-zA-Z]+$",
     "minLength": 1,
-    "errorMessage": "Address must be at least one character long"
+    "errorMessage": {
+      "pattern":"Address must contain only english letters",
+      "minLength":"Address must be at least one character long"
+    }
   },
   "city": {
     "pattern": "^[a-zA-Z]+$",
     "minLength": 1,
     "errorMessages": {
-      "pattern": "City must contain only letters",
+      "pattern": "City must contain only english letters",
       "minLength": "City must be at least one character long"
     }
   },

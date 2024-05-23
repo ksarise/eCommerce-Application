@@ -135,7 +135,11 @@ export default class RegistrationPageModel {
     this.errors[field] = [];
 
     if (!RegistrationPageModel.validateMinLength(street, rule.minLength)) {
-      this.errors[field].push(rule.errorMessage);
+      this.errors[field].push(rule.errorMessage.minLength);
+    }
+
+    if (!RegistrationPageModel.validatePattern(street, rule.pattern)) {
+      this.errors[field].push(rule.errorMessage.pattern);
     }
 
     if (this.errors[field].length === 0) {

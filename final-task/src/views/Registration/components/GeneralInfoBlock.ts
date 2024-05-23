@@ -29,7 +29,6 @@ export default class GeneralInfoBlock extends BaseComponentGenerator {
       'email',
       'Email',
     );
-    this.emailBlock.getInput().setAttribute('autofocus', '');
     this.passwordBlock = new RegistrationFieldBlock(
       'Password',
       'password',
