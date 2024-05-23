@@ -22,9 +22,6 @@ export default class AppController {
       this.appView.registrationView,
       this.appModel.registrationModel,
     );
-    this.appView.registrationView.bindFormSubmit(
-      this.handleRegistrationFormSubmit.bind(this),
-    );
   }
 
   public initialize() {
@@ -53,6 +50,9 @@ export default class AppController {
       this.handleClickLogoutButton.bind(this);
     this.appView.notFoundView.handleClickGoHomeButton =
       this.handleClickGoHomeButton.bind(this);
+    this.appView.registrationView.bindFormSubmit(
+      this.handleRegistrationFormSubmit.bind(this),
+    );
   }
 
   public initializeLoginListeners() {
@@ -165,9 +165,9 @@ export default class AppController {
   }
 
   public handleVisiblityButtons() {
-    const isLogin = !!localStorage.getItem('true-key');
-    console.log(isLogin);
-    this.appView.toglleButtonsVisiblity(isLogin);
+    this.appView.headerView.toggleButtonVisibility(
+      !!localStorage.getItem('true-key'),
+    );
   }
 
   public handleClickGoHomeButton() {

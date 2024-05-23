@@ -111,4 +111,14 @@ export default class HeaderView {
     this.buttonContainer.appendChild(buttonLogout);
     return this.buttonContainer;
   }
+
+  public toggleButtonVisibility(isLoggedIn: boolean): void {
+    if (isLoggedIn) {
+      this.buttonContainer.classList.add('loginned');
+      this.linkContainer.classList.add('loginned');
+    } else {
+      this.linkContainer.classList.remove('loginned');
+      this.buttonContainer.classList.remove('loginned');
+    }
+  }
 }
