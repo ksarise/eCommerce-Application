@@ -69,7 +69,7 @@ export default class RegistrationPageModel {
       this.errors.password.push(rule.errorMessages.specialCharacter);
     }
 
-    if (!RegistrationPageModel.validatePattern(password, rule.noSpace)) {
+    if (RegistrationPageModel.validatePattern(password, rule.noSpace)) {
       this.errors.password.push(rule.errorMessages.noSpace);
     }
 

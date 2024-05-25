@@ -2,7 +2,6 @@ import BaseComponentGenerator from '../../tags/base-component';
 import tags from '../../tags/tags';
 import GeneralInfoBlock from './components/GeneralInfoBlock';
 import AddressBlock from './components/AddressInfoBlock';
-import '../../styles/registration.scss';
 import {
   FormSubmitCallback,
   FieldEventCallback,
