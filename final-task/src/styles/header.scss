@@ -22,7 +22,6 @@
     &_link {
       text-decoration: none;
       color: $text;
-      
       &:after {
         content: '';
         display: block;
@@ -31,10 +30,8 @@
         background-color: $primary;
         transition: width 0.3s;
       }
-      
       &:hover {
         color: $primary;
-        
         &:after {
           width: 100%;
         }

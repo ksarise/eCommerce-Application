@@ -37,11 +37,6 @@ export default class AppController {
 
   public initializeListeners() {
     this.routerController.changeContent = this.changeContent.bind(this);
-    const customersButton = document.querySelector('.customers');
-    customersButton?.addEventListener('click', async () => {
-      const customers = await this.appModel.requestGetCustomers();
-      console.log(customers);
-    });
     this.appView.headerView.handleClickLoginButton =
       this.handleClickLoginButton.bind(this);
     this.appView.headerView.handleClickRegistrationButton =
@@ -158,7 +153,7 @@ export default class AppController {
   }
 
   public handleClickLogoutButton() {
-    this.appModel.isLogined = false;
+    this.appModel.logout();
     this.routerController.goToPage('/');
     localStorage.removeItem('userCreds');
     this.handleVisiblityButtons();

@@ -18,7 +18,6 @@ export default class AppModel {
       this.apiService.postCustomerLogin(
         JSON.parse(localStorage.getItem('userCreds') as string).email,
         JSON.parse(localStorage.getItem('userCreds') as string).password,
-        this.isLogined,
       );
     } else {
       this.isLogined = false;
@@ -31,11 +30,7 @@ export default class AppModel {
   }
 
   public async postLoginCustomer(email: string, password: string) {
-    const result = await this.apiService.postCustomerLogin(
-      email,
-      password,
-      this.isLogined,
-    );
+    const result = await this.apiService.postCustomerLogin(email, password);
     if (result.result) {
       this.isLogined = true;
       localStorage.setItem('userCreds', JSON.stringify({ email, password }));
@@ -58,5 +53,10 @@ export default class AppModel {
 
   public getProducts() {
     return this.apiService.getProducts();
+  }
+
+  public logout() {
+    this.isLogined = false;
+    this.apiService.changeTypeClient('anonymous');
   }
 }

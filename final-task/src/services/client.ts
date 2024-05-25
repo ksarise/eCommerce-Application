@@ -18,22 +18,11 @@ const clientSecret = import.meta.env.VITE_CTP_CLIENT_SECRET;
 
 const LOCAL_STORAGE_TOKEN_KEY = 'key-token';
 
-// const tokenCache: TokenCache = {
-//   get: () => {
-//     const token = localStorage.getItem(LOCAL_STORAGE_TOKEN_KEY);
-//     return token ? JSON.parse(token) : null;
-//   },
-//   set: (cache: TokenStore) => {
-//     localStorage.setItem(LOCAL_STORAGE_TOKEN_KEY, JSON.stringify(cache));
-//   },
-// };
-
 class MyTokenCache implements TokenCache {
   myCaсhe: TokenStore = { token: '', expirationTime: 1800, refreshToken: '' };
 
   set(newCache: TokenStore) {
     this.myCaсhe = newCache;
-    console.log(newCache);
     localStorage.setItem(LOCAL_STORAGE_TOKEN_KEY, JSON.stringify(newCache));
   }
 
@@ -42,7 +31,6 @@ class MyTokenCache implements TokenCache {
     if (token) {
       this.myCaсhe = JSON.parse(token);
     }
-    // this.myCaсhe.token ? JSON.parse(token) : null;
     return this.myCaсhe;
   }
 }

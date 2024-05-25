@@ -2,7 +2,6 @@ import {
   createApiBuilderFromCtpClient,
   ByProjectKeyRequestBuilder,
 } from '@commercetools/platform-sdk';
-// import ctpClient, { createPasswordClient } from './client';
 import {
   createPasswordClient,
   createAnonymousClient,
@@ -13,13 +12,12 @@ import { CustomerDraft, ApiResponse } from '../types/types';
 export default class API {
   private apiRoot: ByProjectKeyRequestBuilder;
 
-  private login: boolean;
+  // private login: boolean;
 
   constructor() {
     const keyToken = localStorage.getItem('key-token');
     if (keyToken) {
       const { refreshToken } = JSON.parse(keyToken);
-      console.log(keyToken);
       this.apiRoot = createApiBuilderFromCtpClient(
         createRefreshTokenClient(refreshToken),
       ).withProjectKey({
@@ -32,7 +30,7 @@ export default class API {
         projectKey: import.meta.env.VITE_CTP_PROJECT_KEY,
       });
     }
-    this.login = false;
+    // this.login = false;
   }
 
   public getProject() {
@@ -54,16 +52,16 @@ export default class API {
   public async postCustomerLogin(
     email: string,
     password: string,
-    isLogined: boolean,
+    // isLogined: boolean,
   ) {
-    this.login = isLogined;
-    if (!this.login) {
-      this.apiRoot = createApiBuilderFromCtpClient(
-        createPasswordClient(email, password),
-      ).withProjectKey({
-        projectKey: import.meta.env.VITE_CTP_PROJECT_KEY,
-      });
-    }
+    // this.login = isLogined;
+    // if (!this.login) {
+    //   this.apiRoot = createApiBuilderFromCtpClient(
+    //     createPasswordClient(email, password),
+    //   ).withProjectKey({
+    //     projectKey: import.meta.env.VITE_CTP_PROJECT_KEY,
+    //   });
+    // }
     try {
       const response = await this.apiRoot
         .login()
@@ -74,6 +72,10 @@ export default class API {
           },
         })
         .execute();
+      this.changeTypeClient('password', {
+        email,
+        password,
+      });
       return { result: true, obj: response };
     } catch (error) {
       return { result: false, obj: error };
@@ -82,5 +84,40 @@ export default class API {
 
   public createCustomer(customerDraft: CustomerDraft): Promise<ApiResponse> {
     return this.apiRoot.customers().post({ body: customerDraft }).execute();
+  }
+
+  public changeTypeClient(
+    typeClient: string,
+    settings?: { refreshToken?: string; email?: string; password?: string },
+  ) {
+    switch (typeClient) {
+      case 'anonymous':
+        this.apiRoot = createApiBuilderFromCtpClient(
+          createAnonymousClient(),
+        ).withProjectKey({
+          projectKey: import.meta.env.VITE_CTP_PROJECT_KEY,
+        });
+        break;
+      case 'password':
+        if (settings && settings.email && settings.password) {
+          this.apiRoot = createApiBuilderFromCtpClient(
+            createPasswordClient(settings?.email, settings?.password),
+          ).withProjectKey({
+            projectKey: import.meta.env.VITE_CTP_PROJECT_KEY,
+          });
+        }
+        break;
+      case 'refreshToken':
+        if (settings && settings.refreshToken) {
+          this.apiRoot = createApiBuilderFromCtpClient(
+            createRefreshTokenClient(settings?.refreshToken),
+          ).withProjectKey({
+            projectKey: import.meta.env.VITE_CTP_PROJECT_KEY,
+          });
+        }
+        break;
+      default:
+        break;
+    }
   }
 }
