@@ -32,11 +32,6 @@ export default class API {
         projectKey: import.meta.env.VITE_CTP_PROJECT_KEY,
       });
     }
-    // this.apiRoot = createApiBuilderFromCtpClient(
-    //   createAnonymousClient(),
-    // ).withProjectKey({
-    //   projectKey: import.meta.env.VITE_CTP_PROJECT_KEY,
-    // });
     this.login = false;
   }
 
@@ -56,7 +51,7 @@ export default class API {
     return this.apiRoot.products().get().execute();
   }
 
-  public postCustomerLogin(
+  public async postCustomerLogin(
     email: string,
     password: string,
     isLogined: boolean,
@@ -69,21 +64,20 @@ export default class API {
         projectKey: import.meta.env.VITE_CTP_PROJECT_KEY,
       });
     }
-    return this.apiRoot
-      .login()
-      .post({
-        body: {
-          email,
-          password,
-        },
-      })
-      .execute()
-      .then((response) => {
-        return { result: true, obj: response };
-      })
-      .catch((error) => {
-        return { result: false, obj: error };
-      });
+    try {
+      const response = await this.apiRoot
+        .login()
+        .post({
+          body: {
+            email,
+            password,
+          },
+        })
+        .execute();
+      return { result: true, obj: response };
+    } catch (error) {
+      return { result: false, obj: error };
+    }
   }
 
   public createCustomer(customerDraft: CustomerDraft): Promise<ApiResponse> {

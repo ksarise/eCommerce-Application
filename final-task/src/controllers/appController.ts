@@ -158,16 +158,14 @@ export default class AppController {
   }
 
   public handleClickLogoutButton() {
+    this.appModel.isLogined = false;
     this.routerController.goToPage('/');
-    localStorage.removeItem('true-key');
-    localStorage.removeItem('key-token');
+    localStorage.removeItem('userCreds');
     this.handleVisiblityButtons();
   }
 
   public handleVisiblityButtons() {
-    this.appView.headerView.toggleButtonVisibility(
-      !!localStorage.getItem('true-key'),
-    );
+    this.appView.headerView.toggleButtonVisibility(this.appModel.isLogined);
   }
 
   public handleClickGoHomeButton() {
