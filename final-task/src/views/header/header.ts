@@ -1,4 +1,3 @@
-// import './header.scss';
 import BaseComponentGenerator from '../../tags/base-component';
 import tags from '../../tags/tags';
 
@@ -22,9 +21,15 @@ export default class HeaderView {
       tag: 'header',
       classNames: ['header', 'container'],
     });
-    this.logoContainer = tags.div(['header__logo-container'], '', {});
-    this.linkContainer = tags.div(['header__navigation'], '', {});
-    this.buttonContainer = tags.div(['header__buttons'], '', {});
+    this.logoContainer = tags
+      .div(['header__logo-container'], '', {})
+      .getElement() as HTMLDivElement;
+    this.linkContainer = tags
+      .div(['header__navigation'], '', {})
+      .getElement() as HTMLDivElement;
+    this.buttonContainer = tags
+      .div(['header__buttons'], '', {})
+      .getElement() as HTMLDivElement;
   }
 
   public getContent(): HTMLElement {

@@ -4,7 +4,7 @@ import AppModel from '../models/appModel';
 import routerController from '../services/router';
 import RegistrationController from './Registration/RegistrationController';
 import showToast from '../services/ToastMessages';
-import { RegistrationFormData } from '../types/types';
+import { RegistrationFormData } from '../global/interfaces/registration';
 
 export default class AppController {
   public appView: AppView;

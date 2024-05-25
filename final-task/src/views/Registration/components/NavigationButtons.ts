@@ -1,5 +1,5 @@
-import BaseComponentGenerator from '../../../components/base-component';
-import tags from '../../../components/tags';
+import BaseComponentGenerator from '../../../tags/base-component';
+import tags from '../../../tags/tags';
 
 export type NavigationButtonCallback = () => void;
 

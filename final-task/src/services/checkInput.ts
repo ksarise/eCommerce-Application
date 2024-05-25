@@ -1,4 +1,4 @@
-import { LoginEmail, LoginPassword } from '../interface/login_interface';
+import { LoginEmail, LoginPassword } from '../global/enums/login';
 
 export function checkPassword(inputString: string): [boolean, LoginPassword] {
   let rightValue: boolean = true;

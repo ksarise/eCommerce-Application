@@ -1,13 +1,13 @@
-import BaseComponentGenerator from '../../components/base-component';
-import tags from '../../components/tags';
+import BaseComponentGenerator from '../../tags/base-component';
+import tags from '../../tags/tags';
 import GeneralInfoBlock from './components/GeneralInfoBlock';
 import AddressBlock from './components/AddressInfoBlock';
 import '../../styles/registration.scss';
 import {
   FormSubmitCallback,
   FieldEventCallback,
-  RegistrationFormData,
-} from '../../types/types';
+} from '../../global/types/registration';
+import { RegistrationFormData } from '../../global/interfaces/registration';
 import NavigationButtons from './components/NavigationButtons';
 
 export default class RegistrationView {

@@ -46,12 +46,12 @@ export default class AppView {
         break;
       case 'login':
         content!.innerHTML = '';
-        content!.append(this.loginView.createLogin() as HTMLElement);
+        content!.append(this.loginView.createLogin());
         this.loginView.addClassToLogin(true);
         break;
       case 'registration':
         content!.innerHTML = '';
-        content!.append(this.registrationView.RenderPage() as HTMLElement);
+        content!.append(this.registrationView.RenderPage());
         this.loginView.addClassToLogin(false);
         break;
       case '404':

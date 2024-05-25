@@ -1,6 +1,9 @@
 import API from '../services/ApiRoot';
 import RegistrationPageModel from './Registration/RegistrationModel';
-import { ApiResponse, RegistrationFormData } from '../types/types';
+import {
+  ApiResponse,
+  RegistrationFormData,
+} from '../global/interfaces/registration';
 import createCustomerDraft from '../services/CreateCustomerDraft';
 
 export default class AppModel {

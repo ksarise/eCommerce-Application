@@ -1,4 +1,4 @@
-import { ElementProps } from '../interface/interface';
+import { ElementProps } from '../global/interfaces/elementProps';
 
 export default class BaseComponentGenerator {
   private element: HTMLElement;
@@ -36,7 +36,6 @@ export default class BaseComponentGenerator {
     content,
     attributes,
     event,
-    type,
     eventCallback,
   }: ElementProps): HTMLElement {
     const element = document.createElement(tag);
@@ -56,9 +55,6 @@ export default class BaseComponentGenerator {
     }
     if (event && eventCallback) {
       element.addEventListener(event, eventCallback);
-    }
-    if (type) {
-      element.setAttribute('type', type);
     }
     return element;
   }

@@ -1,4 +1,4 @@
-import BaseComponentGenerator from '../../../components/base-component';
+import BaseComponentGenerator from '../../../tags/base-component';
 import RegistrationFieldBlock from './RegistrationFieldBlock';
 import tags from '../../../tags/tags';
 

@@ -1,4 +1,4 @@
-import { RegistrationFormData } from '../../types/types';
+import { RegistrationFormData } from '../../global/interfaces/registration';
 import validationRules from './validation/validationRules.json';
 
 type Errors = {

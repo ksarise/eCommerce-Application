@@ -1,5 +1,5 @@
 import tags from '../tags/tags';
-import { LoginForm } from '../interface/interface';
+import { LoginForm } from '../global/enums/login';
 import * as check from '../services/checkInput';
 
 export default class Login {
@@ -33,24 +33,31 @@ export default class Login {
     this.form = tags.form(['form', 'form-login'], {
       id: 'formLogin',
       type: 'submit',
+      autocomplete: 'on',
     });
     this.inputEmail = tags.input(['input', 'input-login'], {
       type: 'text',
       placeholder: 'Email...',
       id: 'inputEmail',
+      autocomplete: 'on',
     });
     this.inputPassword = tags.input(['input', 'input-password'], {
       type: 'password',
       placeholder: 'Password...',
       id: 'inputPassword',
+      autocomplete: 'on',
     });
     this.history = null;
-    this.errorEmail = tags.div(['error', 'error-hidden'], '', {
-      id: 'errorEmail',
-    });
-    this.errorPassword = tags.div(['error', 'error-hidden'], '', {
-      id: 'errorPassword',
-    });
+    this.errorEmail = tags
+      .div(['error', 'error-hidden'], '', {
+        id: 'errorEmail',
+      })
+      .getElement() as HTMLDivElement;
+    this.errorPassword = tags
+      .div(['error', 'error-hidden'], '', {
+        id: 'errorPassword',
+      })
+      .getElement() as HTMLDivElement;
     this.checkBox = tags.input(['password-visible'], {
       type: 'checkbox',
       name: 'password-visible',
@@ -61,18 +68,26 @@ export default class Login {
       for: 'VisiblePassword',
     });
     this.body = document.querySelector('body')!;
-    this.popUp = tags.div(['pop-up', 'pop-up-hidden'], '', {
-      id: 'popLogin',
-    });
-    this.popText = tags.div(['pop-up-text'], '', {
-      id: 'popText',
-    });
-    this.container = tags.div(['container-login'], '', {
-      id: 'container',
-    });
-    this.cross = tags.div(['cross'], '', {
-      id: 'cross',
-    });
+    this.popUp = tags
+      .div(['pop-up', 'pop-up-hidden'], '', {
+        id: 'popLogin',
+      })
+      .getElement() as HTMLDivElement;
+    this.popText = tags
+      .div(['pop-up-text'], '', {
+        id: 'popText',
+      })
+      .getElement() as HTMLDivElement;
+    this.container = tags
+      .div(['container-login'], '', {
+        id: 'container',
+      })
+      .getElement() as HTMLDivElement;
+    this.cross = tags
+      .div(['cross'], '', {
+        id: 'cross',
+      })
+      .getElement() as HTMLDivElement;
   }
 
   public createLogin() {
@@ -108,16 +123,18 @@ export default class Login {
   }
 
   private createPopUp() {
-    const error = tags.div(['error-pop-up'], 'Invalid email or password', {
-      id: 'error-pop-up',
-    });
+    const error = tags
+      .div(['error-pop-up'], 'Invalid email or password', {
+        id: 'error-pop-up',
+      })
+      .getElement() as HTMLDivElement;
     this.popText.innerHTML = 'sdfghj';
     this.popUp.append(this.cross, this.popText, error);
     return this.popUp;
   }
 
   private createBlockInput(labelText: LoginForm) {
-    const block = tags.div(['block-input']);
+    const block = tags.div(['block-input']).getElement() as HTMLDivElement;
     const label = tags.label(
       ['label', `label-${labelText.toLocaleLowerCase()}`],
       labelText,

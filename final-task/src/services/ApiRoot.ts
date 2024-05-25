@@ -7,7 +7,7 @@ import {
   createAnonymousClient,
   createRefreshTokenClient,
 } from './client';
-import { CustomerDraft, ApiResponse } from '../types/types';
+import { CustomerDraft, ApiResponse } from '../global/interfaces/registration';
 
 export default class API {
   private apiRoot: ByProjectKeyRequestBuilder;

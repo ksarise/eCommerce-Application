@@ -1,4 +1,4 @@
-import tags from '../../../components/tags';
+import tags from '../../../tags/tags';
 
 export default class RegistrationCheckboxBlock {
   private checkboxBlock: HTMLElement;
