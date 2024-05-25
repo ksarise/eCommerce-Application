@@ -60,11 +60,14 @@ export default class AppController {
           loginViewVariables.inputPassword.value,
         );
       if (result.result) {
-        await loginViewVariables.addListenerToLogin();
+        loginViewVariables.addListenerToLogin();
         this.routerController.goToPage('/');
         this.handleVisiblityButtons();
       } else {
-        loginViewVariables.addPopUpWithError(result.obj as string);
+        showToast({
+          text: `${result.obj}`,
+          type: 'negative',
+        });
       }
     });
     loginViewVariables.inputEmail.addEventListener('input', () => {

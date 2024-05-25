@@ -67,6 +67,8 @@
   }
 
   &__buttons {
+    display: flex;
+    gap: 5px;
     &:not(.loginned) {
       > *:last-child {
         display: none;
