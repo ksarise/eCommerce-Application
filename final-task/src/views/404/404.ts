@@ -2,7 +2,6 @@ import BaseComponentGenerator from '../../tags/base-component';
 import tags from '../../tags/tags';
 // eslint-disable-next-line import/no-absolute-path
 import animation from '/NotFoundAnimation.json?url';
-// import './404.scss';
 
 export default class NotFoundView {
   private notFound: BaseComponentGenerator;
@@ -16,7 +15,9 @@ export default class NotFoundView {
       tag: 'div',
       classNames: ['not-found'],
     });
-    this.notFoundContainer = tags.div(['not-found__animation'], '', {});
+    this.notFoundContainer = tags
+      .div(['not-found__animation'], '', {})
+      .getElement() as HTMLDivElement;
   }
 
   public getContent(): HTMLElement {

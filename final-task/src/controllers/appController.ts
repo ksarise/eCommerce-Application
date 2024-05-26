@@ -4,7 +4,7 @@ import AppModel from '../models/appModel';
 import routerController from '../services/router';
 import RegistrationController from './Registration/RegistrationController';
 import showToast from '../services/ToastMessages';
-import { RegistrationFormData } from '../types/types';
+import { RegistrationFormData } from '../global/interfaces/registration';
 
 export default class AppController {
   public appView: AppView;
@@ -37,11 +37,6 @@ export default class AppController {
 
   public initializeListeners() {
     this.routerController.changeContent = this.changeContent.bind(this);
-    const customersButton = document.querySelector('.customers');
-    customersButton?.addEventListener('click', async () => {
-      const customers = await this.appModel.requestGetCustomers();
-      console.log(customers);
-    });
     this.appView.headerView.handleClickLoginButton =
       this.handleClickLoginButton.bind(this);
     this.appView.headerView.handleClickRegistrationButton =
@@ -65,11 +60,14 @@ export default class AppController {
           loginViewVariables.inputPassword.value,
         );
       if (result.result) {
-        await loginViewVariables.addListenerToLogin();
+        loginViewVariables.addListenerToLogin();
         this.routerController.goToPage('/');
         this.handleVisiblityButtons();
       } else {
-        loginViewVariables.addPopUpWithError(result.obj as string);
+        showToast({
+          text: `${result.obj}`,
+          type: 'negative',
+        });
       }
     });
     loginViewVariables.inputEmail.addEventListener('input', () => {
@@ -158,16 +156,14 @@ export default class AppController {
   }
 
   public handleClickLogoutButton() {
+    this.appModel.logout();
     this.routerController.goToPage('/');
-    localStorage.removeItem('true-key');
-    localStorage.removeItem('key-token');
+    localStorage.removeItem('userCreds');
     this.handleVisiblityButtons();
   }
 
   public handleVisiblityButtons() {
-    this.appView.headerView.toggleButtonVisibility(
-      !!localStorage.getItem('true-key'),
-    );
+    this.appView.headerView.toggleButtonVisibility(this.appModel.isLogined);
   }
 
   public handleClickGoHomeButton() {

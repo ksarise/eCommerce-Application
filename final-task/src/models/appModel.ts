@@ -1,6 +1,9 @@
 import API from '../services/ApiRoot';
 import RegistrationPageModel from './Registration/RegistrationModel';
-import { ApiResponse, RegistrationFormData } from '../types/types';
+import {
+  ApiResponse,
+  RegistrationFormData,
+} from '../global/interfaces/registration';
 import createCustomerDraft from '../services/CreateCustomerDraft';
 
 export default class AppModel {
@@ -8,9 +11,20 @@ export default class AppModel {
 
   public registrationModel: RegistrationPageModel;
 
+  public isLogined: boolean = false;
+
   constructor() {
     this.apiService = new API();
     this.registrationModel = new RegistrationPageModel();
+    if (localStorage.getItem('userCreds')) {
+      this.isLogined = true;
+      this.apiService.postCustomerLogin(
+        JSON.parse(localStorage.getItem('userCreds') as string).email,
+        JSON.parse(localStorage.getItem('userCreds') as string).password,
+      );
+    } else {
+      this.isLogined = false;
+    }
   }
 
   public async requestGetCustomers() {
@@ -20,6 +34,10 @@ export default class AppModel {
 
   public async postLoginCustomer(email: string, password: string) {
     const result = await this.apiService.postCustomerLogin(email, password);
+    if (result.result) {
+      this.isLogined = true;
+      localStorage.setItem('userCreds', JSON.stringify({ email, password }));
+    }
     return result;
   }
 
@@ -34,5 +52,14 @@ export default class AppModel {
       console.error('Error creating customer:', error);
       throw error;
     }
+  }
+
+  public getProducts() {
+    return this.apiService.getProducts();
+  }
+
+  public logout() {
+    this.isLogined = false;
+    this.apiService.changeTypeClient('anonymous');
   }
 }

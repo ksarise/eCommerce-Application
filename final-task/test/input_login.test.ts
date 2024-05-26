@@ -1,5 +1,5 @@
 import { checkEmail, checkPassword } from '../src/services/checkInput';
-import { LoginEmail, LoginPassword } from '../src/interface/login_interface';
+import { LoginEmail, LoginPassword } from '../src/global/enums/login';
 
 const validEmails: string[] = [
   'user1@example.com',

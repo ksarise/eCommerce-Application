@@ -1,3 +1,7 @@
+export enum LoginForm {
+  EMAIL = 'Email',
+  PASSWORD = 'Password',
+}
 export enum LoginEmail {
   EMPTY = 'Please fill in the field',
   AT = 'Email should contain an "@" symbol separating local part and domain name',

@@ -1,7 +1,7 @@
-import BaseComponentGenerator from '../../../components/base-component';
+import BaseComponentGenerator from '../../../tags/base-component';
 import RegistrationFieldBlock from './RegistrationFieldBlock';
 import RegistrationCheckboxBlock from './CheckboxBlock';
-import tags from '../../../components/tags';
+import tags from '../../../tags/tags';
 
 export default class AddressBlock extends BaseComponentGenerator {
   private streetBlock: RegistrationFieldBlock;

@@ -4,13 +4,13 @@ const div = (
   classNames: string[],
   content?: string,
   attributes: { [key: string]: string } = {},
-): HTMLDivElement => {
+): BaseComponentGenerator => {
   return new BaseComponentGenerator({
     tag: 'div',
     classNames,
     content,
     attributes,
-  }).getElement() as HTMLDivElement;
+  });
 };
 
 const h1 = (
@@ -165,6 +165,13 @@ const button = (
   }).getElement() as HTMLButtonElement;
 };
 
+const span = (classNames: string[]): HTMLElement => {
+  return new BaseComponentGenerator({
+    tag: 'span',
+    classNames,
+  }).getElement();
+};
+
 const tags = {
   div,
   h1,
@@ -179,6 +186,7 @@ const tags = {
   form,
   label,
   button,
+  span,
 };
 
 export default tags;

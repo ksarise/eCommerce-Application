@@ -9,7 +9,7 @@
     "lowercase": "(?=.*[a-z])",
     "number": "(?=.*\\d)",
     "specialCharacter": "(?=.*[!@#$%^&*()_+\\-=\\[\\]{};':\"\\\\|,.<>\\/?])",
-    "noSpace": "(?=\\S)",
+    "noSpace": "(?=\\s)",
     "errorMessages": {
       "minLength": "Password must be at least 8 characters long",
       "uppercase": "Password must contain at least one uppercase letter",
@@ -34,15 +34,15 @@
     "errorMessage": "You must be at least 13 years old"
   },
   "street": {
-    "pattern": "^[a-zA-Z]+$",
+    "pattern": "^[a-zA-Z0-9\\s-]+$",
     "minLength": 1,
     "errorMessage": {
-      "pattern": "Address must contain only english letters",
-      "minLength": "Address must be at least one character long"
+      "pattern": "Street must contain only english letters",
+      "minLength": "Street must be at least one character long"
     }
   },
   "city": {
-    "pattern": "^[a-zA-Z]+$",
+    "pattern": "^[a-zA-Z\\s-]+$",
     "minLength": 1,
     "errorMessages": {
       "pattern": "City must contain only english letters",

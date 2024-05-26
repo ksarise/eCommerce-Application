@@ -1,4 +1,8 @@
-import { RegistrationFormData, Address, CustomerDraft } from '../types/types';
+import {
+  RegistrationFormData,
+  Address,
+  CustomerDraft,
+} from '../global/interfaces/registration';
 
 export default function createCustomerDraft(
   formData: RegistrationFormData,

@@ -4,6 +4,8 @@ import {
   type AuthMiddlewareOptions,
   type HttpMiddlewareOptions,
   type PasswordAuthMiddlewareOptions,
+  type AnonymousAuthMiddlewareOptions,
+  type RefreshAuthMiddlewareOptions,
   TokenStore,
   TokenCache,
 } from '@commercetools/sdk-client-v2';
@@ -16,15 +18,24 @@ const clientSecret = import.meta.env.VITE_CTP_CLIENT_SECRET;
 
 const LOCAL_STORAGE_TOKEN_KEY = 'key-token';
 
-const tokenCache: TokenCache = {
-  get: () => {
+class MyTokenCache implements TokenCache {
+  myCaсhe: TokenStore = { token: '', expirationTime: 1800, refreshToken: '' };
+
+  set(newCache: TokenStore) {
+    this.myCaсhe = newCache;
+    localStorage.setItem(LOCAL_STORAGE_TOKEN_KEY, JSON.stringify(newCache));
+  }
+
+  get() {
     const token = localStorage.getItem(LOCAL_STORAGE_TOKEN_KEY);
-    return token ? JSON.parse(token) : null;
-  },
-  set: (cache: TokenStore) => {
-    localStorage.setItem(LOCAL_STORAGE_TOKEN_KEY, JSON.stringify(cache));
-  },
-};
+    if (token) {
+      this.myCaсhe = JSON.parse(token);
+    }
+    return this.myCaсhe;
+  }
+}
+
+const tokenCache = new MyTokenCache();
 
 const authMiddlewareOptions: AuthMiddlewareOptions = {
   host: hostAuth,
@@ -62,6 +73,51 @@ export const createPasswordClient = (email: string, password: string) => {
   const clientNew = new ClientBuilder()
     .withProjectKey(projectKey)
     .withPasswordFlow(options)
+    .withHttpMiddleware(httpMiddlewareOptions)
+    .withLoggerMiddleware()
+    .build();
+
+  return clientNew;
+};
+
+export const createAnonymousClient = () => {
+  const options: AnonymousAuthMiddlewareOptions = {
+    host: hostAuth,
+    projectKey,
+    credentials: {
+      clientId,
+      clientSecret,
+      anonymousId: crypto.randomUUID(),
+    },
+    scopes,
+    tokenCache,
+    fetch,
+  };
+  const clientNew = new ClientBuilder()
+    .withProjectKey(projectKey)
+    .withAnonymousSessionFlow(options)
+    .withHttpMiddleware(httpMiddlewareOptions)
+    .withLoggerMiddleware()
+    .build();
+
+  return clientNew;
+};
+
+export const createRefreshTokenClient = (refreshToken: string) => {
+  const options: RefreshAuthMiddlewareOptions = {
+    host: hostAuth,
+    projectKey,
+    credentials: {
+      clientId,
+      clientSecret,
+    },
+    refreshToken,
+    tokenCache,
+    fetch,
+  };
+  const clientNew = new ClientBuilder()
+    .withProjectKey(projectKey)
+    .withRefreshTokenFlow(options)
     .withHttpMiddleware(httpMiddlewareOptions)
     .withLoggerMiddleware()
     .build();

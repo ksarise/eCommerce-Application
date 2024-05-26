@@ -1,4 +1,4 @@
-import { RegistrationFormData } from '../../types/types';
+import { RegistrationFormData } from '../../global/interfaces/registration';
 import validationRules from './validation/validationRules.json';
 
 type Errors = {
@@ -69,7 +69,7 @@ export default class RegistrationPageModel {
       this.errors.password.push(rule.errorMessages.specialCharacter);
     }
 
-    if (!RegistrationPageModel.validatePattern(password, rule.noSpace)) {
+    if (RegistrationPageModel.validatePattern(password, rule.noSpace)) {
       this.errors.password.push(rule.errorMessages.noSpace);
     }
 
