@@ -84,8 +84,18 @@ export default class HeaderView {
         'data-navigo': 'true',
       },
     );
+    const linkProduct = tags.a(
+      ['header__navigation_link'],
+      '/product',
+      'Product',
+      {
+        title: 'Link',
+        'data-navigo': 'true',
+      },
+    );
     this.linkContainer.appendChild(linkHome);
     this.linkContainer.appendChild(linkRegistration);
+    this.linkContainer.appendChild(linkProduct);
     return this.linkContainer;
   }
 

@@ -36,6 +36,11 @@ class Router {
       this.router.resolve();
     });
 
+    this.router.on('/product', () => {
+      this.changeContent?.('product');
+      this.router.resolve();
+    });
+
     this.router.notFound(() => {
       this.changeContent?.('404');
       this.router.resolve();

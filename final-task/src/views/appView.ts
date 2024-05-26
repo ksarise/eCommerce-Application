@@ -3,6 +3,7 @@ import LoginView from './login';
 import RegistrationView from './Registration/RegistrationView';
 import HeaderView from './header/header';
 import NotFoundView from './404/404';
+import ProductPageView from './ProductPage/ProductPageView';
 
 const appViewHeader = `<div id="content" class="view container"></div>`;
 
@@ -19,6 +20,8 @@ export default class AppView {
 
   public notFoundView: NotFoundView;
 
+  public productPageView: ProductPageView;
+
   public constructor() {
     this.loginView = new LoginView();
     this.innerHTML = appViewHeader;
@@ -26,11 +29,13 @@ export default class AppView {
     this.mainView = new MainView();
     this.notFoundView = new NotFoundView();
     this.registrationView = new RegistrationView();
+    this.productPageView = new ProductPageView();
   }
 
   public create() {
     this.headerView.create();
     this.notFoundView.create();
+    this.productPageView.create();
   }
 
   public renderContent(page: string) {
@@ -60,6 +65,13 @@ export default class AppView {
           .getElementById('content')!
           .appendChild(this.notFoundView.getContent());
         this.notFoundView.assignAnimation();
+        this.loginView.addClassToLogin(false);
+        break;
+      case 'product':
+        document.getElementById('content')!.innerHTML = '';
+        document
+          .getElementById('content')!
+          .appendChild(this.productPageView.getContent());
         this.loginView.addClassToLogin(false);
         break;
       default:
