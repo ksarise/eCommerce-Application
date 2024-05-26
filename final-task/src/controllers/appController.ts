@@ -52,6 +52,8 @@ export default class AppController {
       this.handleClickRegistrationButton.bind(this);
     this.appView.headerView.handleClickLogoutButton =
       this.handleClickLogoutButton.bind(this);
+    this.appView.headerView.handleClickProduct =
+      this.handleClickProduct.bind(this);
     this.appView.notFoundView.handleClickGoHomeButton =
       this.handleClickGoHomeButton.bind(this);
     this.appView.registrationView.bindFormSubmit(
@@ -188,6 +190,27 @@ export default class AppController {
       const errmessage = (error as ErrorResponse).message;
       showToast({
         text: `${errmessage}`,
+        type: 'negative',
+      });
+    }
+  }
+
+  public async handleClickProduct(event: Event) {
+    const { id } = (event.target! as HTMLElement).dataset;
+    if (!id) {
+      showToast({
+        text: 'No product id',
+        type: 'negative',
+      });
+      return;
+    }
+    try {
+      const response = await this.appModel.getProductById(id);
+      console.log(response);
+    } catch (error) {
+      const errmessage = (error as ErrorResponse).message;
+      showToast({
+        text: `Error: ${errmessage}`,
         type: 'negative',
       });
     }
