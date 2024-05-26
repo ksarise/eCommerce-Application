@@ -1,6 +1,8 @@
 import {
   createApiBuilderFromCtpClient,
   ByProjectKeyRequestBuilder,
+  Product,
+  ClientResponse,
 } from '@commercetools/platform-sdk';
 import {
   createPasswordClient,
@@ -119,5 +121,10 @@ export default class API {
       default:
         break;
     }
+  }
+
+  public getProductById(id: string): Promise<ClientResponse<Product>> {
+    const response = this.apiRoot.products().withId({ ID: id }).get().execute();
+    return response;
   }
 }

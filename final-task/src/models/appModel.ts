@@ -62,4 +62,9 @@ export default class AppModel {
     this.isLogined = false;
     this.apiService.changeTypeClient('anonymous');
   }
+
+  public getProductById(id: string) {
+    const response = this.apiService.getProductById(id);
+    return response;
+  }
 }

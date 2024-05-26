@@ -16,6 +16,8 @@ export default class HeaderView {
 
   public handleClickLogoutButton: ((event?: Event) => void) | undefined;
 
+  public handleClickProduct: ((event: Event) => void) | undefined;
+
   constructor() {
     this.header = new BaseComponentGenerator({
       tag: 'header',
@@ -91,8 +93,12 @@ export default class HeaderView {
       {
         title: 'Link',
         'data-navigo': 'true',
+        'data-id': '6a18b651-bda9-4a35-b201-9842f38777f7',
       },
     );
+    if (this.handleClickProduct) {
+      linkProduct.addEventListener('click', this.handleClickProduct);
+    }
     this.linkContainer.appendChild(linkHome);
     this.linkContainer.appendChild(linkRegistration);
     this.linkContainer.appendChild(linkProduct);
