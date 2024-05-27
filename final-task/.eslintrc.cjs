@@ -2,6 +2,7 @@ module.exports = {
   env: {
     browser: true,
     es2021: true,
+    jest: true,
   },
   extends: [
     'eslint-config-airbnb-base',
@@ -54,4 +55,5 @@ module.exports = {
     },
     noInlineConfig: true,
   },
+  ignorePatterns: ['vite.config.ts'],
 };

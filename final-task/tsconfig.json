@@ -12,6 +12,7 @@
     "resolveJsonModule": true,
     "isolatedModules": true,
     "noEmit": true,
+    "esModuleInterop": true,
 
     /* Linting */
     "strict": true,
@@ -20,5 +21,11 @@
     "noUnusedParameters": true,
     "noFallthroughCasesInSwitch": true
   },
-  "include": ["src", ".eslintrc.cjs", "jest.config.ts"]
+  "include": [
+    "src",
+    ".eslintrc.cjs",
+    "jest.config.ts",
+    "test",
+    "vite.config.ts"
+  ]
 }

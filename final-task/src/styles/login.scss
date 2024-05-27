@@ -1,0 +1,209 @@
+@import 'variables';
+
+.form-login {
+  width: 300px;
+  padding: 0.5em 2em;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 0.5em;
+  flex-direction: column;
+  border: $primary 0.1em solid;
+  background-color: $secondary;
+  border-radius: 1em;
+}
+
+.input {
+  width: 100%;
+  border-radius: 0.5em;
+  border: $primary 0.1em solid;
+  padding: 0.5em;
+  transition: 0.5s;
+  font-size: 1em;
+  &:focus {
+    outline: none;
+  }
+  &-password {
+    padding-right: 2.5em;
+  }
+}
+
+.error {
+  margin: -0.5em;
+  padding-top: 0.5em;
+  text-align: center;
+  min-height: 3.2em;
+  width: 100%;
+  overflow-wrap: break-word;
+  color: $light-red;
+  font-weight: 600;
+  font-size: 0.8em;
+  opacity: 1;
+  transition: 1s;
+}
+
+.error-hidden {
+  width: 100%;
+  opacity: 0;
+  transition: 1s;
+  overflow-wrap: break-word;
+}
+
+.input-error {
+  border-color: $light-red;
+  transition: 0.5s;
+  box-shadow: 0 0 0.2em 0.1em $light-red;
+
+  &:focus {
+    border-color: $light-red;
+  }
+}
+
+.block-input {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  align-items: flex-start;
+  gap: 0.5em;
+}
+
+.password-visible {
+  display: none;
+  position: absolute;
+  right: 0.5em;
+  top: 2em;
+  width: 1.5em;
+  height: 1.5em;
+  border: grey 0.2em solid;
+}
+
+.password-visible-label {
+  position: absolute;
+  right: 0.5em;
+  top: 2em;
+  width: 1.5em;
+  height: 1.5em;
+  cursor: pointer;
+  background-image: url('/eye-password-hide.svg');
+  background-size: 30px 30px;
+  background-repeat: no-repeat;
+  background-position: center;
+}
+
+.view-login {
+  width: 100%;
+  height: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.button-login {
+  width: 100%;
+  padding: 5px 15px;
+  cursor: pointer;
+  border: 2px solid $primary;
+  background: #fff;
+  font-size: 16px;
+  font-weight: 500;
+  line-height: 150%;
+  color: $primary;
+  transition: 0.3s;
+  border-radius: 5px;
+  &:not(:disabled):hover {
+    background-color: $primary;
+    color: #fff;
+  }
+  &:disabled {
+    opacity: 0.3;
+    cursor: default;
+  }
+}
+
+.register-link {
+  padding-top: 20px;
+  text-align: center;
+  font-size: 14px;
+  font-weight: 400;
+  text-decoration: none;
+  color: $text;
+  &:after {
+    content: '';
+    display: block;
+    width: 10%;
+    margin: 0 auto;
+    height: 2px;
+    background-color: $text;
+    transition: width 0.3s;
+  }
+  &:hover {
+    color: $primary;
+    &:after {
+      background-color: $primary;
+      width: 100%;
+    }
+  }
+}
+
+.pop-up {
+  position: fixed;
+  top: 1em;
+  max-width: 300px;
+  display: flex;
+  flex-direction: column;
+  overflow-wrap: break-word;
+  height: auto;
+  padding: 0.2em 0.5em;
+  color: $text;
+  transition: top 0.6s;
+  min-width: 250px;
+  border-radius: 1em;
+  background-color: $secondary;
+  border: $primary 0.1em solid;
+  gap: 5px;
+  text-align: start;
+
+  &-text {
+    width: 100%;
+    color: $light-red;
+    font-size: 1.2em;
+
+    &::before {
+      content: url('/red-cross.svg');
+      margin-top: -35px;
+      display: block;
+      width: 30px;
+      height: 30px;
+    }
+  }
+
+  .cross {
+    cursor: pointer;
+    align-self: flex-end;
+    background-image: url('/cross-mark-svgrepo-com.svg');
+    width: 25px;
+    height: 25px;
+    transition: 0.6s;
+    background-size: 22px 22px;
+    background-repeat: no-repeat;
+    background-position: center;
+
+    &:hover {
+      transform: rotate(90deg);
+    }
+  }
+}
+
+.pop-up-hidden {
+  top: -300px;
+  width: 0;
+  height: 0;
+  opacity: 0;
+  transition: top 0.6s;
+}
+
+.container-login {
+  display: flex;
+  justify-content: center;
+}

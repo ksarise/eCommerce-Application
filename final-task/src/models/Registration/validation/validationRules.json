@@ -1,0 +1,63 @@
+{
+  "email": {
+    "pattern": "^[a-z0-9._%+-]+@[a-z0-9.-]+\\.[a-z]{2,}$",
+    "errorMessage": "Invalid email address"
+  },
+  "password": {
+    "minLength": 8,
+    "uppercase": "(?=.*[A-Z])",
+    "lowercase": "(?=.*[a-z])",
+    "number": "(?=.*\\d)",
+    "specialCharacter": "(?=.*[!@#$%^&*()_+\\-=\\[\\]{};':\"\\\\|,.<>\\/?])",
+    "noSpace": "(?=\\s)",
+    "errorMessages": {
+      "minLength": "Password must be at least 8 characters long",
+      "uppercase": "Password must contain at least one uppercase letter",
+      "lowercase": "Password must contain at least one lowercase letter",
+      "number": "Password must contain at least one number",
+      "specialCharacter": "Password must contain at least one special character",
+      "noSpace": "Password cannot contain spaces"
+    }
+  },
+  "name": {
+    "pattern": "^[a-zA-Z]+$",
+    "minLength": 1,
+    "firstCapital": true,
+    "errorMessages": {
+      "pattern": "Name must contain only english letters",
+      "minLength": "Name must be at least one character long",
+      "firstCapital": "Name must start with a capital letter"
+    }
+  },
+  "dob": {
+    "minAge": 13,
+    "errorMessage": "You must be at least 13 years old"
+  },
+  "street": {
+    "pattern": "^[a-zA-Z0-9\\s-]+$",
+    "minLength": 1,
+    "errorMessage": {
+      "pattern": "Street must contain only english letters",
+      "minLength": "Street must be at least one character long"
+    }
+  },
+  "city": {
+    "pattern": "^[a-zA-Z\\s-]+$",
+    "minLength": 1,
+    "errorMessages": {
+      "pattern": "City must contain only english letters",
+      "minLength": "City must be at least one character long"
+    }
+  },
+  "postalCode": {
+    "patternUSA": "^\\d{5}$",
+    "patternCanada": "^[A-Za-z]\\d[A-Za-z] ?\\d[A-Za-z]\\d$",
+    "errorMessages": {
+      "USA": "Postal code of USA must be 5 digits",
+      "Canada": "Postal code of Canada must be in the format A1A 1A1"
+    }
+  },
+  "country": {
+    "errorMessage": "Sorry, we only accept users from the USA or Canada"
+  }
+}
