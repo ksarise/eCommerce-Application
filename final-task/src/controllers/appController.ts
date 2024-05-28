@@ -180,19 +180,14 @@ export default class AppController {
   }
 
   public async fetchAndLogProducts() {
-    console.log('1');
     try {
       const products = await this.appModel.requestGetProducts();
       console.log(products.results[5].masterData);
       this.appModel.mainModel.setProducts(products);
-      // products.results.forEach((product) => {
-      //   const productName = product.masterData.current.name['en-US'];
-      //   console.log(productName);
-      // });
     } catch (error) {
       const errmessage = (error as ErrorResponse).message;
       showToast({
-        text: `oops${errmessage}`,
+        text: `${errmessage}`,
         type: 'negative',
       });
     }
