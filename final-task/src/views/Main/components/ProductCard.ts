@@ -10,8 +10,8 @@ export default class ProductCard {
     public desc: string,
     public image: string,
     public id: string,
-    public price: number,
-    public discount: number,
+    public price: string,
+    public discount: string,
   ) {
     this.card = tags.div(['product-card'], '').getElement();
 
@@ -32,7 +32,7 @@ export default class ProductCard {
     const cardDesc = tags.p(['product-card__desc'], `${desc}`);
     const cardPrice = tags.p(['product-card__price'], `$${price}`);
     const cardDiscount = tags.p(['product-card__discount'], `$${discount}`);
-    if (discount > 0) {
+    if (discount !== '0.00') {
       cardPrice.classList.add('discounted');
       cardDiscount.classList.add('discounted');
     }

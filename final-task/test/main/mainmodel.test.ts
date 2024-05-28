@@ -30,8 +30,8 @@ describe('MainModel', () => {
       desc: 'Sample description',
       image: 'https://commercetools.com/cli/data/253245821_1.jpg',
       id: 'e7ba4c75-b1bb-483d-94d8-2c4a10f78472',
-      price: 100.0,
-      discount: 80.0,
+      price: '100.0',
+      discount: '80.0',
     };
     expect(products[0]).toEqual(expectedProduct);
   });
@@ -55,8 +55,8 @@ describe('MainModel', () => {
       desc: 'Sample description',
       image: 'https://commercetools.com/cli/data/253245821_1.jpg',
       id: 'e7ba4c75-b1bb-483d-94d8-2c4a10f78472',
-      price: 100.0,
-      discount: 0,
+      price: '100.0',
+      discount: '0',
     };
     expect(products[0]).toEqual(expectedProduct);
   });

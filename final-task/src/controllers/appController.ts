@@ -182,7 +182,7 @@ export default class AppController {
   public async fetchAndLogProducts() {
     try {
       const products = await this.appModel.requestGetProducts();
-      console.log(products.results[5].masterData);
+      // console.log(products.results[5].masterData);
       this.appModel.mainModel.setProducts(products);
     } catch (error) {
       const errmessage = (error as ErrorResponse).message;
