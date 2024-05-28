@@ -3,6 +3,7 @@
   grid-template-columns: repeat(4, 1fr);
   gap: 20px;
   justify-items: center;
+  margin-bottom: 40px;
 
   @media screen and (max-width: 1200px) {
     grid-template-columns: repeat(3, 1fr);
@@ -28,8 +29,8 @@
   align-items: center;
   overflow: hidden;
   width: 90%;
-  
   transition: 0.3s ease-in-out;
+  
   &__link {
     color: #1d1b1b;
     text-decoration: none;
@@ -44,7 +45,7 @@
     font-size: 1.5rem;
     height: 60px;
     font-style: italic;
-    }
+  }
   &__desc {
     font-size: 1rem;
     display: -webkit-box;
@@ -56,10 +57,24 @@
     font-size: 1rem;
     font-weight: 600;
     color: $primary;
+    &.discounted {
+      font-size: 0.8rem;
+      color: rgb(99, 97, 97);
+      text-decoration: line-through;
+    }
+  }
+  &__discount {
+    display: none;
+    font-weight: 600;
+    font-size: 1.2rem;
+    color: rgb(250, 6, 6);
+    &.discounted {
+      display: block;
+    }
   }
   &:hover {
     border-color: $primary;
-    transform: scale(98%);
+    transform: scale(102%);
     transition: 0.3s ease-in-out;
     color: $primary;
 

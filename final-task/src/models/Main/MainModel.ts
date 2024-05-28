@@ -21,6 +21,14 @@ export default class MainModel {
         desc: product.masterData.current.description!['en-US'],
         image: product.masterData.staged.masterVariant.images![0].url,
         id: product.id,
+        price:
+          product.masterData.current.masterVariant.prices![0].value.centAmount /
+          100,
+        discount: product.masterData.current.masterVariant.prices?.[0]
+          ?.discounted?.value?.centAmount
+          ? product.masterData.current.masterVariant.prices[0].discounted.value
+              .centAmount / 100
+          : 0,
       };
       newProducts.push(productdata);
     });

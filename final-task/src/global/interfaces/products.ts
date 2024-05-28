@@ -3,4 +3,6 @@ export default interface ProductCard {
   name: string;
   desc: string;
   image: string;
+  price: number;
+  discount: number;
 }

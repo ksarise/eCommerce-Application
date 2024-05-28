@@ -25,6 +25,8 @@ export default class MainView {
         product.desc,
         product.image,
         product.id,
+        product.price,
+        product.discount,
       );
       this.mainContainer.append(productCard.renderCard());
     });

@@ -183,7 +183,7 @@ export default class AppController {
     console.log('1');
     try {
       const products = await this.appModel.requestGetProducts();
-      console.log(products);
+      console.log(products.results[5].masterData);
       this.appModel.mainModel.setProducts(products);
       // products.results.forEach((product) => {
       //   const productName = product.masterData.current.name['en-US'];
