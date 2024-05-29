@@ -1,0 +1,24 @@
+.product {
+  &__hero {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+  }
+}
+
+.alt-column {
+  width: 70px;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  &__container {
+    width: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+  }
+  &__image {
+    width: 100%;
+    height: 100%;
+  }
+}
