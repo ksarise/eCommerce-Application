@@ -206,7 +206,7 @@ export default class AppController {
     }
     try {
       const response = await this.appModel.getProductById(id);
-      console.log(response);
+      this.appView.productPageView.render(response.body);
     } catch (error) {
       const errmessage = (error as ErrorResponse).message;
       showToast({
