@@ -5,6 +5,7 @@ import routerController from '../services/router';
 import RegistrationController from './Registration/RegistrationController';
 import showToast from '../services/ToastMessages';
 import { RegistrationFormData } from '../global/interfaces/registration';
+import MainController from './Main/MainController';
 
 export default class AppController {
   public appView: AppView;
@@ -12,6 +13,8 @@ export default class AppController {
   public appModel: AppModel;
 
   private routerController = routerController;
+
+  private mainController: MainController;
 
   private registrationController: RegistrationController;
 
@@ -22,15 +25,21 @@ export default class AppController {
       this.appView.registrationView,
       this.appModel.registrationModel,
     );
+    this.mainController = new MainController(
+      this.appModel.mainModel,
+      this.appView.mainView,
+    );
   }
 
-  public initialize() {
+  public async initialize() {
     this.initializeListeners();
     this.initializeLoginListeners();
     this.appView.create();
     this.registrationController.init();
     document.querySelector<HTMLDivElement>('.body')!.innerHTML =
       this.appView.innerHTML;
+    await this.fetchAndLogProducts();
+    this.mainController.initialize();
     routerController.handleLocation();
     this.handleVisiblityButtons();
   }
@@ -168,5 +177,19 @@ export default class AppController {
 
   public handleClickGoHomeButton() {
     this.routerController.goToPage('/');
+  }
+
+  public async fetchAndLogProducts() {
+    try {
+      const products = await this.appModel.requestGetProducts();
+      // console.log(products.results[5].masterData);
+      this.appModel.mainModel.setProducts(products);
+    } catch (error) {
+      const errmessage = (error as ErrorResponse).message;
+      showToast({
+        text: `${errmessage}`,
+        type: 'negative',
+      });
+    }
   }
 }

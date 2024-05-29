@@ -1,4 +1,4 @@
-import MainView from './main';
+import MainView from './Main/MainView';
 import LoginView from './login';
 import RegistrationView from './Registration/RegistrationView';
 import HeaderView from './header/header';

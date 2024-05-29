@@ -1,7 +1,10 @@
 @import './variables.scss';
 
 .header {
-  position: relative;
+  position: sticky;
+  z-index: 999;
+  background-color: #fff;
+  border-bottom: 2px solid $primary;
   top: 0;
   left: 0;
   display: flex;
@@ -9,6 +12,7 @@
   width: 100%;
   justify-content: space-between;
   height: 70px;
+  width: 99% !important;
 
   &__navigation {
     display: flex;

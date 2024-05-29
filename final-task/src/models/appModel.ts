@@ -5,17 +5,21 @@ import {
   RegistrationFormData,
 } from '../global/interfaces/registration';
 import createCustomerDraft from '../services/CreateCustomerDraft';
+import MainModel from './Main/MainModel';
 
 export default class AppModel {
   private apiService: API;
 
   public registrationModel: RegistrationPageModel;
 
+  public mainModel: MainModel = new MainModel();
+
   public isLogined: boolean = false;
 
   constructor() {
     this.apiService = new API();
     this.registrationModel = new RegistrationPageModel();
+    this.mainModel = new MainModel();
     if (localStorage.getItem('userCreds')) {
       this.isLogined = true;
       this.apiService.postCustomerLogin(
@@ -54,8 +58,9 @@ export default class AppModel {
     }
   }
 
-  public getProducts() {
-    return this.apiService.getProducts();
+  public async requestGetProducts() {
+    const { body } = await this.apiService.getProducts();
+    return body;
   }
 
   public logout() {
