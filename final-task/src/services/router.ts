@@ -36,6 +36,15 @@ class Router {
       this.router.resolve();
     });
 
+    this.router.on('/my_profile', () => {
+      if (!localStorage.getItem('userCreds')) {
+        this.goToPage('/');
+      } else {
+        this.changeContent?.('my_profile');
+      }
+      this.router.resolve();
+    });
+
     this.router.notFound(() => {
       this.changeContent?.('404');
       this.router.resolve();
