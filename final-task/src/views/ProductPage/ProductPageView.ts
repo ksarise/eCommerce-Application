@@ -41,20 +41,21 @@ export default class ProductPageView {
   }
 
   public createProductPage(): void {
-    const buttonCart = tags.button(['product__buttons_cart'], 'Add to cart');
+    const buttonCart = tags.button(['product__buttons_cart'], 'Add To Cart');
     this.buttonContainer.append(buttonCart);
-    this.container.appendChildren([
-      this.heroContainer,
-      this.descriptionContainer,
-      this.buttonContainer,
-    ]);
+    const rightContainer = tags
+      .div(['product__right-container'], '', {})
+      .getElement();
+    rightContainer.append(this.descriptionContainer);
+    rightContainer.append(this.buttonContainer);
+    this.container.appendChildren([this.heroContainer, rightContainer]);
   }
 
   private renderHeroContainer(images: Image[]): void {
     const heroMainContainer = tags
       .div(['product__hero_main'], '', {})
       .getElement();
-    this.heroMainImage = tags.img(['product__hero_main_image'], {
+    this.heroMainImage = tags.img(['product__hero_main-image'], {
       src: images[0].url,
     });
 
