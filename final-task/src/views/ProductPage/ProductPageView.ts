@@ -1,7 +1,12 @@
+import Swiper from 'swiper';
+import { Navigation, Thumbs } from 'swiper/modules';
+import 'swiper/css';
+import 'swiper/css/navigation';
+import 'swiper/css/pagination';
 import { ProductData, Image, Product } from '@commercetools/platform-sdk';
 import BaseComponentGenerator from '../../tags/base-component';
 import tags from '../../tags/tags';
-import '../../styles/producrPage.scss';
+import '../../styles/productPage.scss';
 
 export default class ProductPageView {
   private container: BaseComponentGenerator;
@@ -11,8 +16,6 @@ export default class ProductPageView {
   private descriptionContainer: HTMLDivElement;
 
   private buttonContainer: HTMLDivElement;
-
-  private heroMainImage: HTMLImageElement | undefined;
 
   constructor() {
     this.container = tags.div(['product'], '', {});
@@ -53,33 +56,61 @@ export default class ProductPageView {
 
   private renderHeroContainer(images: Image[]): void {
     const heroMainContainer = tags
-      .div(['product__hero_main'], '', {})
+      .div(['product__hero_main', 'swiper', 'mainSwiper'], '', {})
       .getElement();
-    this.heroMainImage = tags.img(['product__hero_main-image'], {
-      src: images[0].url,
-    });
-
+    const swiperWrapperMain = tags.div(['swiper-wrapper'], '', {}).getElement();
+    const swiperWrapperAlt = tags.div(['swiper-wrapper'], '', {}).getElement();
     const heroLeftContainer = tags
-      .div(['product__hero_left', 'alt-column'], '', {})
+      .div(['product__hero_left', 'alt-column', 'swiper', 'altSwiper'], '', {})
       .getElement();
     images.forEach((image) => {
-      const imageTag = tags.img(['alt-column__image'], {
+      const imageTagLeft = tags.img(['alt-column__image'], {
         src: image.url,
       });
-      const imageContainer = tags
-        .div(['alt-column__container'], '', {})
-        .getElement() as HTMLDivElement;
-      imageContainer.append(imageTag);
-      imageContainer.addEventListener('click', () => {
-        if (this.heroMainImage) {
-          this.heroMainImage.src = image.url;
-        }
+      const imageTagMain = tags.img(['product__main_image'], {
+        src: image.url,
       });
-      heroLeftContainer.append(imageContainer);
+      const swiperSlideMain = tags
+        .div(['swiper-slide'], '', {})
+        .getElement() as HTMLDivElement;
+      swiperWrapperMain.append(swiperSlideMain);
+      swiperSlideMain.append(imageTagMain);
+      const swiperSlideAlt = tags.div(['swiper-slide'], '', {}).getElement();
+      swiperWrapperAlt.append(swiperSlideAlt);
+      swiperSlideAlt.append(imageTagLeft);
+      heroLeftContainer.append(swiperWrapperAlt);
     });
     this.heroContainer.append(heroLeftContainer);
-    heroMainContainer.append(this.heroMainImage);
+    heroMainContainer.append(swiperWrapperMain);
+    const swiperNext = tags
+      .div(['swiper-button-next', 'swiper-button'], '', {})
+      .getElement();
+    const swiperPrev = tags
+      .div(['swiper-button-prev', 'swiper-button'], '', {})
+      .getElement();
+    heroMainContainer.append(swiperNext);
+    heroMainContainer.append(swiperPrev);
     this.heroContainer.append(heroMainContainer);
+
+    const swiperAlt = new Swiper('.altSwiper', {
+      direction: 'vertical',
+      spaceBetween: 10,
+      slidesPerView: 'auto',
+    });
+
+    // eslint-disable-next-line no-new
+    new Swiper('.mainSwiper', {
+      slidesPerView: 'auto',
+      loop: true,
+      modules: [Navigation, Thumbs],
+      navigation: {
+        nextEl: '.swiper-button-next',
+        prevEl: '.swiper-button-prev',
+      },
+      thumbs: {
+        swiper: swiperAlt,
+      },
+    });
   }
 
   private renderDestiptionContainer(current: ProductData): void {
