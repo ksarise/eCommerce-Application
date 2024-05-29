@@ -1,4 +1,4 @@
-import { Product, Image } from '@commercetools/platform-sdk';
+import { ProductData, Image, Product } from '@commercetools/platform-sdk';
 import BaseComponentGenerator from '../../tags/base-component';
 import tags from '../../tags/tags';
 import '../../styles/producrPage.scss';
@@ -10,6 +10,8 @@ export default class ProductPageView {
 
   private descriptionContainer: HTMLDivElement;
 
+  private buttonContainer: HTMLDivElement;
+
   private heroMainImage: HTMLImageElement | undefined;
 
   constructor() {
@@ -18,7 +20,10 @@ export default class ProductPageView {
       .div(['product__hero'], '', {})
       .getElement() as HTMLDivElement;
     this.descriptionContainer = tags
-      .div(['product__description'], 'descriptionContainer', {})
+      .div(['product__description'], '', {})
+      .getElement() as HTMLDivElement;
+    this.buttonContainer = tags
+      .div(['product__buttons'], '', {})
       .getElement() as HTMLDivElement;
   }
 
@@ -32,12 +37,16 @@ export default class ProductPageView {
 
   public render(body: Product) {
     this.renderHeroContainer(body.masterData.current.masterVariant.images!);
+    this.renderDestiptionContainer(body.masterData.current);
   }
 
   public createProductPage(): void {
+    const buttonCart = tags.button(['product__buttons_cart'], 'Add to cart');
+    this.buttonContainer.append(buttonCart);
     this.container.appendChildren([
       this.heroContainer,
       this.descriptionContainer,
+      this.buttonContainer,
     ]);
   }
 
@@ -70,5 +79,36 @@ export default class ProductPageView {
     this.heroContainer.append(heroLeftContainer);
     heroMainContainer.append(this.heroMainImage);
     this.heroContainer.append(heroMainContainer);
+  }
+
+  private renderDestiptionContainer(current: ProductData): void {
+    const nameTag = tags.h2(['product__name'], current.name['en-US']);
+    const descriptionTag = tags.p(
+      ['product__description'],
+      current.description!['en-US'],
+    );
+    const price = current.masterVariant.prices![0].value.centAmount;
+    const currency = current.masterVariant.prices![0].value.currencyCode;
+    let currencyTag = '$';
+    switch (currency) {
+      case 'USD':
+        currencyTag = '$';
+        break;
+      case 'EUR':
+        currencyTag = '€';
+        break;
+      case 'RUB':
+        currencyTag = '₽';
+        break;
+      default:
+        break;
+    }
+    const priceTag = tags.p(
+      ['product__price'],
+      `${currencyTag}${(price / 100).toString()}`,
+    );
+    this.descriptionContainer.append(nameTag);
+    this.descriptionContainer.append(priceTag);
+    this.descriptionContainer.append(descriptionTag);
   }
 }
