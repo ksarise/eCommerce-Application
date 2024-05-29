@@ -43,6 +43,8 @@ export default class AppController {
       this.handleClickRegistrationButton.bind(this);
     this.appView.headerView.handleClickLogoutButton =
       this.handleClickLogoutButton.bind(this);
+    this.appView.headerView.handleClickProfileButton =
+      this.handleClickProfileButton.bind(this);
     this.appView.notFoundView.handleClickGoHomeButton =
       this.handleClickGoHomeButton.bind(this);
     this.appView.registrationView.bindFormSubmit(
@@ -160,6 +162,10 @@ export default class AppController {
     this.routerController.goToPage('/');
     localStorage.removeItem('userCreds');
     this.handleVisiblityButtons();
+  }
+
+  public handleClickProfileButton() {
+    this.routerController.goToPage('/my_profile');
   }
 
   public handleVisiblityButtons() {
