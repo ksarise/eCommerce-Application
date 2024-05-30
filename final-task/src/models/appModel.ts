@@ -76,5 +76,6 @@ export default class AppModel {
     this.isLogined = false;
     localStorage.removeItem('key-token');
     this.apiService.changeTypeClient('anonymous');
+    window.location.reload();
   }
 }

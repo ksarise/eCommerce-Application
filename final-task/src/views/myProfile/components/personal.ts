@@ -32,7 +32,7 @@ export default class Personal {
       'profile__info_dateofbirth',
     ]);
     this.profileEmail = tags.span(['profile__info', 'profile__info_email']);
-    this.blockProfile = tags.span(['profile__personal']);
+    this.blockProfile = tags.div(['profile__personal']).getElement();
     this.createBlock();
   }
 
@@ -49,6 +49,8 @@ export default class Personal {
       this.handleClickLoginEdit,
     );
     const profileH1 = tags.h2(['profile__header'], 'Personal information');
+    const imgProfile = tags.div(['img_edit']).getElement();
+    buttonEdit.prepend(imgProfile);
     this.blockProfile.append(
       profileH1,
       createDate('Name'),
