@@ -97,6 +97,10 @@ export default class ProductPageView {
     const swiperPrev = tags
       .div(['swiper-button-prev', 'swiper-button'], '', {})
       .getElement();
+    const swiperPagination = tags
+      .div(['swiper-pagination'], '', {})
+      .getElement();
+    heroMainContainer.append(swiperPagination);
     heroMainContainer.append(swiperNext);
     heroMainContainer.append(swiperPrev);
     this.heroContainer.append(heroMainContainer);
@@ -106,18 +110,19 @@ export default class ProductPageView {
       spaceBetween: 10,
       slidesPerView: 'auto',
     });
-
-    // eslint-disable-next-line no-new
     const mainSwiper = new Swiper('.mainSwiper', {
       slidesPerView: 'auto',
       loop: true,
-      modules: [Navigation, Thumbs],
+      modules: [Navigation, Thumbs, Pagination],
       navigation: {
         nextEl: '.swiper-button-next',
         prevEl: '.swiper-button-prev',
       },
       thumbs: {
         swiper: swiperAlt,
+      },
+      pagination: {
+        el: '.swiper-pagination',
       },
     });
     heroMainContainer.addEventListener('click', (event) => {
@@ -175,7 +180,8 @@ export default class ProductPageView {
         this.container.getElement().removeChild(this.modalWindow!);
       }
     });
-    const closeButton = tags.button(['modal__close'], '×', {});
+    const closeButton = tags.span(['modal__close']);
+    closeButton.innerHTML = '&times;';
     closeButton.addEventListener('click', () => {
       this.container.getElement().removeChild(this.modalWindow!);
     });
