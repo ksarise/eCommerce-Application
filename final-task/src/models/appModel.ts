@@ -45,6 +45,11 @@ export default class AppModel {
     return result;
   }
 
+  public async getCustomerProfile() {
+    const result = await this.apiService.getMyCustomerDraft();
+    return result;
+  }
+
   public async createCustomer(
     formData: RegistrationFormData,
   ): Promise<ApiResponse> {
@@ -65,6 +70,7 @@ export default class AppModel {
 
   public logout() {
     this.isLogined = false;
+    localStorage.removeItem('key-token');
     this.apiService.changeTypeClient('anonymous');
   }
 }
