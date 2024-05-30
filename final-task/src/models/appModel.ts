@@ -5,17 +5,21 @@ import {
   RegistrationFormData,
 } from '../global/interfaces/registration';
 import createCustomerDraft from '../services/CreateCustomerDraft';
+import ProfileModel from './profile/profileModel';
 
 export default class AppModel {
   private apiService: API;
 
   public registrationModel: RegistrationPageModel;
 
+  public profileModel: ProfileModel;
+
   public isLogined: boolean = false;
 
   constructor() {
     this.apiService = new API();
     this.registrationModel = new RegistrationPageModel();
+    this.profileModel = new ProfileModel();
     if (localStorage.getItem('userCreds')) {
       this.isLogined = true;
       this.apiService.postCustomerLogin(

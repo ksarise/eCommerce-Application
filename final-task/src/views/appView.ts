@@ -60,6 +60,7 @@ export default class AppView {
         break;
       case 'my_profile':
         content!.innerHTML = '';
+        content!.append(this.profileView.createProfile());
         this.loginView.addClassToLogin(false);
         break;
       case '404':

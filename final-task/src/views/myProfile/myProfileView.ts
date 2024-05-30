@@ -1,7 +1,7 @@
 import Personal from './components/personal';
 import tags from '../../tags/tags';
 
-export default class Profile {
+export default class ProfileView {
   public personalBlock: Personal;
 
   public blockProfile: HTMLElement;
@@ -9,14 +9,14 @@ export default class Profile {
   constructor() {
     this.personalBlock = new Personal();
     this.blockProfile = tags.div(['profile']).getElement();
-    this.createProfile();
+    this.createProfileBlock();
   }
 
-  public init() {
+  public createProfile() {
     return this.blockProfile;
   }
 
-  createProfile() {
+  createProfileBlock() {
     this.blockProfile.append(this.personalBlock.initPersonal());
   }
 }
