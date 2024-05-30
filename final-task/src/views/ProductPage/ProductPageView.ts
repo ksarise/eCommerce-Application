@@ -175,7 +175,7 @@ export default class ProductPageView {
         this.container.getElement().removeChild(this.modalWindow!);
       }
     });
-    const closeButton = tags.button(['modal__close'], 'X', {});
+    const closeButton = tags.button(['modal__close'], '×', {});
     closeButton.addEventListener('click', () => {
       this.container.getElement().removeChild(this.modalWindow!);
     });
