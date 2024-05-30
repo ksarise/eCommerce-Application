@@ -3,7 +3,7 @@ import LoginView from './login';
 import RegistrationView from './Registration/RegistrationView';
 import HeaderView from './header/header';
 import NotFoundView from './404/404';
-import MyProfile from './myProfile/myProfileView';
+import Profile from './myProfile/myProfileView';
 
 const appViewHeader = `<div id="content" class="view container"></div>`;
 
@@ -20,7 +20,7 @@ export default class AppView {
 
   public notFoundView: NotFoundView;
 
-  public profileView: string;
+  public profileView: Profile;
 
   public constructor() {
     this.loginView = new LoginView();
@@ -29,7 +29,7 @@ export default class AppView {
     this.mainView = new MainView();
     this.notFoundView = new NotFoundView();
     this.registrationView = new RegistrationView();
-    this.profileView = MyProfile;
+    this.profileView = new Profile();
   }
 
   public create() {
@@ -59,7 +59,7 @@ export default class AppView {
         this.loginView.addClassToLogin(false);
         break;
       case 'my_profile':
-        content!.innerHTML = this.profileView;
+        content!.innerHTML = '';
         this.loginView.addClassToLogin(false);
         break;
       case '404':
