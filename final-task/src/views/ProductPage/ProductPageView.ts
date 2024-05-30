@@ -1,5 +1,5 @@
 import Swiper from 'swiper';
-import { Navigation, Thumbs } from 'swiper/modules';
+import { Navigation, Thumbs, Pagination } from 'swiper/modules';
 import 'swiper/css';
 import 'swiper/css/navigation';
 import 'swiper/css/pagination';
@@ -16,6 +16,12 @@ export default class ProductPageView {
   private descriptionContainer: HTMLDivElement;
 
   private buttonContainer: HTMLDivElement;
+
+  private modalWindow: HTMLDivElement | undefined;
+
+  private modalContent: HTMLDivElement | undefined;
+
+  private productImages: Image[] = [];
 
   constructor() {
     this.container = tags.div(['product'], '', {});
@@ -39,7 +45,10 @@ export default class ProductPageView {
   }
 
   public render(body: Product) {
-    this.renderHeroContainer(body.masterData.current.masterVariant.images!);
+    this.productImages = Array.from(
+      body.masterData.current.masterVariant.images!,
+    );
+    this.renderHeroContainer(this.productImages);
     this.renderDestiptionContainer(body.masterData.current);
   }
 
@@ -99,7 +108,7 @@ export default class ProductPageView {
     });
 
     // eslint-disable-next-line no-new
-    new Swiper('.mainSwiper', {
+    const mainSwiper = new Swiper('.mainSwiper', {
       slidesPerView: 'auto',
       loop: true,
       modules: [Navigation, Thumbs],
@@ -110,6 +119,13 @@ export default class ProductPageView {
       thumbs: {
         swiper: swiperAlt,
       },
+    });
+    heroMainContainer.addEventListener('click', (event) => {
+      const target = event.target as HTMLElement;
+      if (target.classList.contains('swiper-button')) {
+        return;
+      }
+      this.openModalWindow(mainSwiper.realIndex);
     });
   }
 
@@ -142,5 +158,75 @@ export default class ProductPageView {
     this.descriptionContainer.append(nameTag);
     this.descriptionContainer.append(priceTag);
     this.descriptionContainer.append(descriptionTag);
+  }
+
+  private openModalWindow(activeSlide: number): void {
+    this.createModalWindow();
+    this.renderModalContent(activeSlide);
+  }
+
+  private createModalWindow(): void {
+    this.modalWindow = tags
+      .div(['modal'], '', {})
+      .getElement() as HTMLDivElement;
+    this.modalWindow.addEventListener('click', (event) => {
+      const target = event.target as HTMLElement;
+      if (target.classList.contains('modal')) {
+        this.container.getElement().removeChild(this.modalWindow!);
+      }
+    });
+    const closeButton = tags.button(['modal__close'], 'X', {});
+    closeButton.addEventListener('click', () => {
+      this.container.getElement().removeChild(this.modalWindow!);
+    });
+    this.modalWindow.append(closeButton);
+    this.modalContent = tags
+      .div(['modal__content', 'swiper', 'modalSwiper'], '', {})
+      .getElement() as HTMLDivElement;
+    this.modalWindow.append(this.modalContent);
+    this.container.appendChild(this.modalWindow);
+  }
+
+  private renderModalContent(activeSlide: number): void {
+    const swiperWrapperModal = tags
+      .div(['swiper-wrapper'], '', {})
+      .getElement();
+    this.productImages.forEach((image) => {
+      const imageTagModal = tags.img(['modal__content_image'], {
+        src: image.url,
+      });
+      const swiperSlideModal = tags
+        .div(['swiper-slide'], '', {})
+        .getElement() as HTMLDivElement;
+      swiperWrapperModal.append(swiperSlideModal);
+      swiperSlideModal.append(imageTagModal);
+    });
+    this.modalContent!.append(swiperWrapperModal);
+    const swiperNext = tags
+      .div(['swiper-button-next', 'swiper-button'], '', {})
+      .getElement();
+    const swiperPrev = tags
+      .div(['swiper-button-prev', 'swiper-button'], '', {})
+      .getElement();
+    const swiperPagination = tags
+      .div(['swiper-pagination'], '', {})
+      .getElement();
+    this.modalContent!.append(swiperPagination);
+    this.modalContent!.append(swiperNext);
+    this.modalContent!.append(swiperPrev);
+    // eslint-disable-next-line no-new
+    new Swiper('.modalSwiper', {
+      slidesPerView: 'auto',
+      loop: true,
+      modules: [Navigation, Pagination],
+      navigation: {
+        nextEl: '.swiper-button-next',
+        prevEl: '.swiper-button-prev',
+      },
+      initialSlide: activeSlide,
+      pagination: {
+        el: '.swiper-pagination',
+      },
+    });
   }
 }
