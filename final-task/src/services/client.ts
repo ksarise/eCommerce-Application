@@ -90,7 +90,6 @@ export const createAnonymousClient = () => {
       anonymousId: crypto.randomUUID(),
     },
     scopes,
-    tokenCache,
     fetch,
   };
   const clientNew = new ClientBuilder()
