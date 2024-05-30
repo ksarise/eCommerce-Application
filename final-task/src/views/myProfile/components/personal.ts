@@ -22,6 +22,8 @@ export default class Personal {
 
   public blockProfile: HTMLElement;
 
+  public handleClickLoginEdit: ((event?: Event) => void) | undefined;
+
   constructor() {
     this.profileName = tags.span(['profile__info', 'profile__info_name']);
     this.profileSurname = tags.span(['profile__info', 'profile__info_surname']);
@@ -30,28 +32,35 @@ export default class Personal {
       'profile__info_dateofbirth',
     ]);
     this.profileEmail = tags.span(['profile__info', 'profile__info_email']);
-    this.blockProfile = tags.span(['profile']);
+    this.blockProfile = tags.span(['profile__personal']);
     this.createBlock();
   }
 
   public initPersonal() {
-    return this.createBlock();
+    return this.blockProfile;
   }
 
   private createBlock() {
+    const buttonEdit = tags.button(
+      ['profile__button', 'profile__button_personal'],
+      'Edit',
+      {},
+      'click',
+      this.handleClickLoginEdit,
+    );
     const profileH1 = tags.h2(['profile__header'], 'Personal information');
     this.blockProfile.append(
       profileH1,
       createDate('Name'),
       this.profileName,
       createDate('Surname'),
-      this.profileName,
+      this.profileSurname,
       createDate('Date of birth'),
-      this.profileName,
+      this.profileDateofBirth,
       createDate('Email'),
-      this.profileName,
+      this.profileEmail,
+      buttonEdit,
     );
-    return this.blockProfile;
   }
 
   public changePersonalInfo(
