@@ -9,7 +9,7 @@ import tags from '../../tags/tags';
 import '../../styles/productPage.scss';
 
 export default class ProductPageView {
-  private container: BaseComponentGenerator;
+  public container: BaseComponentGenerator;
 
   private heroContainer: HTMLDivElement;
 
@@ -45,11 +45,20 @@ export default class ProductPageView {
   }
 
   public render(body: Product) {
+    this.reset();
+    this.create();
     this.productImages = Array.from(
       body.masterData.current.masterVariant.images!,
     );
     this.renderHeroContainer(this.productImages);
     this.renderDestiptionContainer(body.masterData.current);
+  }
+
+  private reset(): void {
+    this.container.getElement().innerHTML = '';
+    this.heroContainer.innerHTML = '';
+    this.descriptionContainer.innerHTML = '';
+    this.buttonContainer.innerHTML = '';
   }
 
   public createProductPage(): void {
@@ -104,7 +113,6 @@ export default class ProductPageView {
     heroMainContainer.append(swiperNext);
     heroMainContainer.append(swiperPrev);
     this.heroContainer.append(heroMainContainer);
-
     const swiperAlt = new Swiper('.altSwiper', {
       direction: 'vertical',
       spaceBetween: 10,
