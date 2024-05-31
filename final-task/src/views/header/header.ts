@@ -16,8 +16,6 @@ export default class HeaderView {
 
   public handleClickLogoutButton: ((event?: Event) => void) | undefined;
 
-  public handleClickProduct: ((event: Event) => void) | undefined;
-
   constructor() {
     this.header = new BaseComponentGenerator({
       tag: 'header',

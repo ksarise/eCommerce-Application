@@ -57,8 +57,6 @@ export default class AppController {
       this.handleClickRegistrationButton.bind(this);
     this.appView.headerView.handleClickLogoutButton =
       this.handleClickLogoutButton.bind(this);
-    this.appView.headerView.handleClickProduct =
-      this.handleClickProduct.bind(this);
     this.appView.notFoundView.handleClickGoHomeButton =
       this.handleClickGoHomeButton.bind(this);
     this.appView.registrationView.bindFormSubmit(
