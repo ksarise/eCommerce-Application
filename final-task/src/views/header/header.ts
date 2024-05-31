@@ -86,22 +86,8 @@ export default class HeaderView {
         'data-navigo': 'true',
       },
     );
-    const linkProduct = tags.a(
-      ['header__navigation_link'],
-      '/product/6a18b651-bda9-4a35-b201-9842f38777f7',
-      'Product',
-      {
-        title: 'Link',
-        'data-navigo': 'true',
-        'data-id': '6a18b651-bda9-4a35-b201-9842f38777f7',
-      },
-    );
-    if (this.handleClickProduct) {
-      linkProduct.addEventListener('click', this.handleClickProduct);
-    }
     this.linkContainer.appendChild(linkHome);
     this.linkContainer.appendChild(linkRegistration);
-    this.linkContainer.appendChild(linkProduct);
     return this.linkContainer;
   }
 

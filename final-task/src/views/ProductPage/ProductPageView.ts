@@ -48,7 +48,7 @@ export default class ProductPageView {
     this.reset();
     this.create();
     this.productImages = Array.from(
-      body.masterData.current.masterVariant.images!,
+      body.masterData.staged.masterVariant.images!,
     );
     this.renderHeroContainer(this.productImages);
     this.renderDestiptionContainer(body.masterData.current);

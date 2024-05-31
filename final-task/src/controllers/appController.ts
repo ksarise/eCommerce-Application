@@ -1,4 +1,8 @@
-import { type ErrorResponse } from '@commercetools/platform-sdk';
+import {
+  type ErrorResponse,
+  type Product,
+  ClientResponse,
+} from '@commercetools/platform-sdk';
 import AppView from '../views/appView';
 import AppModel from '../models/appModel';
 import routerController from '../services/router';
@@ -209,15 +213,18 @@ export default class AppController {
   }
 
   public async fecthProductById(id: string) {
+    let response: ClientResponse<Product> | null = null;
     try {
-      const response = await this.appModel.getProductById(id);
-      this.appView.productPageView.render(response.body);
+      response = await this.appModel.getProductById(id);
     } catch (error) {
       const errmessage = (error as ErrorResponse).message;
       showToast({
         text: `Error: ${errmessage}`,
         type: 'negative',
       });
+    }
+    if (response) {
+      this.appView.productPageView.render(response.body);
     }
   }
 }
