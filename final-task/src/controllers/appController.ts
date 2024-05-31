@@ -46,6 +46,7 @@ export default class AppController {
 
   public initializeListeners() {
     this.routerController.changeContent = this.changeContent.bind(this);
+    this.routerController.fecthProductById = this.fecthProductById.bind(this);
     this.appView.headerView.handleClickLoginButton =
       this.handleClickLoginButton.bind(this);
     this.appView.headerView.handleClickRegistrationButton =
@@ -204,6 +205,10 @@ export default class AppController {
       });
       return;
     }
+    this.fecthProductById(id);
+  }
+
+  public async fecthProductById(id: string) {
     try {
       const response = await this.appModel.getProductById(id);
       this.appView.productPageView.render(response.body);
