@@ -27,13 +27,28 @@
     }
   }
   &__price {
-    margin: 0;
-    color: $light-text;
+    display: flex;
+    align-items: center;
+    gap: 10px;
     font-size: 30px;
     font-weight: 500;
     line-height: 150%;
-    @media (max-width: 620px) {
-      font-size: 20px;
+    &_value {
+      margin: 0;
+      color: $light-text;
+      &-crossed {
+        text-decoration: line-through;
+      }
+      @media (max-width: 620px) {
+        font-size: 20px;
+      }
+    }
+    &_discount {
+      margin: 0;
+      color: $light-red;
+      @media (max-width: 620px) {
+        font-size: 20px;
+      }
     }
   }
   &__buttons {

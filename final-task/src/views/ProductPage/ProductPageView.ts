@@ -149,6 +149,13 @@ export default class ProductPageView {
       current.description!['en-US'],
     );
     const price = current.masterVariant.prices![0].value.centAmount;
+    let isDiscounted = false;
+    let discountedPrice: number | null = null;
+    if (current.masterVariant.prices![0].discounted) {
+      isDiscounted = true;
+      discountedPrice =
+        current.masterVariant.prices![0].discounted.value.centAmount;
+    }
     const currency = current.masterVariant.prices![0].value.currencyCode;
     let currencyTag = '$';
     switch (currency) {
@@ -164,12 +171,23 @@ export default class ProductPageView {
       default:
         break;
     }
+    const priceContainer = tags.div(['product__price'], '', {}).getElement();
     const priceTag = tags.p(
-      ['product__price'],
+      ['product__price_value'],
       `${currencyTag}${(price / 100).toString()}`,
     );
+    if (isDiscounted) {
+      const discountPriceTag = tags.p(
+        ['product__price_discount'],
+        `${currencyTag}${(discountedPrice! / 100).toString()}`,
+      );
+      priceTag.classList.add('product__price_value-crossed');
+      priceContainer.append(discountPriceTag);
+    }
+    priceContainer.append(priceTag);
     this.descriptionContainer.append(nameTag);
-    this.descriptionContainer.append(priceTag);
+    this.descriptionContainer.append(priceContainer);
+    // this.descriptionContainer.append(priceTag);
     this.descriptionContainer.append(descriptionTag);
   }
 
