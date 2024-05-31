@@ -215,6 +215,11 @@ export default class AppController {
     try {
       response = await this.appModel.getProductById(id);
     } catch (error) {
+      const status = (error as ErrorResponse).statusCode;
+      if (status === 404) {
+        this.changeContent?.('404');
+        return;
+      }
       const errmessage = (error as ErrorResponse).message;
       showToast({
         text: `Error: ${errmessage}`,
