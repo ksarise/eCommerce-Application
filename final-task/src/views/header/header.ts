@@ -88,7 +88,7 @@ export default class HeaderView {
     );
     const linkProduct = tags.a(
       ['header__navigation_link'],
-      '/product',
+      '/product/6a18b651-bda9-4a35-b201-9842f38777f7',
       'Product',
       {
         title: 'Link',

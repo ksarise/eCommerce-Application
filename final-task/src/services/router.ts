@@ -7,6 +7,8 @@ class Router {
 
   public changeContent: ((page: string) => void) | undefined;
 
+  public fecthProductById: ((id: string) => void) | undefined;
+
   constructor() {
     this.router = new Navigo(this.root);
     this.routerListeners();
@@ -36,7 +38,7 @@ class Router {
       this.router.resolve();
     });
 
-    this.router.on('/product', () => {
+    this.router.on('/product/:productId', () => {
       this.changeContent?.('product');
       this.router.resolve();
     });
@@ -53,6 +55,9 @@ class Router {
 
   public handleLocation() {
     const path = window.location.pathname;
+    if (path.includes('product')) {
+      this.fecthProductById?.(path.split('/product/')[1]);
+    }
     this.goToPage(path);
   }
 }
