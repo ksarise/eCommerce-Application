@@ -55,6 +55,17 @@ export default class API {
     return this.apiRoot.me().get().execute();
   }
 
+  // public changedata(id: string) {
+  //   return this.apiRoot.customers().withId({ ID: id }).post({
+  //     body: {
+  //       version: 3,
+  //       actions: [
+
+  //       ]
+  //     }
+  //   })
+  // }
+
   public async postCustomerLogin(email: string, password: string) {
     try {
       await this.changeTypeClient('password', {
