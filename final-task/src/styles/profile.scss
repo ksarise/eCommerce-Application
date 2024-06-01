@@ -3,7 +3,6 @@
 .profile {
   width: 100%;
 
-
   &__block {
     padding: 1em;
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
@@ -15,13 +14,12 @@
       border-radius: 10px;
       box-shadow: 0 0px 8px 5px rgba(0, 0, 0, 0.1);
     }
-
   }
 
   &__address_hidden {
     transition: 0.6s;
 
-    .address{
+    .address {
       overflow: hidden;
       height: 0;
       opacity: 0;
@@ -61,8 +59,8 @@
 
   &__header,
   .addresses__header,
-   .addresses__header_bill,
-   .addresses__header_ship {
+  .addresses__header_bill,
+  .addresses__header_ship {
     position: relative;
     color: $primary;
     text-decoration: none;
@@ -81,11 +79,15 @@
 
   &__personal {
     position: relative;
-    background-image: url('./images/snowboard.jpg');
+    background-image: url('./images/snowboard2.jpg');
     background-repeat: no-repeat;
-    background-position: left bottom;
+    background-position: center  52%;
     background-size: 100% auto;
 
+    @media (max-width: 800px) {
+      background-image: url('./images/snowboard.jpg');
+      background-position: left bottom;
+    }
   }
 
   &__all {
@@ -106,14 +108,24 @@
   &__shippingBilling {
     position: relative;
     background-color: $secondary;
+
+    background-image: url('./images/snowboard4.jpg');
+    background-repeat: no-repeat;
+    background-position: center  20%;
+    background-size: 100% auto;
+
+    @media (max-width: 800px) {
+      background-image: url('./images/snowboard3.jpg');
+      background-position: center;
+    }
   }
 
   &__edit,
   &__add,
   &__rubbish {
     position: absolute;
-      top: 5px;
-      right: 10px;
+    top: 5px;
+    right: 10px;
     display: flex;
     gap: 5px;
     padding: 5px 15px;
@@ -126,7 +138,6 @@
     color: $primary;
     transition: 0.3s;
     border-radius: 5px;
-
 
     .img_edit,
     .img_rubbish {
@@ -158,7 +169,6 @@
         background-image: url('./svg/rubbish-hover.svg');
       }
     }
-
   }
 
   &__data {
