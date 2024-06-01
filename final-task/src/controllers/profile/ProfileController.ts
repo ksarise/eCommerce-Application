@@ -26,6 +26,8 @@ export default class ProfileController {
         body.email,
       );
     }
+    this.view.addressesBlock.changeAddresses(body);
+    this.view.addressesBlock.defaultAddresses(body);
   }
 
   public handleClickLoginEditPersonal() {

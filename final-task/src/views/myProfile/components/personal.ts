@@ -32,7 +32,9 @@ export default class Personal {
       'profile__info_dateofbirth',
     ]);
     this.profileEmail = tags.span(['profile__info', 'profile__info_email']);
-    this.blockProfile = tags.div(['profile__personal']).getElement();
+    this.blockProfile = tags
+      .div(['profile__personal', 'profile__block'])
+      .getElement();
     this.createBlock();
   }
 
@@ -42,17 +44,17 @@ export default class Personal {
 
   private createBlock() {
     const buttonEdit = tags.button(
-      ['profile__button', 'profile__button_personal'],
+      ['profile__edit', 'profile__button_personal'],
       'Edit',
       {},
       'click',
       this.handleClickLoginEdit,
     );
-    const profileH1 = tags.h2(['profile__header'], 'Personal information');
+    const profileH2 = tags.h2(['profile__header'], 'Personal information');
     const imgProfile = tags.div(['img_edit']).getElement();
     buttonEdit.prepend(imgProfile);
     this.blockProfile.append(
-      profileH1,
+      profileH2,
       createDate('Name'),
       this.profileName,
       createDate('Surname'),
