@@ -1,4 +1,5 @@
 import Swiper from 'swiper';
+import { SwiperOptions } from 'swiper/types';
 import { Navigation, Thumbs, Pagination } from 'swiper/modules';
 import 'swiper/css';
 import 'swiper/css/navigation';
@@ -187,7 +188,6 @@ export default class ProductPageView {
     priceContainer.append(priceTag);
     this.descriptionContainer.append(nameTag);
     this.descriptionContainer.append(priceContainer);
-    // this.descriptionContainer.append(priceTag);
     this.descriptionContainer.append(descriptionTag);
   }
 
@@ -243,21 +243,23 @@ export default class ProductPageView {
     const swiperPagination = tags
       .div(['swiper-pagination'], '', {})
       .getElement();
-    this.modalContent!.append(swiperPagination);
-    this.modalContent!.append(swiperNext);
-    this.modalContent!.append(swiperPrev);
-    // eslint-disable-next-line no-new
-    new Swiper('.modalSwiper', {
+    this.modalContent!.append(swiperPagination, swiperNext, swiperPrev);
+    function initializeSwiper(container: string, options: SwiperOptions) {
+      const swiperInstance = new Swiper(container, options);
+      return swiperInstance;
+    }
+    initializeSwiper('.modalSwiper', {
       slidesPerView: 'auto',
       loop: true,
+      initialSlide: activeSlide,
       modules: [Navigation, Pagination],
       navigation: {
         nextEl: '.swiper-button-next',
         prevEl: '.swiper-button-prev',
       },
-      initialSlide: activeSlide,
       pagination: {
         el: '.swiper-pagination',
+        clickable: true,
       },
     });
   }
