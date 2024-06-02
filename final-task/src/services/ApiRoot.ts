@@ -14,8 +14,6 @@ import { CustomerDraft, ApiResponse } from '../global/interfaces/registration';
 export default class API {
   private apiRoot: ByProjectKeyRequestBuilder;
 
-  // private login: boolean;
-
   constructor() {
     const keyToken = localStorage.getItem('key-token');
     if (keyToken) {
@@ -32,7 +30,6 @@ export default class API {
         projectKey: import.meta.env.VITE_CTP_PROJECT_KEY,
       });
     }
-    // this.login = false;
   }
 
   public getProject() {
@@ -55,16 +52,40 @@ export default class API {
     return this.apiRoot.me().get().execute();
   }
 
-  // public changedata(id: string) {
-  //   return this.apiRoot.customers().withId({ ID: id }).post({
-  //     body: {
-  //       version: 3,
-  //       actions: [
-
-  //       ]
-  //     }
-  //   })
-  // }
+  public changePersonalInfo(
+    name: string,
+    surname: string,
+    date: string,
+    email: string,
+    version: number,
+  ) {
+    return this.apiRoot
+      .me()
+      .post({
+        body: {
+          version,
+          actions: [
+            {
+              action: 'setFirstName',
+              firstName: name,
+            },
+            {
+              action: 'setLastName',
+              lastName: surname,
+            },
+            {
+              action: 'changeEmail',
+              email,
+            },
+            {
+              action: 'setDateOfBirth',
+              dateOfBirth: date,
+            },
+          ],
+        },
+      })
+      .execute();
+  }
 
   public async postCustomerLogin(email: string, password: string) {
     try {
