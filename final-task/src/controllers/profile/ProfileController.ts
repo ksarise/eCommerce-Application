@@ -13,7 +13,7 @@ export default class ProfileController {
   }
 
   public init() {
-    this.view.personalBlock.handleClickLoginEdit =
+    this.view.personalBlock.handleClickProfileEdit =
       this.handleClickLoginEditPersonal.bind(this);
   }
 
@@ -31,7 +31,12 @@ export default class ProfileController {
   }
 
   public handleClickLoginEditPersonal() {
-    console.log(this.view.personalBlock.handleClickLoginEdit);
-    alert('llll');
+    const variables = this.view.personalBlock;
+    this.view.popUpBlock.createPersonalForm(
+      variables.profileName.innerHTML,
+      variables.profileSurname.innerHTML,
+      variables.profileDateofBirth.innerHTML,
+      variables.profileEmail.innerHTML,
+    );
   }
 }

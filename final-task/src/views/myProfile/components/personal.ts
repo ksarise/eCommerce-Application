@@ -22,7 +22,7 @@ export default class Personal {
 
   public blockProfile: HTMLElement;
 
-  public handleClickLoginEdit: ((event?: Event) => void) | undefined;
+  public handleClickProfileEdit: ((event?: Event) => void) | undefined;
 
   constructor() {
     this.profileName = tags.span(['profile__info', 'profile__info_name']);
@@ -47,9 +47,10 @@ export default class Personal {
       ['profile__edit', 'profile__button_personal'],
       'Edit',
       {},
-      'click',
-      this.handleClickLoginEdit,
     );
+    buttonEdit.addEventListener('click', () => {
+      if (this.handleClickProfileEdit) this.handleClickProfileEdit();
+    });
     const profileH2 = tags.h2(['profile__header'], 'Personal information');
     const imgProfile = tags.div(['img_edit']).getElement();
     buttonEdit.prepend(imgProfile);
