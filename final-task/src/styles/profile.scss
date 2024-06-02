@@ -1,6 +1,39 @@
 @import './variables.scss';
 
 .profile {
+
+  &__popup {
+    position: fixed;
+    top: 0;
+    height: 100vh;
+    width: 100vw;
+    background-color: rgba(0, 0, 0, 0.504);
+    z-index: 1000;
+    left: 0;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    transition: 0.3s;
+  }
+
+  &__popup_hidden {
+    transition: 0.3s;
+    opacity: 0;
+    z-index: -5;
+  }
+
+  .input:focus {
+    box-shadow: 0 0 6px 1px black;
+  }
+
+  &__form {
+    position: relative;
+    padding: 2em 2em;
+    background-color: $secondary;
+    border: $primary 3px solid;
+    border-radius: 10px;
+  }
+
   width: 100%;
 
   &__block {
@@ -122,7 +155,8 @@
 
   &__edit,
   &__add,
-  &__rubbish {
+  &__rubbish,
+  &__save {
     position: absolute;
     top: 5px;
     right: 10px;
@@ -157,7 +191,13 @@
       background-image: url('./svg/pen-svgrepo-com.svg');
     }
 
-    &:hover {
+    &:disabled {
+      border: gray 3px solid;
+      color: gray;
+      cursor: auto;
+    }
+
+    &:hover:not(:disabled) {
       background-color: $primary;
       color: #fff;
 
