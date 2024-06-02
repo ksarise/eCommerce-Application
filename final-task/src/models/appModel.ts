@@ -54,6 +54,23 @@ export default class AppModel {
     return result;
   }
 
+  public async changePersonalInfo(
+    name: string,
+    surname: string,
+    date: string,
+    email: string,
+    version: number,
+  ) {
+    const result = await this.apiService.changePersonalInfo(
+      name,
+      surname,
+      date,
+      email,
+      version,
+    );
+    return result;
+  }
+
   public async createCustomer(
     formData: RegistrationFormData,
   ): Promise<ApiResponse> {

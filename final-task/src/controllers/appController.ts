@@ -34,7 +34,7 @@ export default class AppController {
     );
     this.profileController = new ProfileController(
       this.appView.profileView,
-      this.appModel.profileModel,
+      this.appModel,
     );
   }
 
