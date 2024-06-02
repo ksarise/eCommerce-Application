@@ -25,7 +25,7 @@ export default class ProfileFieldBlock {
       autocomplete: 'on',
       id: name,
     });
-    this.fieldError = tags.span(['popup_error', 'error-hidden']);
+    this.fieldError = tags.span(['popup__error']);
     const blockContainer = tags.div(['popup__block']);
     blockContainer.appendChildren([
       this.fieldLabel,

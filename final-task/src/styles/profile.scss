@@ -1,7 +1,6 @@
 @import './variables.scss';
 
 .profile {
-
   &__popup {
     position: fixed;
     top: 0;
@@ -22,8 +21,28 @@
     z-index: -5;
   }
 
+  .popup__error {
+    color: $light-red;
+    transition: 0.3s;
+    opacity: 1;
+  }
+
+  .error__hidden {
+    transition: 0.3s;
+    opacity: 0;
+    display: none;
+  }
+
   .input:focus {
     box-shadow: 0 0 6px 1px black;
+  }
+
+  .input__red {
+    box-shadow: 0 0 6px 1px $light-red;
+  }
+
+  .input__red:focus {
+    box-shadow: 0 0 6px 1px $light-red;
   }
 
   &__form {
