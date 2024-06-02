@@ -16,13 +16,22 @@ export default class PopUpForm {
 
   public headerPersonal: HTMLElement;
 
-  public handlePersonalEdit: ((event?: Event) => void) | undefined;
+  public buttonPersonal: HTMLElement;
+
+  //   public handlePersonalEdit: (event?: Event) => void;
+
+  public closePopUp: (event: Event) => void;
 
   constructor() {
     this.popUp = tags
       .div(['profile__popup', 'profile__popup_hidden'])
       .getElement();
     this.form = tags.form(['profile__form'], { type: 'submit' });
+    this.closePopUp = (event: Event) => {
+      if (event.target === this.popUp) {
+        this.popUp.classList.add('profile__popup_hidden');
+      }
+    };
     this.createPopUp();
     this.popUpName = new ProfileFieldBlock(
       'First Name',
@@ -41,7 +50,7 @@ export default class PopUpForm {
     this.popUpDateofBirth = new ProfileFieldBlock(
       'Date of Birth',
       'date',
-      'dob-popup',
+      'dob',
       'Date of Birth',
     );
 
@@ -56,6 +65,11 @@ export default class PopUpForm {
       ['popup__header'],
       'Change Personal Information',
     );
+    this.buttonPersonal = tags.button(
+      ['profile__save', 'profile__button_popup'],
+      'Save',
+      { disabled: 'true' },
+    );
   }
 
   public createPopUpBlock() {
@@ -63,6 +77,7 @@ export default class PopUpForm {
   }
 
   private createPopUp() {
+    this.popUp.addEventListener('click', this.closePopUp);
     this.popUp.append(this.form);
   }
 
@@ -83,6 +98,7 @@ export default class PopUpForm {
       this.popUpSurname.getBlock(),
       this.popUpDateofBirth.getBlock(),
       this.popUpEmail.getBlock(),
+      this.buttonPersonal,
     );
     this.popUp.classList.remove('profile__popup_hidden');
   }
