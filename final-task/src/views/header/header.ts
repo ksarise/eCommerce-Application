@@ -10,6 +10,8 @@ export default class HeaderView {
 
   public buttonContainer: HTMLDivElement;
 
+  public buttonMyProfile: HTMLButtonElement;
+
   public handleClickLoginButton: ((event?: Event) => void) | undefined;
 
   public handleClickRegistrationButton: ((event?: Event) => void) | undefined;
@@ -32,6 +34,11 @@ export default class HeaderView {
     this.buttonContainer = tags
       .div(['header__buttons'], '', {})
       .getElement() as HTMLDivElement;
+    this.buttonMyProfile = tags.button(
+      ['header__button', 'header__button_profile'],
+      'Profile',
+      {},
+    );
   }
 
   public getContent(): HTMLElement {
@@ -122,12 +129,12 @@ export default class HeaderView {
       if (this.handleClickMyProfile) await this.handleClickMyProfile();
     });
     const imgProfile = tags.div(['img_profile']).getElement();
-    buttonMyProfile.prepend(imgProfile);
+    this.buttonMyProfile.prepend(imgProfile);
     this.buttonContainer.append(
       buttonLogin,
       buttonRegistration,
       buttonLogout,
-      buttonMyProfile,
+      this.buttonMyProfile,
     );
     return this.buttonContainer;
   }
