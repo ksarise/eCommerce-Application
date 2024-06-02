@@ -15,13 +15,14 @@ export default class ProductCard {
   ) {
     this.card = tags.div(['product-card'], '').getElement();
 
-    this.link = ProductCard.nameToLink(name);
+    this.link = `${id}`;
     const cardLink = tags.a(
       ['product-card__link'],
       `/product/${this.link}`,
       '',
       {
         id: `${id}`,
+        'data-id': id,
       },
     );
 
@@ -38,11 +39,6 @@ export default class ProductCard {
     }
     cardLink.append(cardImage, cardName, cardDesc, cardDiscount, cardPrice);
     this.card.append(cardLink);
-  }
-
-  // Set link href
-  static nameToLink(name: string) {
-    return name.replace(/[\s.]+/g, '-').toLowerCase();
   }
 
   public renderCard() {

@@ -1,4 +1,8 @@
-import { type ErrorResponse } from '@commercetools/platform-sdk';
+import {
+  type ErrorResponse,
+  type Product,
+  ClientResponse,
+} from '@commercetools/platform-sdk';
 import AppView from '../views/appView';
 import AppModel from '../models/appModel';
 import routerController from '../services/router';
@@ -46,6 +50,7 @@ export default class AppController {
 
   public initializeListeners() {
     this.routerController.changeContent = this.changeContent.bind(this);
+    this.routerController.fecthProductById = this.fecthProductById.bind(this);
     this.appView.headerView.handleClickLoginButton =
       this.handleClickLoginButton.bind(this);
     this.appView.headerView.handleClickRegistrationButton =
@@ -190,6 +195,39 @@ export default class AppController {
         text: `${errmessage}`,
         type: 'negative',
       });
+    }
+  }
+
+  public async handleClickProduct(event: Event) {
+    const { id } = (event.target! as HTMLElement).dataset;
+    if (!id) {
+      showToast({
+        text: 'No product id',
+        type: 'negative',
+      });
+      return;
+    }
+    this.fecthProductById(id);
+  }
+
+  public async fecthProductById(id: string) {
+    let response: ClientResponse<Product> | null = null;
+    try {
+      response = await this.appModel.getProductById(id);
+    } catch (error) {
+      const status = (error as ErrorResponse).statusCode;
+      if (status === 404) {
+        this.changeContent?.('404');
+        return;
+      }
+      const errmessage = (error as ErrorResponse).message;
+      showToast({
+        text: `Error: ${errmessage}`,
+        type: 'negative',
+      });
+    }
+    if (response) {
+      this.appView.productPageView.render(response.body);
     }
   }
 }
