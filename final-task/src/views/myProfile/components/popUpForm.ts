@@ -2,7 +2,7 @@ import tags from '../../../tags/tags';
 import ProfileFieldBlock from './profileFieldBlocks';
 
 export default class PopUpForm {
-  private popUp: HTMLElement;
+  public popUp: HTMLElement;
 
   private form: HTMLElement;
 
@@ -16,7 +16,7 @@ export default class PopUpForm {
 
   public headerPersonal: HTMLElement;
 
-  public buttonPersonal: HTMLElement;
+  public buttonPersonal: HTMLButtonElement;
 
   //   public handlePersonalEdit: (event?: Event) => void;
 
@@ -68,7 +68,7 @@ export default class PopUpForm {
     this.buttonPersonal = tags.button(
       ['profile__save', 'profile__button_popup'],
       'Save',
-      { disabled: 'true' },
+      { disabled: 'true', type: 'submit' },
     );
   }
 
