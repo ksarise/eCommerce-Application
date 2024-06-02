@@ -51,20 +51,16 @@ export default class API {
     return this.apiRoot.products().get().execute();
   }
 
-  public async postCustomerLogin(
-    email: string,
-    password: string,
-    // isLogined: boolean,
-  ) {
-    // this.login = isLogined;
-    // if (!this.login) {
-    //   this.apiRoot = createApiBuilderFromCtpClient(
-    //     createPasswordClient(email, password),
-    //   ).withProjectKey({
-    //     projectKey: import.meta.env.VITE_CTP_PROJECT_KEY,
-    //   });
-    // }
+  public getMyCustomerDraft() {
+    return this.apiRoot.me().get().execute();
+  }
+
+  public async postCustomerLogin(email: string, password: string) {
     try {
+      await this.changeTypeClient('password', {
+        email,
+        password,
+      });
       const response = await this.apiRoot
         .login()
         .post({
@@ -74,10 +70,6 @@ export default class API {
           },
         })
         .execute();
-      this.changeTypeClient('password', {
-        email,
-        password,
-      });
       return { result: true, obj: response };
     } catch (error) {
       return { result: false, obj: error };

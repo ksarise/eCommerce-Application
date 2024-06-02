@@ -57,8 +57,12 @@ export default class AppController {
       this.handleClickRegistrationButton.bind(this);
     this.appView.headerView.handleClickLogoutButton =
       this.handleClickLogoutButton.bind(this);
-    this.appView.headerView.handleClickProfileButton =
-      this.handleClickProfileButton.bind(this);
+    this.appView.headerView.buttonMyProfile.addEventListener(
+      'click',
+      async () => {
+        await this.handleClickProfileButton();
+      },
+    );
     this.appView.notFoundView.handleClickGoHomeButton =
       this.handleClickGoHomeButton.bind(this);
     this.appView.registrationView.bindFormSubmit(
@@ -178,8 +182,10 @@ export default class AppController {
     this.handleVisiblityButtons();
   }
 
-  public handleClickProfileButton() {
-    this.routerController.goToPage('/my_profile');
+  public async handleClickProfileButton() {
+    await this.routerController.goToPage('/my_profile');
+    const res = await this.appModel.getCustomerProfile();
+    console.log(res);
   }
 
   public handleVisiblityButtons() {
