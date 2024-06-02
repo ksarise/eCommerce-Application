@@ -40,6 +40,13 @@ class Router {
 
     this.router.on('/product/:productId', () => {
       this.changeContent?.('product');
+    });
+    this.router.on('/my_profile', () => {
+      if (!localStorage.getItem('userCreds')) {
+        this.goToPage('/');
+      } else {
+        this.changeContent?.('my_profile');
+      }
       this.router.resolve();
     });
 
