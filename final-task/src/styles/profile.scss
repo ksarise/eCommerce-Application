@@ -23,14 +23,22 @@
 
   .popup__error {
     color: $light-red;
-    transition: 0.3s;
+    transition: 0.6s;
     opacity: 1;
   }
 
   .error__hidden {
-    transition: 0.3s;
+    transition: 0.6s;
     opacity: 0;
     display: none;
+  }
+
+  .input {
+    width: 100%;
+  }
+
+  .label {
+    align-self: flex-start;
   }
 
   .input:focus {
@@ -46,11 +54,19 @@
   }
 
   &__form {
+    max-width: 500px;
+    text-align: center;
     position: relative;
     padding: 2em 2em;
     background-color: $secondary;
     border: $primary 3px solid;
     border-radius: 10px;
+  }
+
+  .popup__block {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
   }
 
   width: 100%;
@@ -65,6 +81,33 @@
       border: $primary 3px solid;
       border-radius: 10px;
       box-shadow: 0 0px 8px 5px rgba(0, 0, 0, 0.1);
+    }
+  }
+
+  .profile__line {
+    padding: 5px 15px;
+    cursor: pointer;
+    border: 2px solid #ffffff00;
+    background-color: #ffffff00;
+    font-size: 16px;
+    font-weight: 500;
+    line-height: 150%;
+    color: $primary;
+    transition: 0.3s;
+    border-radius: 5px;
+    background-image: url('/svg/line.svg');
+    background-position: center;
+    background-repeat: no-repeat;
+    background-size: 80% 80%;
+    width: 30px;
+    height: 30px;
+    transform: rotate(90deg);
+
+
+    &:hover {
+      background-color: $primary;
+      background-image: url('/svg/line-hover.svg');
+      border: 2px solid $primary;
     }
   }
 
@@ -84,24 +127,6 @@
 
   .address {
     transition: height 0.6s ease-in-out;
-  }
-
-  &__line {
-    width: 32px;
-    height: 32px;
-    background-image: url('./svg/line.svg');
-    background-repeat: no-repeat;
-    background-position: center;
-    background-size: 70% 70%;
-    cursor: pointer;
-    font-size: 16px;
-    font-weight: 500;
-    line-height: 150%;
-    color: $primary;
-    transition: 0.3s;
-    border: none;
-    background-color: #ffffff00;
-    transform: rotate(90deg);
   }
 
   .addresses__header {
@@ -131,13 +156,13 @@
 
   &__personal {
     position: relative;
-    background-image: url('./images/snowboard2.jpg');
+    background-image: url('/images/snowboard2.jpg');
     background-repeat: no-repeat;
     background-position: center 52%;
     background-size: 100% auto;
 
     @media (max-width: 800px) {
-      background-image: url('./images/snowboard.jpg');
+      background-image: url('/images/snowboard.jpg');
       background-position: left bottom;
     }
   }
@@ -161,13 +186,13 @@
     position: relative;
     background-color: $secondary;
 
-    background-image: url('./images/snowboard4.jpg');
+    background-image: url('/images/snowboard4.jpg');
     background-repeat: no-repeat;
     background-position: center 20%;
     background-size: 100% auto;
 
     @media (max-width: 800px) {
-      background-image: url('./images/snowboard3.jpg');
+      background-image: url('/images/snowboard3.jpg');
       background-position: center;
     }
   }
@@ -196,18 +221,18 @@
     .img_rubbish {
       width: 21px;
       height: 21px;
-      background-image: url('./svg/pen-svgrepo-com.svg');
+      background-image: url('/svg/pen-svgrepo-com.svg');
       background-size: 22px 22px;
       background-repeat: no-repeat;
       background-position: center;
     }
 
     .img_rubbish {
-      background-image: url('./svg/rubbish.svg');
+      background-image: url('/svg/rubbish.svg');
     }
 
     .img-edit {
-      background-image: url('./svg/pen-svgrepo-com.svg');
+      background-image: url('/svg/pen-svgrepo-com.svg');
     }
 
     &:disabled {
@@ -221,11 +246,11 @@
       color: #fff;
 
       .img_edit {
-        background-image: url('./svg/pen-svgrepo-com-hover.svg');
+        background-image: url('/svg/pen-svgrepo-com-hover.svg');
       }
 
       .img_rubbish {
-        background-image: url('./svg/rubbish-hover.svg');
+        background-image: url('/svg/rubbish-hover.svg');
       }
     }
   }

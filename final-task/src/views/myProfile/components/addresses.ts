@@ -47,12 +47,12 @@ export default class Addresses {
     const buttonEditBilling = tags.button(
       ['profile__edit', 'profile__button_billing'],
       'Edit',
-      {},
+      { title: 'Edit' },
     );
     const buttonEditShipping = tags.button(
       ['profile__edit', 'profile__button_shipping'],
       'Edit',
-      {},
+      { title: 'Edit' },
     );
     buttonEditBilling.prepend(imgProfile);
     buttonEditShipping.prepend(imgProfileShipping);
@@ -84,8 +84,12 @@ export default class Addresses {
   private createAddressOne(elem: Address) {
     const rubbish = tags.button(['profile__rubbish'], '', {
       id: `rubbish-${elem.id}`,
+      title: 'Delete',
     });
-    const edit = tags.button(['profile__edit'], '', { id: `edit-${elem.id}` });
+    const edit = tags.button(['profile__edit'], '', {
+      id: `edit-${elem.id}`,
+      title: 'Edit',
+    });
     const imgRubbish = tags.div(['img_rubbish']).getElement();
     const imgEdit = tags.div(['img_edit']).getElement();
     rubbish.append(imgRubbish);
@@ -101,7 +105,9 @@ export default class Addresses {
       { id: `heading-${elem.id}` },
     );
     header.append(edit, rubbish);
-    const buttonLine = tags.button(['profile__line'], '', {});
+    const buttonLine = tags.button(['profile__line'], '', {
+      title: 'More information',
+    });
     buttonLine.addEventListener('click', () => {
       block.classList.toggle('profile__address_hidden');
     });

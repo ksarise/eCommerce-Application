@@ -69,7 +69,7 @@
     .img_profile {
       width: 25px;
       height: 25px;
-      background-image: url('./svg/snowboarder.svg');
+      background-image: url('/svg/snowboarder.svg');
       background-size: 50px 50px;
       background-repeat: no-repeat;
       background-position: center;
@@ -80,7 +80,7 @@
       color: #fff;
 
       .img_profile {
-        background-image: url('./svg/snowboarder-hover.svg');
+        background-image: url('/svg/snowboarder-hover.svg');
       }
     }
   }
