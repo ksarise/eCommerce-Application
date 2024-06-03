@@ -5,6 +5,7 @@ import AppModel from '../../models/appModel';
 import RegistrationPageModel from '../../models/Registration/RegistrationModel';
 import ProfileFieldBlock from '../../views/myProfile/components/profileFieldBlocks';
 import showToast from '../../services/ToastMessages';
+import { PopupFields } from '../../global/enums/profile';
 
 function handleFieldError(fields: ProfileFieldBlock, error: string[]) {
   const field = fields;
@@ -51,6 +52,8 @@ export default class ProfileController {
         this.view.popUpBlock.buttonPersonal.disabled = true;
       },
     );
+    this.view.addressesBlock.handleClickEditAddress =
+      this.handleClickEditAddress.bind(this);
     this.view.addressesBlock.handleClickAddAddress =
       this.handleClickAddAddress.bind(this);
   }
@@ -61,8 +64,39 @@ export default class ProfileController {
     });
   }
 
-  public handleClickAddAddress() {
+  private handleClickAddAddress() {
     this.view.popUpBlock.createAddAddressForm();
+  }
+
+  public handleClickEditAddress() {
+    this.view.popUpBlock.buttonEditAddress.id = `popup-${this.view.addressesBlock.addressesAll.id.split('-')[1]}`;
+    const ID = this.view.addressesBlock.addressesAll.id.split('-')[1];
+    const name = document.getElementById(
+      `${PopupFields.NAME}-${ID}`,
+    )?.innerHTML;
+    const surname = document.getElementById(
+      `${PopupFields.SURNAME}-${ID}`,
+    )?.innerHTML;
+    const street = document.getElementById(
+      `${PopupFields.STREET}-${ID}`,
+    )?.innerHTML;
+    const city = document.getElementById(
+      `${PopupFields.CITY}-${ID}`,
+    )?.innerHTML;
+    const country = document.getElementById(
+      `${PopupFields.COUNTRY}-${ID}`,
+    )?.innerHTML;
+    const code = document.getElementById(
+      `${PopupFields.CODE}-${ID}`,
+    )?.innerHTML;
+    this.view.popUpBlock.createEditAddressForm(
+      name,
+      surname,
+      street,
+      city,
+      country,
+      code,
+    );
   }
 
   async sendData() {
@@ -138,8 +172,10 @@ export default class ProfileController {
       !errors.postalCode
     ) {
       this.view.popUpBlock.buttonAddAddress.disabled = false;
+      this.view.popUpBlock.buttonEditAddress.disabled = false;
     } else {
       this.view.popUpBlock.buttonAddAddress.disabled = true;
+      this.view.popUpBlock.buttonEditAddress.disabled = true;
     }
     handleFieldError(variables.popUpName, errors.firstName);
     handleFieldError(variables.popUpSurname, errors.lastName);

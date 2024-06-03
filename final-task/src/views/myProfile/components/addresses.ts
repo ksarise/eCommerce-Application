@@ -15,6 +15,8 @@ export default class Addresses {
 
   public handleClickAddAddress: ((event?: Event) => void) | undefined;
 
+  public handleClickEditAddress: (() => void) | undefined;
+
   constructor() {
     this.defaultShipping = tags.div(['profile__shipping']).getElement();
     this.defaultBilling = tags.div(['profile__billing']).getElement();
@@ -90,6 +92,10 @@ export default class Addresses {
     const edit = tags.button(['profile__edit'], '', {
       id: `edit-${elem.id}`,
       title: 'Edit',
+    });
+    edit.addEventListener('click', () => {
+      this.addressesAll.id = `address-${elem.id}`;
+      if (this.handleClickEditAddress) this.handleClickEditAddress();
     });
     const imgRubbish = tags.div(['img_rubbish']).getElement();
     const imgEdit = tags.div(['img_edit']).getElement();

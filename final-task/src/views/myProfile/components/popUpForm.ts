@@ -31,7 +31,7 @@ export default class PopUpForm {
 
   public buttonAddAddress: HTMLButtonElement;
 
-  public buttotnEditAddress: HTMLButtonElement;
+  public buttonEditAddress: HTMLButtonElement;
 
   public closePopUp: (event: Event) => void;
 
@@ -114,7 +114,7 @@ export default class PopUpForm {
       { disabled: 'true', type: 'submit', id: 'save-newaddress' },
     );
 
-    this.buttotnEditAddress = tags.button(
+    this.buttonEditAddress = tags.button(
       ['profile__add', 'profile__button_popup'],
       'Save',
       { disabled: 'true', type: 'submit', id: 'save-newaddress' },
@@ -153,7 +153,7 @@ export default class PopUpForm {
     });
     this.buttonAddAddress.disabled = true;
     this.buttonPersonal.disabled = true;
-    this.buttotnEditAddress.disabled = true;
+    this.buttonEditAddress.disabled = true;
   }
 
   public createPersonalForm(
@@ -206,5 +206,28 @@ export default class PopUpForm {
       this.poUpCountry.getBlock(),
       this.popUppostalCode.getBlock(),
     );
+  }
+
+  public createEditAddressForm(
+    name: string | undefined,
+    surname: string | undefined,
+    street: string | undefined,
+    city: string | undefined,
+    country: string | undefined,
+    code: string | undefined,
+  ) {
+    this.deleteErrors();
+    this.header.innerHTML = Heading.CHANGEADDRESS;
+    this.form.innerHTML = '';
+    this.popUpName.fieldInput.value = name || '';
+    this.popUpSurname.fieldInput.value = surname || '';
+    this.popUpStreetName.fieldInput.value = street || '';
+    this.popUpCity.fieldInput.value = city || '';
+    this.poUpCountry.fieldInput.value = country === 'CA' ? 'Canada' : 'USA';
+    this.popUppostalCode.fieldInput.value = code || '';
+    this.popUp.classList.remove('profile__popup_hidden');
+    this.createAddressPopUp();
+    this.form.append(this.buttonEditAddress);
+    this.openClosePopUp(false);
   }
 }
