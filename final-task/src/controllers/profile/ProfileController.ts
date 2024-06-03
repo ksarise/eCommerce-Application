@@ -34,32 +34,35 @@ export default class ProfileController {
   public init() {
     this.view.personalBlock.handleClickProfileEdit =
       this.handleClickLoginEditPersonal.bind(this);
-    this.view.popUpBlock.popUpName.fieldInput.addEventListener('input', () => {
-      this.checkAll();
-    });
-    this.view.popUpBlock.popUpEmail.fieldInput.addEventListener('input', () => {
-      this.checkAll();
-    });
-    this.view.popUpBlock.popUpDateofBirth.fieldInput.addEventListener(
-      'input',
-      () => {
-        this.checkAll();
-      },
-    );
-    this.view.popUpBlock.popUpSurname.fieldInput.addEventListener(
-      'input',
-      () => {
-        this.checkAll();
-      },
-    );
+    this.validateInput(this.view.popUpBlock.popUpName.fieldInput);
+    this.validateInput(this.view.popUpBlock.popUpSurname.fieldInput);
+    this.validateInput(this.view.popUpBlock.popUpDateofBirth.fieldInput);
+    this.validateInput(this.view.popUpBlock.popUpEmail.fieldInput);
+    this.validateInput(this.view.popUpBlock.popUpStreetName.fieldInput);
+    this.validateInput(this.view.popUpBlock.popUpCity.fieldInput);
+    this.validateInput(this.view.popUpBlock.poUpCountry.fieldInput);
+    this.validateInput(this.view.popUpBlock.popUppostalCode.fieldInput);
     this.view.popUpBlock.buttonPersonal.addEventListener(
       'click',
       async (event) => {
         event.preventDefault();
         await this.sendData();
-        await this.view.popUpBlock.popUp.classList.add('profile__popup_hidden');
+        await this.view.popUpBlock.openClosePopUp(true);
+        this.view.popUpBlock.buttonPersonal.disabled = true;
       },
     );
+    this.view.addressesBlock.handleClickAddAddress =
+      this.handleClickAddAddress.bind(this);
+  }
+
+  private validateInput(element: HTMLElement) {
+    element.addEventListener('input', () => {
+      this.checkAll();
+    });
+  }
+
+  public handleClickAddAddress() {
+    this.view.popUpBlock.createAddAddressForm();
   }
 
   async sendData() {
@@ -100,10 +103,25 @@ export default class ProfileController {
     );
     this.validation.validateDOB(variables.popUpDateofBirth.getInput().value);
     this.validation.validateEmail(variables.popUpEmail.getInput().value);
+    this.validation.validateStreet(
+      variables.popUpStreetName.getInput().value,
+      'street',
+    );
+    this.validation.validateCity(variables.popUpCity.getInput().value, 'city');
+    this.validation.validateCountry(
+      variables.poUpCountry.getInput().value,
+      ['USA', 'Canada'],
+      'country',
+    );
+    this.validation.validatePostalCode(
+      variables.popUppostalCode.getInput().value,
+      variables.poUpCountry.getInput().value,
+      'postalCode',
+    );
     this.createErrors();
   }
 
-  createErrors() {
+  private createErrors() {
     const variables = this.view.popUpBlock;
     const { errors } = this.validation;
     if (!errors.firstName && !errors.lastName && !errors.dob && !errors.email) {
@@ -111,10 +129,26 @@ export default class ProfileController {
     } else {
       this.view.popUpBlock.buttonPersonal.disabled = true;
     }
+    if (
+      !errors.firstName &&
+      !errors.lastName &&
+      !errors.street &&
+      !errors.city &&
+      !errors.country &&
+      !errors.postalCode
+    ) {
+      this.view.popUpBlock.buttonAddAddress.disabled = false;
+    } else {
+      this.view.popUpBlock.buttonAddAddress.disabled = true;
+    }
     handleFieldError(variables.popUpName, errors.firstName);
     handleFieldError(variables.popUpSurname, errors.lastName);
     handleFieldError(variables.popUpDateofBirth, errors.dob);
     handleFieldError(variables.popUpEmail, errors.email);
+    handleFieldError(variables.popUpStreetName, errors.street);
+    handleFieldError(variables.popUpCity, errors.city);
+    handleFieldError(variables.poUpCountry, errors.country);
+    handleFieldError(variables.popUppostalCode, errors.postalCode);
   }
 
   public updateData(body: Customer) {

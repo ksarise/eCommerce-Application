@@ -28,9 +28,10 @@ export default class Addresses {
       ['profile__add', 'profile__button_add'],
       'Add',
       {},
-      'click',
-      this.handleClickAddAddress,
     );
+    this.buttonAdd.addEventListener('click', () => {
+      if (this.handleClickAddAddress) this.handleClickAddAddress();
+    });
     this.createShippingBilling();
     this.createAddressesAll();
   }

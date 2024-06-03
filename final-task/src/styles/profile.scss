@@ -1,5 +1,10 @@
 @import './variables.scss';
 
+.body-scroll {
+  height: 100vh;
+  overflow-y: hidden;
+}
+
 .profile {
   &__popup {
     position: fixed;
@@ -25,6 +30,8 @@
     color: $light-red;
     transition: 0.6s;
     opacity: 1;
+    width: 100%;
+    overflow-wrap: break-word;
   }
 
   .error__hidden {
@@ -54,13 +61,15 @@
   }
 
   &__form {
-    max-width: 500px;
+    max-height: 80vh;
+    width: 350px;
     text-align: center;
     position: relative;
     padding: 2em 2em;
     background-color: $secondary;
     border: $primary 3px solid;
     border-radius: 10px;
+    overflow-y: scroll;
   }
 
   .popup__block {
@@ -102,7 +111,6 @@
     width: 30px;
     height: 30px;
     transform: rotate(90deg);
-
 
     &:hover {
       background-color: $primary;
