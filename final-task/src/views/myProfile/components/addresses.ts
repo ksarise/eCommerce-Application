@@ -17,6 +17,10 @@ export default class Addresses {
 
   public handleClickEditAddress: (() => void) | undefined;
 
+  public handleClickEditBilling: (() => void) | undefined;
+
+  public handleClickEditShipping: (() => void) | undefined;
+
   constructor() {
     this.defaultShipping = tags.div(['profile__shipping']).getElement();
     this.defaultBilling = tags.div(['profile__billing']).getElement();
@@ -57,6 +61,12 @@ export default class Addresses {
       'Edit',
       { title: 'Edit' },
     );
+    buttonEditBilling.addEventListener('click', () => {
+      if (this.handleClickEditBilling) this.handleClickEditBilling();
+    });
+    buttonEditShipping.addEventListener('click', () => {
+      if (this.handleClickEditShipping) this.handleClickEditShipping();
+    });
     buttonEditBilling.prepend(imgProfile);
     buttonEditShipping.prepend(imgProfileShipping);
     shippingH3.append(buttonEditShipping);

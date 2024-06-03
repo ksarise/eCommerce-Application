@@ -1,6 +1,6 @@
 import tags from '../../../tags/tags';
 import ProfileFieldBlock from './profileFieldBlocks';
-import Heading from '../../../global/enums/profile';
+import Heading, { PopupFields } from '../../../global/enums/profile';
 
 export default class PopUpForm {
   public popUp: HTMLElement;
@@ -19,6 +19,10 @@ export default class PopUpForm {
 
   public buttonPersonal: HTMLButtonElement;
 
+  public buttonShipping: HTMLButtonElement;
+
+  public buttonBilling: HTMLButtonElement;
+
   //   public handlePersonalEdit: (event?: Event) => void;
 
   public popUpStreetName: ProfileFieldBlock;
@@ -32,6 +36,8 @@ export default class PopUpForm {
   public buttonAddAddress: HTMLButtonElement;
 
   public buttonEditAddress: HTMLButtonElement;
+
+  public select: HTMLElement;
 
   public closePopUp: (event: Event) => void;
 
@@ -101,6 +107,8 @@ export default class PopUpForm {
       'Country',
     );
 
+    this.select = tags.select(['select']);
+
     this.header = tags.h2(['popup__header'], Heading.CHANGEPERSONAL);
     this.buttonPersonal = tags.button(
       ['profile__save', 'profile__button_popup'],
@@ -117,7 +125,18 @@ export default class PopUpForm {
     this.buttonEditAddress = tags.button(
       ['profile__add', 'profile__button_popup'],
       'Save',
-      { disabled: 'true', type: 'submit', id: 'save-newaddress' },
+      { disabled: 'true', type: 'submit' },
+    );
+    this.buttonBilling = tags.button(
+      ['profile__add', 'profile__button_popup'],
+      'Save',
+      { disabled: 'true', type: 'submit', id: 'save-billing' },
+    );
+
+    this.buttonShipping = tags.button(
+      ['profile__add', 'profile__button_popup'],
+      'Save',
+      { disabled: 'true', type: 'submit', id: 'save-shipping' },
     );
   }
 
@@ -154,6 +173,8 @@ export default class PopUpForm {
     this.buttonAddAddress.disabled = true;
     this.buttonPersonal.disabled = true;
     this.buttonEditAddress.disabled = true;
+    this.buttonShipping.disabled = true;
+    this.buttonBilling.disabled = true;
   }
 
   public createPersonalForm(
@@ -228,6 +249,39 @@ export default class PopUpForm {
     this.popUp.classList.remove('profile__popup_hidden');
     this.createAddressPopUp();
     this.form.append(this.buttonEditAddress);
+    this.openClosePopUp(false);
+  }
+
+  public createDefaultAddressForm(text: string, flag: boolean, value?: string) {
+    const label = tags.label(['label'], text, { for: this.select.id });
+    this.deleteErrors();
+    this.form.innerHTML = '';
+    const headers = document.querySelectorAll(
+      '.addresses__header',
+    ) as unknown as HTMLElement[];
+    this.select.innerHTML = '';
+    (this.select as HTMLSelectElement).value = value || '';
+    headers.forEach((elem) => {
+      const name = document.getElementById(
+        `${PopupFields.NAME}-${elem.id.split('-')[1]}`,
+      )?.innerHTML;
+      const surname = document.getElementById(
+        `${PopupFields.SURNAME}-${elem.id.split('-')[1]}`,
+      )?.innerHTML;
+      const code = document.getElementById(
+        `${PopupFields.CODE}-${elem.id.split('-')[1]}`,
+      )?.innerHTML;
+      const option = tags.option(
+        ['option'],
+        `${elem.innerText} ${name} ${surname} ${code}`,
+        { value: `${elem.id.split('-')[1]}` },
+      );
+      this.select.append(option);
+      this.select.append(option);
+    });
+    const button = flag ? this.buttonShipping : this.buttonBilling;
+    this.header.innerHTML = flag ? Heading.SHIP : Heading.BILL;
+    this.form.append(this.header, label, this.select, button);
     this.openClosePopUp(false);
   }
 }

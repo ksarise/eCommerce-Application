@@ -172,6 +172,32 @@ const span = (classNames: string[]): HTMLElement => {
   }).getElement();
 };
 
+const select = (
+  classNames: string[],
+  content?: string,
+  attributes: { [key: string]: string } = {},
+): HTMLElement => {
+  return new BaseComponentGenerator({
+    tag: 'select',
+    classNames,
+    content,
+    attributes,
+  }).getElement();
+};
+
+const option = (
+  classNames: string[],
+  content?: string,
+  attributes: { [key: string]: string } = {},
+): HTMLElement => {
+  return new BaseComponentGenerator({
+    tag: 'option',
+    classNames,
+    content,
+    attributes,
+  }).getElement();
+};
+
 const tags = {
   div,
   h1,
@@ -187,6 +213,8 @@ const tags = {
   label,
   button,
   span,
+  select,
+  option,
 };
 
 export default tags;

@@ -56,6 +56,10 @@ export default class ProfileController {
       this.handleClickEditAddress.bind(this);
     this.view.addressesBlock.handleClickAddAddress =
       this.handleClickAddAddress.bind(this);
+    this.view.addressesBlock.handleClickEditShipping =
+      this.handleClickEditShipping.bind(this);
+    this.view.addressesBlock.handleClickEditBilling =
+      this.handleClickEditBilling.bind(this);
   }
 
   private validateInput(element: HTMLElement) {
@@ -207,6 +211,28 @@ export default class ProfileController {
       variables.profileSurname.innerHTML,
       variables.profileDateofBirth.innerHTML,
       variables.profileEmail.innerHTML,
+    );
+  }
+
+  private handleClickEditShipping() {
+    const id = document
+      .querySelector('.addresses__header_ship')
+      ?.id.split('-')[1];
+    this.view.popUpBlock.createDefaultAddressForm(
+      'Default Shipping Address',
+      true,
+      id,
+    );
+  }
+
+  private handleClickEditBilling() {
+    const id = document
+      .querySelector('.addresses__header_bill')
+      ?.id.split('-')[1];
+    this.view.popUpBlock.createDefaultAddressForm(
+      'Default Billing Address',
+      false,
+      id,
     );
   }
 }
