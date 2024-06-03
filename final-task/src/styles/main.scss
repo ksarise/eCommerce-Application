@@ -1,5 +1,14 @@
 .main {
+  display: flex;
+}
+.filter-side-bar {
+  width: 15% !important;
+  border: 1px solid #dddddd77;
+}
+.catalog {
+  width: 75% !important;
   display: grid;
+  border: 1px solid #dddddd77;
   grid-template-columns: repeat(4, 1fr);
   gap: 20px;
   justify-items: center;

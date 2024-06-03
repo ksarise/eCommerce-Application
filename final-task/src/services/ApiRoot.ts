@@ -55,6 +55,10 @@ export default class API {
     return this.apiRoot.products().get().execute();
   }
 
+  public getCategories() {
+    return this.apiRoot.categories().get().execute();
+  }
+
   public getMyCustomerDraft() {
     return this.apiRoot.me().get().execute();
   }

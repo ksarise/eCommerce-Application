@@ -14,5 +14,6 @@ export default class MainController {
   public initialize() {
     const products = this.mainModel.getProducts();
     this.mainView.renderProducts(products);
+    this.mainView.setCategories(this.mainModel.getParsedCategories());
   }
 }

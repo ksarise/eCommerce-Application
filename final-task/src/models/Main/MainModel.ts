@@ -1,5 +1,14 @@
-import { Product, PagedQueryResponse } from '@commercetools/platform-sdk';
-import ProductCard from '../../global/interfaces/products';
+import {
+  Product,
+  PagedQueryResponse,
+  Category,
+} from '@commercetools/platform-sdk';
+import { Product as ProductCard } from '../../global/interfaces/products';
+
+interface ParsedCategory {
+  name: string;
+  subCategories: string[];
+}
 
 export default class MainModel {
   private products: PagedQueryResponse = {
@@ -9,8 +18,17 @@ export default class MainModel {
     results: [],
   };
 
+  private categories: Category[] = [];
+
+  private parsedCategories: Map<string, ParsedCategory> = new Map();
+
   public setProducts(products: PagedQueryResponse) {
     this.products = products;
+  }
+
+  public setCategories(categories: PagedQueryResponse) {
+    this.categories = categories.results as Category[];
+    console.log('this', this.categories);
   }
 
   public getData() {
@@ -39,5 +57,37 @@ export default class MainModel {
 
   public getProducts() {
     return this.getData();
+  }
+
+  private parseCategories(categories: Map<string, Category>) {
+    categories.forEach((category) => {
+      if (!category.parent) {
+        this.parsedCategories.set(category.id, {
+          name: category.name['en-US'],
+          subCategories: [],
+        });
+      }
+    });
+
+    categories.forEach((category) => {
+      if (category.parent) {
+        const parentId = category.parent?.id;
+        if (parentId) {
+          const parentCategory = this.parsedCategories.get(parentId);
+          if (parentCategory) {
+            parentCategory.subCategories.push(category.name['en-US']);
+          } else {
+            console.error(`Main category ${parentId} not found`);
+          }
+        }
+      }
+    });
+  }
+
+  public getParsedCategories() {
+    this.parseCategories(
+      new Map(this.categories.map((category) => [category.id, category])),
+    );
+    return this.parsedCategories;
   }
 }

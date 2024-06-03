@@ -52,6 +52,7 @@ export default class AppController {
     document.querySelector<HTMLDivElement>('.body')!.innerHTML =
       this.appView.innerHTML;
     await this.fetchAndLogProducts();
+    await this.fetchCategories();
     this.mainController.initialize();
     routerController.handleLocation();
     this.handleVisiblityButtons();
@@ -253,6 +254,19 @@ export default class AppController {
     }
     if (response) {
       this.appView.productPageView.render(response.body);
+    }
+  }
+
+  public async fetchCategories() {
+    try {
+      const categories = await this.appModel.requestGetCategories();
+      this.appModel.mainModel.setCategories(categories);
+    } catch (error) {
+      const errmessage = (error as ErrorResponse).message;
+      showToast({
+        text: `${errmessage}`,
+        type: 'negative',
+      });
     }
   }
 }

@@ -150,6 +150,11 @@ export default class AppModel {
     return body;
   }
 
+  public async requestGetCategories() {
+    const { body } = await this.apiService.getCategories();
+    return body;
+  }
+
   public logout() {
     this.isLogined = false;
     localStorage.removeItem('key-token');
