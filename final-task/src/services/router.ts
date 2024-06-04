@@ -40,7 +40,9 @@ class Router {
 
     this.router.on('/product/:productId', () => {
       this.changeContent?.('product');
+      this.router.resolve();
     });
+
     this.router.on('/my_profile', () => {
       if (!localStorage.getItem('userCreds')) {
         this.goToPage('/');
