@@ -19,6 +19,13 @@ function handleFieldError(fields: ProfileFieldBlock, error: string[]) {
   }
 }
 
+function showMessage(text: string, type: 'positive' | 'negative') {
+  showToast({
+    text,
+    type,
+  });
+}
+
 export default class ProfileController {
   private view: ProfileView;
 
@@ -32,7 +39,7 @@ export default class ProfileController {
     this.validation = new RegistrationPageModel();
   }
 
-  public init() {
+  public async init() {
     this.view.personalBlock.handleClickProfileEdit =
       this.handleClickLoginEditPersonal.bind(this);
     this.validateInput(this.view.popUpBlock.popUpName.fieldInput);
@@ -49,7 +56,6 @@ export default class ProfileController {
         event.preventDefault();
         await this.sendData();
         await this.view.popUpBlock.openClosePopUp(true);
-        this.view.popUpBlock.buttonPersonal.disabled = true;
       },
     );
     this.view.addressesBlock.handleClickEditAddress =
@@ -60,6 +66,69 @@ export default class ProfileController {
       this.handleClickEditShipping.bind(this);
     this.view.addressesBlock.handleClickEditBilling =
       this.handleClickEditBilling.bind(this);
+    this.view.addressesBlock.handleClickRemoveAddress =
+      this.removeAddress.bind(this);
+    await this.addPopUpClick();
+  }
+
+  public async addPopUpClick() {
+    this.view.popUpBlock.buttonPersonal.addEventListener(
+      'click',
+      async (event) => {
+        event.preventDefault();
+        await this.sendData();
+      },
+    );
+    this.view.popUpBlock.buttonAddAddress.addEventListener(
+      'click',
+      async (event) => {
+        event.preventDefault();
+        await this.addOrEditAddress();
+      },
+    );
+    this.view.popUpBlock.buttonEditAddress.addEventListener(
+      'click',
+      async (event) => {
+        const index = this.view.popUpBlock.buttonEditAddress.id.split('-')[1];
+        event.preventDefault();
+        await this.addOrEditAddress(index);
+      },
+    );
+    this.view.popUpBlock.buttonRemoveAddress.addEventListener(
+      'click',
+      async (event) => {
+        event.preventDefault();
+        const index = this.view.popUpBlock.buttonRemoveAddress.id.split('-')[1];
+        await this.removeAddressServer(index);
+      },
+    );
+    this.view.popUpBlock.select.addEventListener('change', () => {
+      this.view.popUpBlock.buttonBilling.disabled = false;
+      this.view.popUpBlock.buttonShipping.disabled = false;
+    });
+
+    this.view.popUpBlock.buttonBilling.addEventListener(
+      'click',
+      async (event) => {
+        event.preventDefault();
+        const { value } = this.view.popUpBlock.select as HTMLSelectElement;
+        if (value !== 'none') {
+          await this.addShippingOrBilling(value, false);
+        }
+        await this.view.popUpBlock.openClosePopUp(true);
+      },
+    );
+    this.view.popUpBlock.buttonShipping.addEventListener(
+      'click',
+      async (event) => {
+        event.preventDefault();
+        const { value } = this.view.popUpBlock.select as HTMLSelectElement;
+        if (value !== 'none') {
+          await this.addShippingOrBilling(value, true);
+        }
+        await this.view.popUpBlock.openClosePopUp(true);
+      },
+    );
   }
 
   private validateInput(element: HTMLElement) {
@@ -103,7 +172,74 @@ export default class ProfileController {
     );
   }
 
-  async sendData() {
+  public removeAddress() {
+    const index =
+      document.querySelector('.profile__all')?.id.split('-')[1] || '';
+    const name = (document.getElementById(`heading-${index}`) as HTMLElement)
+      .innerText;
+    console.log(index, name);
+    this.view.popUpBlock.createDeletePopUp(name, index);
+  }
+
+  private async addShippingOrBilling(value: string, shipping: boolean) {
+    try {
+      const { body } = await this.model.getCustomerProfile();
+      await this.model.setDefaultAddress(body.version, value, shipping);
+      const result = (await this.model.getCustomerProfile()).body;
+      await this.updateData(result);
+      const text = shipping ? 'shipping' : 'billing';
+      showMessage(`Successfully change default ${text} address`, 'positive');
+    } catch (error) {
+      showMessage(`${error}`, 'negative');
+      console.log(error);
+    }
+  }
+
+  private async removeAddressServer(index: string) {
+    await this.view.popUpBlock.openClosePopUp(true);
+    try {
+      document.getElementById(`bill-${index}`)?.remove();
+      document.getElementById(`ship-${index}`)?.remove();
+      const { body } = await this.model.getCustomerProfile();
+      await this.model.removeAddress(body.version, index);
+      const result = (await this.model.getCustomerProfile()).body;
+      await this.updateData(result);
+      showMessage('Successfully remove address', 'positive');
+    } catch (error) {
+      showMessage(`${error}`, 'negative');
+      console.log(error);
+    }
+  }
+
+  private async addOrEditAddress(index?: string) {
+    await this.view.popUpBlock.openClosePopUp(true);
+    try {
+      const { body } = await this.model.getCustomerProfile();
+      const variables = this.view.popUpBlock;
+      await this.model.addOrEditAddress(
+        variables.popUpName.getInput().value,
+        variables.popUpSurname.getInput().value,
+        variables.popUpStreetName.getInput().value,
+        variables.popUpCity.getInput().value,
+        variables.poUpCountry.getInput().value,
+        variables.popUppostalCode.getInput().value,
+        body.version,
+        index,
+      );
+      const result = (await this.model.getCustomerProfile()).body;
+      await this.updateData(result);
+      const text = index
+        ? 'Successfully change address'
+        : 'Successfully add address';
+      showMessage(text, 'positive');
+    } catch (error) {
+      showMessage(`${error}`, 'negative');
+      console.log(error);
+    }
+  }
+
+  private async sendData() {
+    await this.view.popUpBlock.openClosePopUp(true);
     try {
       const { body } = await this.model.getCustomerProfile();
       const variables = this.view.popUpBlock;
@@ -116,15 +252,9 @@ export default class ProfileController {
       );
       const result = (await this.model.getCustomerProfile()).body;
       await this.updateData(result);
-      showToast({
-        text: 'Successfully change personal information',
-        type: 'positive',
-      });
+      showMessage('Successfully change personal information', 'positive');
     } catch (error) {
-      showToast({
-        text: `${error}`,
-        type: 'negative',
-      });
+      showMessage(`${error}`, 'negative');
       console.log(error);
     }
   }

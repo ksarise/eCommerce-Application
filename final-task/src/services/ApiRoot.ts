@@ -87,6 +87,109 @@ export default class API {
       .execute();
   }
 
+  public addNewAddress(
+    firstName: string,
+    lastName: string,
+    streetName: string,
+    city: string,
+    country: string,
+    postalCode: string,
+    version: number,
+  ) {
+    return this.apiRoot
+      .me()
+      .post({
+        body: {
+          version,
+          actions: [
+            {
+              action: 'addAddress',
+              address: {
+                firstName,
+                lastName,
+                streetName,
+                city,
+                country,
+                postalCode,
+              },
+            },
+          ],
+        },
+      })
+      .execute();
+  }
+
+  public editAddress(
+    firstName: string,
+    lastName: string,
+    streetName: string,
+    city: string,
+    country: string,
+    postalCode: string,
+    version: number,
+    index: string,
+  ) {
+    return this.apiRoot
+      .me()
+      .post({
+        body: {
+          version,
+          actions: [
+            {
+              action: 'changeAddress',
+              addressId: `${index}`,
+              address: {
+                firstName,
+                lastName,
+                streetName,
+                city,
+                country,
+                postalCode,
+              },
+            },
+          ],
+        },
+      })
+      .execute();
+  }
+
+  public removeAddress(index: string, version: number) {
+    return this.apiRoot
+      .me()
+      .post({
+        body: {
+          version,
+          actions: [
+            {
+              action: 'removeAddress',
+              addressId: `${index}`,
+            },
+          ],
+        },
+      })
+      .execute();
+  }
+
+  public setDefaultAddress(index: string, version: number, shipping: boolean) {
+    const address = shipping
+      ? 'setDefaultShippingAddress'
+      : 'setDefaultBillingAddress';
+    return this.apiRoot
+      .me()
+      .post({
+        body: {
+          version,
+          actions: [
+            {
+              action: address,
+              addressId: `${index}`,
+            },
+          ],
+        },
+      })
+      .execute();
+  }
+
   public async postCustomerLogin(email: string, password: string) {
     try {
       await this.changeTypeClient('password', {

@@ -39,6 +39,8 @@ export default class PopUpForm {
 
   public select: HTMLElement;
 
+  public buttonRemoveAddress: HTMLButtonElement;
+
   public closePopUp: (event: Event) => void;
 
   constructor() {
@@ -138,6 +140,11 @@ export default class PopUpForm {
       'Save',
       { disabled: 'true', type: 'submit', id: 'save-shipping' },
     );
+    this.buttonRemoveAddress = tags.button(
+      ['profile__add', 'profile__button_popup'],
+      'Remove',
+      { type: 'submit', id: 'remove-address' },
+    );
   }
 
   public createPopUpBlock() {
@@ -201,6 +208,15 @@ export default class PopUpForm {
     this.openClosePopUp(false);
   }
 
+  public createDeletePopUp(text: string, index: string) {
+    this.deleteErrors();
+    this.header.innerHTML = text;
+    this.form.innerHTML = '';
+    this.buttonRemoveAddress.id = `remove-${index}`;
+    this.form.append(this.header, this.buttonRemoveAddress);
+    this.openClosePopUp(false);
+  }
+
   public createAddAddressForm() {
     this.deleteErrors();
     this.header.innerHTML = Heading.ADD;
@@ -260,7 +276,6 @@ export default class PopUpForm {
       '.addresses__header',
     ) as unknown as HTMLElement[];
     this.select.innerHTML = '';
-    (this.select as HTMLSelectElement).value = value || '';
     headers.forEach((elem) => {
       const name = document.getElementById(
         `${PopupFields.NAME}-${elem.id.split('-')[1]}`,
@@ -277,8 +292,12 @@ export default class PopUpForm {
         { value: `${elem.id.split('-')[1]}` },
       );
       this.select.append(option);
-      this.select.append(option);
     });
+    const option = tags.option(['option'], `none`, { value: 'none' });
+    if (value !== '' && !value) {
+      this.select.append(option);
+    }
+    (this.select as HTMLSelectElement).value = value || 'none';
     const button = flag ? this.buttonShipping : this.buttonBilling;
     this.header.innerHTML = flag ? Heading.SHIP : Heading.BILL;
     this.form.append(this.header, label, this.select, button);
