@@ -36,6 +36,7 @@ export default class MainView {
       this.filterContainer.getContent(),
       this.catalogWrapContainer,
     );
+    this.createTextSearch();
     this.createSortDropdown();
   }
 
@@ -151,7 +152,10 @@ export default class MainView {
       const check = checkbox;
       check.checked = false;
     });
-    console.log('clear');
+    const textSearchInput = this.mainContainer.querySelector(
+      '.text-search-input',
+    )! as HTMLInputElement;
+    textSearchInput.value = '';
     const priceFilterMin = this.mainContainer.querySelector(
       '.price-range-min',
     ) as HTMLInputElement;
@@ -163,6 +167,23 @@ export default class MainView {
       priceFilterMin.value = '0';
       priceFilterMax.value = '1000';
     }
+  }
+
+  public createTextSearch() {
+    const textSearchContainer = tags
+      .div(['text-search-container'])
+      .getElement();
+    const textSearchInput = tags.input(['text-search-input'], {
+      type: 'text',
+      placeholder: 'Search...',
+      id: 'textSearchInput',
+    });
+    const textSearchButton = tags.button(['text-search-button'], '🔍', {
+      disabled: 'on',
+    });
+
+    textSearchContainer.append(textSearchInput, textSearchButton);
+    this.catalogPanelContainer.append(textSearchContainer);
   }
 
   public createSortDropdown() {
@@ -209,6 +230,33 @@ export default class MainView {
     if (sortDropdown) {
       sortDropdown.addEventListener('change', () => {
         callback(sortDropdown.value);
+      });
+    }
+  }
+
+  public bindTextSearch(callback: (value: string) => void): void {
+    const textSearchButton = this.catalogPanelContainer.querySelector(
+      '.text-search-button',
+    ) as HTMLButtonElement;
+    const textSearchInput = this.catalogPanelContainer.querySelector(
+      '.text-search-input',
+    ) as HTMLInputElement;
+    textSearchInput.addEventListener('input', () => {
+      if (textSearchInput.value.length > 0) {
+        textSearchButton.disabled = false;
+      } else {
+        textSearchButton.disabled = true;
+      }
+    });
+    if (textSearchInput && textSearchButton) {
+      textSearchButton.addEventListener('click', () => {
+        callback(textSearchInput.value);
+      });
+
+      document.addEventListener('keydown', (event) => {
+        if (event.key === 'Enter' && !textSearchButton.disabled) {
+          callback(textSearchInput.value);
+        }
       });
     }
   }

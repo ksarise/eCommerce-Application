@@ -24,6 +24,8 @@ export default class MainModel {
 
   public sort: string = 'name.en-US asc';
 
+  public textSearch: string;
+
   public selectedFilters: {
     categoryIds: string[];
     attributes: { key: string; value: string }[];
@@ -36,6 +38,7 @@ export default class MainModel {
       attributes: [],
       priceRange: { min: 0, max: 1000 },
     };
+    this.textSearch = '';
   }
 
   public setProducts(products: PagedQueryResponse) {
@@ -195,9 +198,14 @@ export default class MainModel {
       attributes: [],
       priceRange: { min: 0, max: 1000 },
     };
+    this.textSearch = '';
   }
 
   public handleSort(value: string) {
     this.sort = value;
+  }
+
+  public handleSearch(value: string) {
+    this.textSearch = value;
   }
 }

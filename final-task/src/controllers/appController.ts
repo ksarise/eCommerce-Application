@@ -77,6 +77,7 @@ export default class AppController {
     this.appView.mainView.bindApplyFilters(this.handleApplyFilters.bind(this));
     this.appView.mainView.bindResetFilters(this.handleResetFilters.bind(this));
     this.appView.mainView.bindSortDropdown(this.handleSortChange.bind(this));
+    this.appView.mainView.bindTextSearch(this.handleSearch.bind(this));
   }
 
   public initializeLoginListeners() {
@@ -213,11 +214,19 @@ export default class AppController {
     this.routerController.goToPage('/');
   }
 
-  public async fetchAndLogProducts(filters?: string[], sorts?: string) {
+  public async fetchAndLogProducts(
+    filters?: string[],
+    sorts?: string,
+    texts?: string,
+  ) {
     try {
       console.log('fetch filters', filters);
       if (filters) {
-        const products = await this.appModel.requestGetProducts(filters, sorts);
+        const products = await this.appModel.requestGetProducts(
+          filters,
+          sorts,
+          texts,
+        );
         this.appModel.mainModel.setProducts(products);
         this.mainController.renderProducts();
       } else {
@@ -266,9 +275,13 @@ export default class AppController {
     }
   }
 
-  private handleApplyFilters() {
+  private async handleApplyFilters() {
     const { searchQuery } = this.appModel.mainModel;
-    this.fetchAndLogProducts(searchQuery);
+    await this.fetchAndLogProducts(
+      searchQuery,
+      this.appModel.mainModel.sort,
+      this.appModel.mainModel.textSearch,
+    );
   }
 
   private async handleResetFilters() {
@@ -279,9 +292,19 @@ export default class AppController {
   private async handleSortChange(value: string) {
     if (value !== this.appModel.mainModel.sort) {
       this.appModel.mainModel.handleSort(value);
-      await this.fetchAndLogProducts([], this.appModel.mainModel.sort);
+      await this.fetchAndLogProducts(
+        this.appModel.mainModel.searchQuery || [],
+        this.appModel.mainModel.sort,
+        this.appModel.mainModel.textSearch,
+      );
       this.mainController.renderProducts();
     }
+  }
+
+  private async handleSearch(value: string) {
+    this.appModel.mainModel.handleSearch(value);
+    await this.fetchAndLogProducts([], this.appModel.mainModel.sort, value);
+    this.mainController.renderProducts();
   }
 
   public async fetchCategories() {

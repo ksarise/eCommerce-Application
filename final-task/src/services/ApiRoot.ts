@@ -51,7 +51,11 @@ export default class API {
     return this.apiRoot.customers().withId({ ID: id }).get().execute();
   }
 
-  public getProducts(queryArgs: { filter?: string[]; sort?: string }) {
+  public getProducts(queryArgs: {
+    filter?: string[];
+    sort?: string;
+    text?: string;
+  }) {
     if (queryArgs.filter) {
       return this.apiRoot
         .productProjections()
@@ -60,6 +64,7 @@ export default class API {
           queryArgs: {
             'filter.query': queryArgs.filter,
             sort: queryArgs.sort,
+            'text.en-US': queryArgs.text,
           },
         })
         .execute();
