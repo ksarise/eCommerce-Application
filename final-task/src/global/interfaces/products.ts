@@ -8,5 +8,9 @@ export interface Product {
 }
 export interface ParsedCategory {
   name: string;
-  subCategories: string[];
+  subCategories: SubCategory[];
+}
+interface SubCategory {
+  id: string;
+  name: string;
 }

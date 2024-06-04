@@ -51,8 +51,15 @@ export default class API {
     return this.apiRoot.customers().withId({ ID: id }).get().execute();
   }
 
-  public getProducts() {
-    return this.apiRoot.products().get().execute();
+  public getProducts(queryArgs: { filter?: string[] }) {
+    if (queryArgs.filter) {
+      return this.apiRoot
+        .productProjections()
+        .search()
+        .get({ queryArgs: { 'filter.query': queryArgs.filter } })
+        .execute();
+    }
+    return this.apiRoot.productProjections().get().execute();
   }
 
   public getCategories() {

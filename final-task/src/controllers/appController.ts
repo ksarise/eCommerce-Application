@@ -74,6 +74,8 @@ export default class AppController {
     this.appView.registrationView.bindFormSubmit(
       this.handleRegistrationFormSubmit.bind(this),
     );
+    this.appView.mainView.bindApplyFilters(this.handleApplyFilters.bind(this));
+    this.appView.mainView.bindResetFilters(this.handleResetFilters.bind(this));
   }
 
   public initializeLoginListeners() {
@@ -210,15 +212,21 @@ export default class AppController {
     this.routerController.goToPage('/');
   }
 
-  public async fetchAndLogProducts() {
+  public async fetchAndLogProducts(filters?: string[]) {
     try {
-      const products = await this.appModel.requestGetProducts();
-      // console.log(products.results[5].masterData);
-      this.appModel.mainModel.setProducts(products);
+      console.log('fetch filters', filters);
+      if (filters) {
+        const products = await this.appModel.requestGetProducts(filters);
+        this.appModel.mainModel.setProducts(products);
+        this.mainController.renderProducts();
+      } else {
+        const products = await this.appModel.requestGetProducts();
+        this.appModel.mainModel.setProducts(products);
+      }
     } catch (error) {
       const errmessage = (error as ErrorResponse).message;
       showToast({
-        text: `${errmessage}`,
+        text: `Fetch Products error${errmessage}`,
         type: 'negative',
       });
     }
@@ -255,6 +263,16 @@ export default class AppController {
     if (response) {
       this.appView.productPageView.render(response.body);
     }
+  }
+
+  private handleApplyFilters() {
+    const { searchQuery } = this.appModel.mainModel;
+    this.fetchAndLogProducts(searchQuery);
+  }
+
+  private async handleResetFilters() {
+    await this.fetchAndLogProducts();
+    this.mainController.handleResetFilters();
   }
 
   public async fetchCategories() {

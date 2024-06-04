@@ -145,9 +145,14 @@ export default class AppModel {
     }
   }
 
-  public async requestGetProducts() {
-    const { body } = await this.apiService.getProducts();
-    return body;
+  public async requestGetProducts(filters?: string[]) {
+    let response;
+    if (filters) {
+      response = await this.apiService.getProducts({ filter: filters });
+    } else {
+      response = await this.apiService.getProducts({});
+    }
+    return response.body;
   }
 
   public async requestGetCategories() {
