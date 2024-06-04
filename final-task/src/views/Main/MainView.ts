@@ -22,7 +22,7 @@ export default class MainView {
       .div(['catalog-wrap'])
       .getElement() as HTMLDivElement;
     this.catalogPanelContainer = tags
-      .div(['catalog-panel'])
+      .div(['catalog-panel', 'container'])
       .getElement() as HTMLDivElement;
 
     this.catalogContainer = tags
