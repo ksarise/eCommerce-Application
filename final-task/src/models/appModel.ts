@@ -145,10 +145,13 @@ export default class AppModel {
     }
   }
 
-  public async requestGetProducts(filters?: string[]) {
+  public async requestGetProducts(filters?: string[], sorts?: string) {
     let response;
     if (filters) {
-      response = await this.apiService.getProducts({ filter: filters });
+      response = await this.apiService.getProducts({
+        filter: filters,
+        sort: sorts,
+      });
     } else {
       response = await this.apiService.getProducts({});
     }

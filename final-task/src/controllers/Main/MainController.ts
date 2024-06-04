@@ -40,6 +40,13 @@ export default class MainController {
     this.renderProducts();
   }
 
+  public handleSortChange(value: string) {
+    if (value !== this.mainModel.sort) {
+      this.mainModel.handleSort(value);
+      this.renderProducts();
+    }
+  }
+
   public renderProducts() {
     const products = this.mainModel.getProducts();
     console.log('render', products);

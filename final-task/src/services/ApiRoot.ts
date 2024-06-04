@@ -51,15 +51,27 @@ export default class API {
     return this.apiRoot.customers().withId({ ID: id }).get().execute();
   }
 
-  public getProducts(queryArgs: { filter?: string[] }) {
+  public getProducts(queryArgs: { filter?: string[]; sort?: string }) {
     if (queryArgs.filter) {
       return this.apiRoot
         .productProjections()
         .search()
-        .get({ queryArgs: { 'filter.query': queryArgs.filter } })
+        .get({
+          queryArgs: {
+            'filter.query': queryArgs.filter,
+            sort: queryArgs.sort,
+          },
+        })
         .execute();
     }
-    return this.apiRoot.productProjections().get().execute();
+    return this.apiRoot
+      .productProjections()
+      .get({
+        queryArgs: {
+          sort: 'name.en-US asc',
+        },
+      })
+      .execute();
   }
 
   public getCategories() {

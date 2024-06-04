@@ -76,6 +76,7 @@ export default class AppController {
     );
     this.appView.mainView.bindApplyFilters(this.handleApplyFilters.bind(this));
     this.appView.mainView.bindResetFilters(this.handleResetFilters.bind(this));
+    this.appView.mainView.bindSortDropdown(this.handleSortChange.bind(this));
   }
 
   public initializeLoginListeners() {
@@ -212,11 +213,11 @@ export default class AppController {
     this.routerController.goToPage('/');
   }
 
-  public async fetchAndLogProducts(filters?: string[]) {
+  public async fetchAndLogProducts(filters?: string[], sorts?: string) {
     try {
       console.log('fetch filters', filters);
       if (filters) {
-        const products = await this.appModel.requestGetProducts(filters);
+        const products = await this.appModel.requestGetProducts(filters, sorts);
         this.appModel.mainModel.setProducts(products);
         this.mainController.renderProducts();
       } else {
@@ -273,6 +274,14 @@ export default class AppController {
   private async handleResetFilters() {
     await this.fetchAndLogProducts();
     this.mainController.handleResetFilters();
+  }
+
+  private async handleSortChange(value: string) {
+    if (value !== this.appModel.mainModel.sort) {
+      this.appModel.mainModel.handleSort(value);
+      await this.fetchAndLogProducts([], this.appModel.mainModel.sort);
+      this.mainController.renderProducts();
+    }
   }
 
   public async fetchCategories() {

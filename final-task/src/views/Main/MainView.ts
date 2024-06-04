@@ -2,24 +2,41 @@ import tags from '../../tags/tags';
 import ProductCard from './components/ProductCard';
 import FilterSideBar from './components/FilterSideBar';
 import { Product, ParsedCategory } from '../../global/interfaces/products';
+import BaseComponentGenerator from '../../tags/base-component';
 
 export default class MainView {
   private mainContainer: HTMLDivElement;
 
   private catalogContainer: HTMLDivElement;
 
+  private catalogPanelContainer: HTMLDivElement;
+
+  private catalogWrapContainer: HTMLDivElement;
+
   private filterContainer: FilterSideBar;
 
   constructor() {
     this.mainContainer = tags.div(['main']).getElement() as HTMLDivElement;
     this.filterContainer = new FilterSideBar();
+    this.catalogWrapContainer = tags
+      .div(['catalog-wrap'])
+      .getElement() as HTMLDivElement;
+    this.catalogPanelContainer = tags
+      .div(['catalog-panel'])
+      .getElement() as HTMLDivElement;
+
     this.catalogContainer = tags
       .div(['catalog', 'container'], 'Catalog', {})
       .getElement() as HTMLDivElement;
-    this.mainContainer.append(
-      this.filterContainer.getContent(),
+    this.catalogWrapContainer.append(
+      this.catalogPanelContainer,
       this.catalogContainer,
     );
+    this.mainContainer.append(
+      this.filterContainer.getContent(),
+      this.catalogWrapContainer,
+    );
+    this.createSortDropdown();
   }
 
   public getContent(): HTMLElement {
@@ -120,7 +137,6 @@ export default class MainView {
           parseInt(priceFilterMin.value, 10),
           parseInt(priceFilterMax.value, 10),
         );
-        console.log('change', priceFilterMax.value);
       });
     }
   }
@@ -146,6 +162,54 @@ export default class MainView {
     if (priceFilterMin && priceFilterMax) {
       priceFilterMin.value = '0';
       priceFilterMax.value = '1000';
+    }
+  }
+
+  public createSortDropdown() {
+    const sortDropdownContainer = tags
+      .div(['sort-dropdown-container'])
+      .getElement();
+    const sortDropdownLabel = tags.label(['sort-dropdown-label'], 'Sort by:');
+    const sortDropdown = new BaseComponentGenerator({
+      tag: 'select',
+      classNames: ['sort-dropdown'],
+      attributes: {
+        name: 'sort-dropdown',
+        id: 'sort-dropdown',
+      },
+    });
+    const sorts: {
+      name: string;
+      value: string;
+    }[] = [
+      { name: 'Name: A-Z', value: 'name.en-US asc' },
+      { name: 'Name: Z-A', value: 'name.en-US desc' },
+      { name: 'Price: low to high', value: 'price asc' },
+      { name: 'Price: high to low', value: 'price desc' },
+    ];
+    sorts.forEach((sort) => {
+      const option = new BaseComponentGenerator({
+        tag: 'option',
+        classNames: ['sort-dropdown__option'],
+        attributes: {
+          value: sort.value,
+        },
+        content: sort.name,
+      });
+      sortDropdown.appendChild(option);
+    });
+    sortDropdownContainer.append(sortDropdownLabel, sortDropdown.getElement());
+    this.catalogPanelContainer.append(sortDropdownContainer);
+  }
+
+  public bindSortDropdown(callback: (value: string) => void): void {
+    const sortDropdown = this.catalogPanelContainer.querySelector(
+      '.sort-dropdown',
+    ) as HTMLSelectElement;
+    if (sortDropdown) {
+      sortDropdown.addEventListener('change', () => {
+        callback(sortDropdown.value);
+      });
     }
   }
 }
