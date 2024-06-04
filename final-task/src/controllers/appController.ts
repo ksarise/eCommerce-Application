@@ -48,7 +48,7 @@ export default class AppController {
     await this.appView.create();
     await this.registrationController.init();
     await this.profileController.init();
-    await this.getUser();
+    if (localStorage.getItem('userCreds')) await this.getUser();
     document.querySelector<HTMLDivElement>('.body')!.innerHTML =
       this.appView.innerHTML;
     await this.fetchAndLogProducts();
