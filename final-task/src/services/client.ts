@@ -19,19 +19,26 @@ const clientSecret = import.meta.env.VITE_CTP_CLIENT_SECRET;
 const LOCAL_STORAGE_TOKEN_KEY = 'key-token';
 
 class MyTokenCache implements TokenCache {
-  myCaсhe: TokenStore = { token: '', expirationTime: 1800, refreshToken: '' };
+  myCache: TokenStore = { token: '', expirationTime: 1800, refreshToken: '' };
 
   set(newCache: TokenStore) {
-    this.myCaсhe = newCache;
+    this.myCache = newCache;
     localStorage.setItem(LOCAL_STORAGE_TOKEN_KEY, JSON.stringify(newCache));
   }
 
   get() {
-    const token = localStorage.getItem(LOCAL_STORAGE_TOKEN_KEY);
-    if (token) {
-      this.myCaсhe = JSON.parse(token);
+    const tokenString = localStorage.getItem(LOCAL_STORAGE_TOKEN_KEY);
+    if (tokenString) {
+      const tokenData = JSON.parse(tokenString);
+      const currentTime = Math.floor(Date.now() / 1000);
+      if (tokenData.expirationTime > currentTime) {
+        this.myCache = tokenData;
+      } else {
+        this.myCache = { token: '', expirationTime: 1800, refreshToken: '' };
+        localStorage.removeItem(LOCAL_STORAGE_TOKEN_KEY);
+      }
     }
-    return this.myCaсhe;
+    return this.myCache;
   }
 }
 
@@ -111,7 +118,6 @@ export const createRefreshTokenClient = (refreshToken: string) => {
       clientSecret,
     },
     refreshToken,
-    tokenCache,
     fetch,
   };
   const clientNew = new ClientBuilder()
