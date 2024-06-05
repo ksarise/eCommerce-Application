@@ -7,6 +7,7 @@ import AppView from '../views/appView';
 import AppModel from '../models/appModel';
 import routerController from '../services/router';
 import RegistrationController from './Registration/RegistrationController';
+import ProfileController from './profile/ProfileController';
 import showToast from '../services/ToastMessages';
 import { RegistrationFormData } from '../global/interfaces/registration';
 import MainController from './Main/MainController';
@@ -22,6 +23,8 @@ export default class AppController {
 
   private registrationController: RegistrationController;
 
+  private profileController: ProfileController;
+
   constructor() {
     this.appView = new AppView();
     this.appModel = new AppModel();
@@ -33,13 +36,19 @@ export default class AppController {
       this.appModel.mainModel,
       this.appView.mainView,
     );
+    this.profileController = new ProfileController(
+      this.appView.profileView,
+      this.appModel,
+    );
   }
 
   public async initialize() {
-    this.initializeListeners();
-    this.initializeLoginListeners();
-    this.appView.create();
-    this.registrationController.init();
+    await this.initializeListeners();
+    await this.initializeLoginListeners();
+    await this.appView.create();
+    await this.registrationController.init();
+    await this.profileController.init();
+    if (localStorage.getItem('userCreds')) await this.getUser();
     document.querySelector<HTMLDivElement>('.body')!.innerHTML =
       this.appView.innerHTML;
     await this.fetchAndLogProducts();
@@ -57,6 +66,8 @@ export default class AppController {
       this.handleClickRegistrationButton.bind(this);
     this.appView.headerView.handleClickLogoutButton =
       this.handleClickLogoutButton.bind(this);
+    this.appView.headerView.handleClickMyProfile =
+      this.handleClickProfileButton.bind(this);
     this.appView.notFoundView.handleClickGoHomeButton =
       this.handleClickGoHomeButton.bind(this);
     this.appView.registrationView.bindFormSubmit(
@@ -174,6 +185,20 @@ export default class AppController {
     this.routerController.goToPage('/');
     localStorage.removeItem('userCreds');
     this.handleVisiblityButtons();
+  }
+
+  public async handleClickProfileButton() {
+    await this.routerController.goToPage('/my_profile');
+    await this.getUser();
+  }
+
+  public async getUser() {
+    try {
+      const { body } = await this.appModel.getCustomerProfile();
+      this.profileController.updateData(body);
+    } catch (error) {
+      console.log('create user');
+    }
   }
 
   public handleVisiblityButtons() {

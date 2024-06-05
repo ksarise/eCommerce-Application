@@ -16,6 +16,8 @@ export default class HeaderView {
 
   public handleClickLogoutButton: ((event?: Event) => void) | undefined;
 
+  public handleClickMyProfile: (() => void) | undefined;
+
   constructor() {
     this.header = new BaseComponentGenerator({
       tag: 'header',
@@ -111,9 +113,22 @@ export default class HeaderView {
       'click',
       this.handleClickLogoutButton,
     );
-    this.buttonContainer.appendChild(buttonLogin);
-    this.buttonContainer.appendChild(buttonRegistration);
-    this.buttonContainer.appendChild(buttonLogout);
+    const buttonMyProfile = tags.button(
+      ['header__button', 'header__button_profile'],
+      'Profile',
+      {},
+    );
+    buttonMyProfile.addEventListener('click', async () => {
+      if (this.handleClickMyProfile) await this.handleClickMyProfile();
+    });
+    const imgProfile = tags.div(['img_profile']).getElement();
+    buttonMyProfile.prepend(imgProfile);
+    this.buttonContainer.append(
+      buttonLogin,
+      buttonRegistration,
+      buttonLogout,
+      buttonMyProfile,
+    );
     return this.buttonContainer;
   }
 
