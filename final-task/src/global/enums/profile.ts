@@ -4,6 +4,7 @@ enum Heading {
   CHANGEADDRESS = 'Change Address',
   SHIP = 'Change Shipping Address',
   BILL = 'Change Billing Address',
+  PASSWORD = 'Change Password',
 }
 
 export enum PopupFields {

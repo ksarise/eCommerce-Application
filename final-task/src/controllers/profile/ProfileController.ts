@@ -42,6 +42,8 @@ export default class ProfileController {
   public async init() {
     this.view.personalBlock.handleClickProfileEdit =
       this.handleClickLoginEditPersonal.bind(this);
+    this.view.personalBlock.handleClickChangePassword =
+      this.handleClickChangePassword.bind(this);
     this.validateInput(this.view.popUpBlock.popUpName.fieldInput);
     this.validateInput(this.view.popUpBlock.popUpSurname.fieldInput);
     this.validateInput(this.view.popUpBlock.popUpDateofBirth.fieldInput);
@@ -50,6 +52,8 @@ export default class ProfileController {
     this.validateInput(this.view.popUpBlock.popUpCity.fieldInput);
     this.validateInput(this.view.popUpBlock.poUpCountry.fieldInput);
     this.validateInput(this.view.popUpBlock.popUppostalCode.fieldInput);
+    this.validateInput(this.view.popUpBlock.popUpNewPassword.fieldInput);
+    this.validateInput(this.view.popUpBlock.popUpCurrentPassword.fieldInput);
     this.view.popUpBlock.buttonPersonal.addEventListener(
       'click',
       async (event) => {
@@ -85,6 +89,13 @@ export default class ProfileController {
         const index = this.view.popUpBlock.buttonEditAddress.id.split('-')[1];
         event.preventDefault();
         await this.addOrEditAddress(index);
+      },
+    );
+    this.view.popUpBlock.buttonChangePassword.addEventListener(
+      'click',
+      async (event) => {
+        event.preventDefault();
+        await this.changePassword();
       },
     );
     this.view.popUpBlock.buttonRemoveAddress.addEventListener(
@@ -165,6 +176,10 @@ export default class ProfileController {
     );
   }
 
+  private handleClickChangePassword() {
+    this.view.popUpBlock.createPasswordForm();
+  }
+
   public removeAddress() {
     const index =
       document.querySelector('.profile__all')?.id.split('-')[1] || '';
@@ -172,6 +187,28 @@ export default class ProfileController {
       .innerText;
     console.log(index, name);
     this.view.popUpBlock.createDeletePopUp(name, index);
+  }
+
+  private async changePassword() {
+    const variables = this.view.popUpBlock;
+    try {
+      const { body } = await this.model.getCustomerProfile();
+      await this.model.changePassword(
+        body.version,
+        variables.popUpCurrentPassword.getInput().value,
+        variables.popUpNewPassword.getInput().value,
+      );
+      showMessage(`Successfully change password`, 'positive');
+      const info = JSON.parse(localStorage.getItem('userCreds') as string);
+      info.password = variables.popUpNewPassword.getInput().value;
+      localStorage.setItem('userCreds', JSON.stringify(info));
+      localStorage.removeItem('key-token');
+      // // await this.model.changePasswordLogin()
+      window.location.reload();
+    } catch (error) {
+      showMessage(`${error}`, 'negative');
+      console.log(error);
+    }
   }
 
   private async addShippingOrBilling(value: string, shipping: boolean) {
@@ -282,6 +319,12 @@ export default class ProfileController {
       variables.poUpCountry.getInput().value,
       'postalCode',
     );
+    this.validation.validatePassword(
+      variables.popUpCurrentPassword.getInput().value,
+    );
+    this.validation.validateNewPassword(
+      variables.popUpNewPassword.getInput().value,
+    );
     this.createErrors();
   }
 
@@ -307,6 +350,11 @@ export default class ProfileController {
       this.view.popUpBlock.buttonAddAddress.disabled = true;
       this.view.popUpBlock.buttonEditAddress.disabled = true;
     }
+    if (!errors.password && !errors.newPassword) {
+      this.view.popUpBlock.buttonChangePassword.disabled = false;
+    } else {
+      this.view.popUpBlock.buttonChangePassword.disabled = true;
+    }
     handleFieldError(variables.popUpName, errors.firstName);
     handleFieldError(variables.popUpSurname, errors.lastName);
     handleFieldError(variables.popUpDateofBirth, errors.dob);
@@ -315,6 +363,8 @@ export default class ProfileController {
     handleFieldError(variables.popUpCity, errors.city);
     handleFieldError(variables.poUpCountry, errors.country);
     handleFieldError(variables.popUppostalCode, errors.postalCode);
+    handleFieldError(variables.popUpCurrentPassword, errors.password);
+    handleFieldError(variables.popUpNewPassword, errors.newPassword);
   }
 
   public updateData(body: Customer) {

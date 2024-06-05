@@ -16,10 +16,17 @@ export default class API {
 
   constructor() {
     const keyToken = localStorage.getItem('key-token');
+    const userCreds = JSON.parse(localStorage.getItem('userCreds') as string);
     if (keyToken) {
       const { refreshToken } = JSON.parse(keyToken);
       this.apiRoot = createApiBuilderFromCtpClient(
         createRefreshTokenClient(refreshToken),
+      ).withProjectKey({
+        projectKey: import.meta.env.VITE_CTP_PROJECT_KEY,
+      });
+    } else if (userCreds && !keyToken) {
+      this.apiRoot = createApiBuilderFromCtpClient(
+        createPasswordClient(userCreds.email, userCreds.password),
       ).withProjectKey({
         projectKey: import.meta.env.VITE_CTP_PROJECT_KEY,
       });
@@ -82,6 +89,29 @@ export default class API {
               dateOfBirth: date,
             },
           ],
+        },
+      })
+      .execute();
+  }
+
+  public async changePasswordLogin() {
+    const { email } = JSON.parse(localStorage.getItem('userCreds') as string);
+    const { password } = JSON.parse(
+      localStorage.getItem('userCreds') as string,
+    );
+    await this.changeTypeClient('password', { email, password });
+    await this.postCustomerLogin(email, password);
+  }
+
+  public changePassword(version: number, current: string, newPassword: string) {
+    return this.apiRoot
+      .me()
+      .password()
+      .post({
+        body: {
+          version,
+          currentPassword: current,
+          newPassword,
         },
       })
       .execute();

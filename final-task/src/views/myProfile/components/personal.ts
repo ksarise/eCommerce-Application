@@ -24,6 +24,8 @@ export default class Personal {
 
   public handleClickProfileEdit: ((event?: Event) => void) | undefined;
 
+  public handleClickChangePassword: ((event?: Event) => void) | undefined;
+
   constructor() {
     this.profileName = tags.span(['profile__info', 'profile__info_name']);
     this.profileSurname = tags.span(['profile__info', 'profile__info_surname']);
@@ -48,6 +50,14 @@ export default class Personal {
       'Edit',
       {},
     );
+    const buttonPassword = tags.button(
+      ['profile__change', 'profile__button_personal'],
+      'Change password',
+      {},
+    );
+    buttonPassword.addEventListener('click', () => {
+      if (this.handleClickChangePassword) this.handleClickChangePassword();
+    });
     buttonEdit.addEventListener('click', () => {
       if (this.handleClickProfileEdit) this.handleClickProfileEdit();
     });
@@ -65,6 +75,7 @@ export default class Personal {
       createDate('Email'),
       this.profileEmail,
       buttonEdit,
+      buttonPassword,
     );
   }
 

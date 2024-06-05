@@ -108,6 +108,23 @@ export default class AppModel {
     return result;
   }
 
+  public async changePassword(
+    version: number,
+    current: string,
+    newPassword: string,
+  ) {
+    const result = await this.apiService.changePassword(
+      version,
+      current,
+      newPassword,
+    );
+    return result;
+  }
+
+  public async changePasswordLogin() {
+    await this.apiService.changePasswordLogin();
+  }
+
   public async setDefaultAddress(
     version: number,
     index: string,

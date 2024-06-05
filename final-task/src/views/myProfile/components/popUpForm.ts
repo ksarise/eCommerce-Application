@@ -15,6 +15,10 @@ export default class PopUpForm {
 
   public popUpEmail: ProfileFieldBlock;
 
+  public popUpCurrentPassword: ProfileFieldBlock;
+
+  public popUpNewPassword: ProfileFieldBlock;
+
   public header: HTMLElement;
 
   public buttonPersonal: HTMLButtonElement;
@@ -36,6 +40,8 @@ export default class PopUpForm {
   public buttonAddAddress: HTMLButtonElement;
 
   public buttonEditAddress: HTMLButtonElement;
+
+  public buttonChangePassword: HTMLButtonElement;
 
   public select: HTMLElement;
 
@@ -109,6 +115,20 @@ export default class PopUpForm {
       'Country',
     );
 
+    this.popUpCurrentPassword = new ProfileFieldBlock(
+      'Current Password',
+      'password',
+      'currentpassword-popup',
+      'Current Password',
+    );
+
+    this.popUpNewPassword = new ProfileFieldBlock(
+      'New Password',
+      'password',
+      'newpassword-popup',
+      'New Password',
+    );
+
     this.select = tags.select(['select']);
 
     this.header = tags.h2(['popup__header'], Heading.CHANGEPERSONAL);
@@ -145,6 +165,11 @@ export default class PopUpForm {
       'Remove',
       { type: 'submit', id: 'remove-address' },
     );
+    this.buttonChangePassword = tags.button(
+      ['profile__add', 'profile__button_popup'],
+      'Change',
+      { type: 'submit', id: 'change-password' },
+    );
   }
 
   public createPopUpBlock() {
@@ -172,6 +197,8 @@ export default class PopUpForm {
       this.popUpCity,
       this.poUpCountry,
       this.popUppostalCode,
+      this.popUpCurrentPassword,
+      this.popUpNewPassword,
     ];
     elements.forEach((elem) => {
       elem.fieldError.classList.add('error__hidden');
@@ -182,6 +209,7 @@ export default class PopUpForm {
     this.buttonEditAddress.disabled = true;
     this.buttonShipping.disabled = true;
     this.buttonBilling.disabled = true;
+    this.buttonChangePassword.disabled = true;
   }
 
   public createPersonalForm(
@@ -301,6 +329,22 @@ export default class PopUpForm {
     const button = flag ? this.buttonShipping : this.buttonBilling;
     this.header.innerHTML = flag ? Heading.SHIP : Heading.BILL;
     this.form.append(this.header, label, this.select, button);
+    this.openClosePopUp(false);
+  }
+
+  public createPasswordForm() {
+    this.deleteErrors();
+    this.header.innerHTML = Heading.PASSWORD;
+    this.form.innerHTML = '';
+    this.popUpCurrentPassword.fieldInput.value = '';
+    this.popUpNewPassword.fieldInput.value = '';
+    this.popUp.classList.remove('profile__popup_hidden');
+    this.form.append(
+      this.header,
+      this.popUpCurrentPassword.getBlock(),
+      this.popUpNewPassword.getBlock(),
+      this.buttonChangePassword,
+    );
     this.openClosePopUp(false);
   }
 }

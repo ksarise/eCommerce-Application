@@ -163,6 +163,11 @@
   }
 
   &__personal {
+
+    .profile__header {
+      margin-top: 30px;
+      background-color: #ffffff75;
+    }
     position: relative;
     background-image: url('/images/snowboard2.jpg');
     background-repeat: no-repeat;
@@ -205,12 +210,35 @@
     }
   }
 
+  &__change {
+    position: absolute;
+    top: 3px;
+    left: 10px;
+    display: flex;
+    gap: 5px;
+    padding: 5px 15px;
+    cursor: pointer;
+    border: 2px solid $primary;
+    background: #fff;
+    font-size: 16px;
+    font-weight: 500;
+    line-height: 150%;
+    color: $primary;
+    transition: 0.3s;
+    border-radius: 5px;
+
+    &:hover:not(:disabled) {
+      background-color: $primary;
+      color: #fff;}
+  }
+
   &__edit,
   &__add,
   &__rubbish,
-  &__save {
+  &__save,
+  &__changepass {
     position: absolute;
-    top: 5px;
+    top: 3px;
     right: 10px;
     display: flex;
     gap: 5px;
