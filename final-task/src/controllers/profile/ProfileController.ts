@@ -72,13 +72,6 @@ export default class ProfileController {
   }
 
   public async addPopUpClick() {
-    this.view.popUpBlock.buttonPersonal.addEventListener(
-      'click',
-      async (event) => {
-        event.preventDefault();
-        await this.sendData();
-      },
-    );
     this.view.popUpBlock.buttonAddAddress.addEventListener(
       'click',
       async (event) => {
@@ -253,6 +246,9 @@ export default class ProfileController {
       const result = (await this.model.getCustomerProfile()).body;
       await this.updateData(result);
       showMessage('Successfully change personal information', 'positive');
+      const info = JSON.parse(localStorage.getItem('userCreds') as string);
+      info.email = variables.popUpEmail.getInput().value;
+      localStorage.setItem('userCreds', JSON.stringify(info));
     } catch (error) {
       showMessage(`${error}`, 'negative');
       console.log(error);

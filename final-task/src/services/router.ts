@@ -45,7 +45,7 @@ class Router {
 
     this.router.on('/my_profile', () => {
       if (!localStorage.getItem('userCreds')) {
-        this.goToPage('/');
+        this.goToPage('/login');
       } else {
         this.changeContent?.('my_profile');
       }
