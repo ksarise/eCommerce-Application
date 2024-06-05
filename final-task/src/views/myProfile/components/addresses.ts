@@ -137,7 +137,12 @@ export default class Addresses {
     const blockAddress = tags.div(['address']).getElement();
     const keys = Object.entries(elem);
     keys.forEach(([key, value]) => {
-      if (key !== 'id' && key !== 'key') {
+      if (
+        key !== 'id' &&
+        key !== 'key' &&
+        key !== 'firstName' &&
+        key !== 'lastName'
+      ) {
         const data = tags.div(['profile__data'], `${key}`).getElement();
         const info = tags
           .div(['profile__info'], `${value}`, { id: `${key}-${elem.id}` })

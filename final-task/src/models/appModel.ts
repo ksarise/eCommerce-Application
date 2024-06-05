@@ -68,8 +68,6 @@ export default class AppModel {
   }
 
   public async addOrEditAddress(
-    firstName: string,
-    lastName: string,
     streetName: string,
     city: string,
     country: string,
@@ -80,8 +78,6 @@ export default class AppModel {
     const countryCode = country === 'Canada' ? 'CA' : 'US';
     if (index) {
       const result = await this.apiService.editAddress(
-        firstName,
-        lastName,
         streetName,
         city,
         countryCode,
@@ -92,8 +88,6 @@ export default class AppModel {
       return result;
     }
     const result = await this.apiService.addNewAddress(
-      firstName,
-      lastName,
       streetName,
       city,
       countryCode,

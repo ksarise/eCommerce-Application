@@ -118,8 +118,6 @@ export default class API {
   }
 
   public addNewAddress(
-    firstName: string,
-    lastName: string,
     streetName: string,
     city: string,
     country: string,
@@ -135,8 +133,6 @@ export default class API {
             {
               action: 'addAddress',
               address: {
-                firstName,
-                lastName,
                 streetName,
                 city,
                 country,
@@ -150,8 +146,6 @@ export default class API {
   }
 
   public editAddress(
-    firstName: string,
-    lastName: string,
     streetName: string,
     city: string,
     country: string,
@@ -169,8 +163,6 @@ export default class API {
               action: 'changeAddress',
               addressId: `${index}`,
               address: {
-                firstName,
-                lastName,
                 streetName,
                 city,
                 country,

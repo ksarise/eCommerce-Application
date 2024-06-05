@@ -148,12 +148,6 @@ export default class ProfileController {
   public handleClickEditAddress() {
     this.view.popUpBlock.buttonEditAddress.id = `popup-${this.view.addressesBlock.addressesAll.id.split('-')[1]}`;
     const ID = this.view.addressesBlock.addressesAll.id.split('-')[1];
-    const name = document.getElementById(
-      `${PopupFields.NAME}-${ID}`,
-    )?.innerHTML;
-    const surname = document.getElementById(
-      `${PopupFields.SURNAME}-${ID}`,
-    )?.innerHTML;
     const street = document.getElementById(
       `${PopupFields.STREET}-${ID}`,
     )?.innerHTML;
@@ -166,14 +160,7 @@ export default class ProfileController {
     const code = document.getElementById(
       `${PopupFields.CODE}-${ID}`,
     )?.innerHTML;
-    this.view.popUpBlock.createEditAddressForm(
-      name,
-      surname,
-      street,
-      city,
-      country,
-      code,
-    );
+    this.view.popUpBlock.createEditAddressForm(street, city, country, code);
   }
 
   private handleClickChangePassword() {
@@ -203,11 +190,13 @@ export default class ProfileController {
       info.password = variables.popUpNewPassword.getInput().value;
       localStorage.setItem('userCreds', JSON.stringify(info));
       localStorage.removeItem('key-token');
+      await this.view.popUpBlock.openClosePopUp(true);
+      setTimeout(() => {
+        window.location.reload();
+      }, 2000);
       // // await this.model.changePasswordLogin()
-      window.location.reload();
     } catch (error) {
       showMessage(`${error}`, 'negative');
-      console.log(error);
     }
   }
 
@@ -247,8 +236,6 @@ export default class ProfileController {
       const { body } = await this.model.getCustomerProfile();
       const variables = this.view.popUpBlock;
       await this.model.addOrEditAddress(
-        variables.popUpName.getInput().value,
-        variables.popUpSurname.getInput().value,
         variables.popUpStreetName.getInput().value,
         variables.popUpCity.getInput().value,
         variables.poUpCountry.getInput().value,
@@ -337,8 +324,6 @@ export default class ProfileController {
       this.view.popUpBlock.buttonPersonal.disabled = true;
     }
     if (
-      !errors.firstName &&
-      !errors.lastName &&
       !errors.street &&
       !errors.city &&
       !errors.country &&

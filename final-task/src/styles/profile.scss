@@ -163,7 +163,6 @@
   }
 
   &__personal {
-
     .profile__header {
       margin-top: 30px;
       background-color: #ffffff75;
@@ -229,7 +228,8 @@
 
     &:hover:not(:disabled) {
       background-color: $primary;
-      color: #fff;}
+      color: #fff;
+    }
   }
 
   &__edit,

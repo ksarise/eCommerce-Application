@@ -249,8 +249,6 @@ export default class PopUpForm {
     this.deleteErrors();
     this.header.innerHTML = Heading.ADD;
     this.form.innerHTML = '';
-    this.popUpName.fieldInput.value = '';
-    this.popUpSurname.fieldInput.value = '';
     this.popUpStreetName.fieldInput.value = '';
     this.popUpCity.fieldInput.value = '';
     this.poUpCountry.fieldInput.value = '';
@@ -264,8 +262,6 @@ export default class PopUpForm {
   private createAddressPopUp() {
     this.form.append(
       this.header,
-      this.popUpName.getBlock(),
-      this.popUpSurname.getBlock(),
       this.popUpStreetName.getBlock(),
       this.popUpCity.getBlock(),
       this.poUpCountry.getBlock(),
@@ -274,8 +270,6 @@ export default class PopUpForm {
   }
 
   public createEditAddressForm(
-    name: string | undefined,
-    surname: string | undefined,
     street: string | undefined,
     city: string | undefined,
     country: string | undefined,
@@ -284,8 +278,6 @@ export default class PopUpForm {
     this.deleteErrors();
     this.header.innerHTML = Heading.CHANGEADDRESS;
     this.form.innerHTML = '';
-    this.popUpName.fieldInput.value = name || '';
-    this.popUpSurname.fieldInput.value = surname || '';
     this.popUpStreetName.fieldInput.value = street || '';
     this.popUpCity.fieldInput.value = city || '';
     this.poUpCountry.fieldInput.value = country === 'CA' ? 'Canada' : 'USA';
@@ -305,20 +297,12 @@ export default class PopUpForm {
     ) as unknown as HTMLElement[];
     this.select.innerHTML = '';
     headers.forEach((elem) => {
-      const name = document.getElementById(
-        `${PopupFields.NAME}-${elem.id.split('-')[1]}`,
-      )?.innerHTML;
-      const surname = document.getElementById(
-        `${PopupFields.SURNAME}-${elem.id.split('-')[1]}`,
-      )?.innerHTML;
-      const code = document.getElementById(
-        `${PopupFields.CODE}-${elem.id.split('-')[1]}`,
-      )?.innerHTML;
-      const option = tags.option(
-        ['option'],
-        `${elem.innerText} ${name} ${surname} ${code}`,
-        { value: `${elem.id.split('-')[1]}` },
-      );
+      const code =
+        document.getElementById(`${PopupFields.CODE}-${elem.id.split('-')[1]}`)
+          ?.innerHTML || '';
+      const option = tags.option(['option'], `${elem.innerText} ${code}`, {
+        value: `${elem.id.split('-')[1]}`,
+      });
       this.select.append(option);
     });
     const option = tags.option(['option'], `none`, { value: 'none' });
