@@ -15,6 +15,10 @@ export default class PopUpForm {
 
   public popUpEmail: ProfileFieldBlock;
 
+  public popUpCurrentPassword: ProfileFieldBlock;
+
+  public popUpNewPassword: ProfileFieldBlock;
+
   public header: HTMLElement;
 
   public buttonPersonal: HTMLButtonElement;
@@ -37,7 +41,11 @@ export default class PopUpForm {
 
   public buttonEditAddress: HTMLButtonElement;
 
+  public buttonChangePassword: HTMLButtonElement;
+
   public select: HTMLElement;
+
+  public buttonRemoveAddress: HTMLButtonElement;
 
   public closePopUp: (event: Event) => void;
 
@@ -107,6 +115,20 @@ export default class PopUpForm {
       'Country',
     );
 
+    this.popUpCurrentPassword = new ProfileFieldBlock(
+      'Current Password',
+      'password',
+      'currentpassword-popup',
+      'Current Password',
+    );
+
+    this.popUpNewPassword = new ProfileFieldBlock(
+      'New Password',
+      'password',
+      'newpassword-popup',
+      'New Password',
+    );
+
     this.select = tags.select(['select']);
 
     this.header = tags.h2(['popup__header'], Heading.CHANGEPERSONAL);
@@ -138,6 +160,16 @@ export default class PopUpForm {
       'Save',
       { disabled: 'true', type: 'submit', id: 'save-shipping' },
     );
+    this.buttonRemoveAddress = tags.button(
+      ['profile__add', 'profile__button_popup'],
+      'Remove',
+      { type: 'submit', id: 'remove-address' },
+    );
+    this.buttonChangePassword = tags.button(
+      ['profile__add', 'profile__button_popup'],
+      'Change',
+      { type: 'submit', id: 'change-password' },
+    );
   }
 
   public createPopUpBlock() {
@@ -165,6 +197,8 @@ export default class PopUpForm {
       this.popUpCity,
       this.poUpCountry,
       this.popUppostalCode,
+      this.popUpCurrentPassword,
+      this.popUpNewPassword,
     ];
     elements.forEach((elem) => {
       elem.fieldError.classList.add('error__hidden');
@@ -175,6 +209,7 @@ export default class PopUpForm {
     this.buttonEditAddress.disabled = true;
     this.buttonShipping.disabled = true;
     this.buttonBilling.disabled = true;
+    this.buttonChangePassword.disabled = true;
   }
 
   public createPersonalForm(
@@ -201,12 +236,19 @@ export default class PopUpForm {
     this.openClosePopUp(false);
   }
 
+  public createDeletePopUp(text: string, index: string) {
+    this.deleteErrors();
+    this.header.innerHTML = text;
+    this.form.innerHTML = '';
+    this.buttonRemoveAddress.id = `remove-${index}`;
+    this.form.append(this.header, this.buttonRemoveAddress);
+    this.openClosePopUp(false);
+  }
+
   public createAddAddressForm() {
     this.deleteErrors();
     this.header.innerHTML = Heading.ADD;
     this.form.innerHTML = '';
-    this.popUpName.fieldInput.value = '';
-    this.popUpSurname.fieldInput.value = '';
     this.popUpStreetName.fieldInput.value = '';
     this.popUpCity.fieldInput.value = '';
     this.poUpCountry.fieldInput.value = '';
@@ -220,8 +262,6 @@ export default class PopUpForm {
   private createAddressPopUp() {
     this.form.append(
       this.header,
-      this.popUpName.getBlock(),
-      this.popUpSurname.getBlock(),
       this.popUpStreetName.getBlock(),
       this.popUpCity.getBlock(),
       this.poUpCountry.getBlock(),
@@ -230,8 +270,6 @@ export default class PopUpForm {
   }
 
   public createEditAddressForm(
-    name: string | undefined,
-    surname: string | undefined,
     street: string | undefined,
     city: string | undefined,
     country: string | undefined,
@@ -240,8 +278,6 @@ export default class PopUpForm {
     this.deleteErrors();
     this.header.innerHTML = Heading.CHANGEADDRESS;
     this.form.innerHTML = '';
-    this.popUpName.fieldInput.value = name || '';
-    this.popUpSurname.fieldInput.value = surname || '';
     this.popUpStreetName.fieldInput.value = street || '';
     this.popUpCity.fieldInput.value = city || '';
     this.poUpCountry.fieldInput.value = country === 'CA' ? 'Canada' : 'USA';
@@ -260,28 +296,39 @@ export default class PopUpForm {
       '.addresses__header',
     ) as unknown as HTMLElement[];
     this.select.innerHTML = '';
-    (this.select as HTMLSelectElement).value = value || '';
     headers.forEach((elem) => {
-      const name = document.getElementById(
-        `${PopupFields.NAME}-${elem.id.split('-')[1]}`,
-      )?.innerHTML;
-      const surname = document.getElementById(
-        `${PopupFields.SURNAME}-${elem.id.split('-')[1]}`,
-      )?.innerHTML;
-      const code = document.getElementById(
-        `${PopupFields.CODE}-${elem.id.split('-')[1]}`,
-      )?.innerHTML;
-      const option = tags.option(
-        ['option'],
-        `${elem.innerText} ${name} ${surname} ${code}`,
-        { value: `${elem.id.split('-')[1]}` },
-      );
-      this.select.append(option);
+      const code =
+        document.getElementById(`${PopupFields.CODE}-${elem.id.split('-')[1]}`)
+          ?.innerHTML || '';
+      const option = tags.option(['option'], `${elem.innerText} ${code}`, {
+        value: `${elem.id.split('-')[1]}`,
+      });
       this.select.append(option);
     });
+    const option = tags.option(['option'], `none`, { value: 'none' });
+    if (value !== '' && !value) {
+      this.select.append(option);
+    }
+    (this.select as HTMLSelectElement).value = value || 'none';
     const button = flag ? this.buttonShipping : this.buttonBilling;
     this.header.innerHTML = flag ? Heading.SHIP : Heading.BILL;
     this.form.append(this.header, label, this.select, button);
+    this.openClosePopUp(false);
+  }
+
+  public createPasswordForm() {
+    this.deleteErrors();
+    this.header.innerHTML = Heading.PASSWORD;
+    this.form.innerHTML = '';
+    this.popUpCurrentPassword.fieldInput.value = '';
+    this.popUpNewPassword.fieldInput.value = '';
+    this.popUp.classList.remove('profile__popup_hidden');
+    this.form.append(
+      this.header,
+      this.popUpCurrentPassword.getBlock(),
+      this.popUpNewPassword.getBlock(),
+      this.buttonChangePassword,
+    );
     this.openClosePopUp(false);
   }
 }

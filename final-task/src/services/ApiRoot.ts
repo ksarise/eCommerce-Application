@@ -16,10 +16,17 @@ export default class API {
 
   constructor() {
     const keyToken = localStorage.getItem('key-token');
+    const userCreds = JSON.parse(localStorage.getItem('userCreds') as string);
     if (keyToken) {
       const { refreshToken } = JSON.parse(keyToken);
       this.apiRoot = createApiBuilderFromCtpClient(
         createRefreshTokenClient(refreshToken),
+      ).withProjectKey({
+        projectKey: import.meta.env.VITE_CTP_PROJECT_KEY,
+      });
+    } else if (userCreds && !keyToken) {
+      this.apiRoot = createApiBuilderFromCtpClient(
+        createPasswordClient(userCreds.email, userCreds.password),
       ).withProjectKey({
         projectKey: import.meta.env.VITE_CTP_PROJECT_KEY,
       });
@@ -80,6 +87,124 @@ export default class API {
             {
               action: 'setDateOfBirth',
               dateOfBirth: date,
+            },
+          ],
+        },
+      })
+      .execute();
+  }
+
+  public async changePasswordLogin() {
+    const { email } = JSON.parse(localStorage.getItem('userCreds') as string);
+    const { password } = JSON.parse(
+      localStorage.getItem('userCreds') as string,
+    );
+    await this.changeTypeClient('password', { email, password });
+    await this.postCustomerLogin(email, password);
+  }
+
+  public changePassword(version: number, current: string, newPassword: string) {
+    return this.apiRoot
+      .me()
+      .password()
+      .post({
+        body: {
+          version,
+          currentPassword: current,
+          newPassword,
+        },
+      })
+      .execute();
+  }
+
+  public addNewAddress(
+    streetName: string,
+    city: string,
+    country: string,
+    postalCode: string,
+    version: number,
+  ) {
+    return this.apiRoot
+      .me()
+      .post({
+        body: {
+          version,
+          actions: [
+            {
+              action: 'addAddress',
+              address: {
+                streetName,
+                city,
+                country,
+                postalCode,
+              },
+            },
+          ],
+        },
+      })
+      .execute();
+  }
+
+  public editAddress(
+    streetName: string,
+    city: string,
+    country: string,
+    postalCode: string,
+    version: number,
+    index: string,
+  ) {
+    return this.apiRoot
+      .me()
+      .post({
+        body: {
+          version,
+          actions: [
+            {
+              action: 'changeAddress',
+              addressId: `${index}`,
+              address: {
+                streetName,
+                city,
+                country,
+                postalCode,
+              },
+            },
+          ],
+        },
+      })
+      .execute();
+  }
+
+  public removeAddress(index: string, version: number) {
+    return this.apiRoot
+      .me()
+      .post({
+        body: {
+          version,
+          actions: [
+            {
+              action: 'removeAddress',
+              addressId: `${index}`,
+            },
+          ],
+        },
+      })
+      .execute();
+  }
+
+  public setDefaultAddress(index: string, version: number, shipping: boolean) {
+    const address = shipping
+      ? 'setDefaultShippingAddress'
+      : 'setDefaultBillingAddress';
+    return this.apiRoot
+      .me()
+      .post({
+        body: {
+          version,
+          actions: [
+            {
+              action: address,
+              addressId: `${index}`,
             },
           ],
         },

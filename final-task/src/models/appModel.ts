@@ -67,6 +67,71 @@ export default class AppModel {
     return result;
   }
 
+  public async addOrEditAddress(
+    streetName: string,
+    city: string,
+    country: string,
+    postalCode: string,
+    version: number,
+    index?: string,
+  ) {
+    const countryCode = country === 'Canada' ? 'CA' : 'US';
+    if (index) {
+      const result = await this.apiService.editAddress(
+        streetName,
+        city,
+        countryCode,
+        postalCode,
+        version,
+        index,
+      );
+      return result;
+    }
+    const result = await this.apiService.addNewAddress(
+      streetName,
+      city,
+      countryCode,
+      postalCode,
+      version,
+    );
+    return result;
+  }
+
+  public async removeAddress(version: number, index: string) {
+    const result = await this.apiService.removeAddress(index, version);
+    return result;
+  }
+
+  public async changePassword(
+    version: number,
+    current: string,
+    newPassword: string,
+  ) {
+    const result = await this.apiService.changePassword(
+      version,
+      current,
+      newPassword,
+    );
+    return result;
+  }
+
+  public async changePasswordLogin() {
+    await this.apiService.changePasswordLogin();
+  }
+
+  public async setDefaultAddress(
+    version: number,
+    index: string,
+    shipping: boolean,
+  ) {
+    const result = await this.apiService.setDefaultAddress(
+      index,
+      version,
+      shipping,
+    );
+    return result;
+  }
+
   public async createCustomer(
     formData: RegistrationFormData,
   ): Promise<ApiResponse> {

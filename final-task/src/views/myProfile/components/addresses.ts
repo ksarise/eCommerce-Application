@@ -21,6 +21,8 @@ export default class Addresses {
 
   public handleClickEditShipping: (() => void) | undefined;
 
+  public handleClickRemoveAddress: (() => void) | undefined;
+
   constructor() {
     this.defaultShipping = tags.div(['profile__shipping']).getElement();
     this.defaultBilling = tags.div(['profile__billing']).getElement();
@@ -107,6 +109,10 @@ export default class Addresses {
       this.addressesAll.id = `address-${elem.id}`;
       if (this.handleClickEditAddress) this.handleClickEditAddress();
     });
+    rubbish.addEventListener('click', () => {
+      this.addressesAll.id = `address-${elem.id}`;
+      if (this.handleClickRemoveAddress) this.handleClickRemoveAddress();
+    });
     const imgRubbish = tags.div(['img_rubbish']).getElement();
     const imgEdit = tags.div(['img_edit']).getElement();
     rubbish.append(imgRubbish);
@@ -131,7 +137,12 @@ export default class Addresses {
     const blockAddress = tags.div(['address']).getElement();
     const keys = Object.entries(elem);
     keys.forEach(([key, value]) => {
-      if (key !== 'id' && key !== 'key') {
+      if (
+        key !== 'id' &&
+        key !== 'key' &&
+        key !== 'firstName' &&
+        key !== 'lastName'
+      ) {
         const data = tags.div(['profile__data'], `${key}`).getElement();
         const info = tags
           .div(['profile__info'], `${value}`, { id: `${key}-${elem.id}` })
@@ -171,7 +182,7 @@ export default class Addresses {
             ['addresses__header_ship'],
             `${elem.country} ${elem.city} ${elem.streetName}`,
             {
-              id: `bill-${index}`,
+              id: `ship-${index}`,
             },
           );
           this.defaultShipping.innerHTML = '';

@@ -78,6 +78,41 @@ export default class RegistrationPageModel {
     }
   }
 
+  validateNewPassword(password: string): void {
+    const rule = validationRules.password;
+    this.errors.newPassword = [];
+
+    if (password.length < rule.minLength) {
+      this.errors.newPassword.push(rule.errorMessages.minLength);
+    }
+
+    if (!RegistrationPageModel.validatePattern(password, rule.uppercase)) {
+      this.errors.newPassword.push(rule.errorMessages.uppercase);
+    }
+
+    if (!RegistrationPageModel.validatePattern(password, rule.lowercase)) {
+      this.errors.newPassword.push(rule.errorMessages.lowercase);
+    }
+
+    if (!RegistrationPageModel.validatePattern(password, rule.number)) {
+      this.errors.newPassword.push(rule.errorMessages.number);
+    }
+
+    if (
+      !RegistrationPageModel.validatePattern(password, rule.specialCharacter)
+    ) {
+      this.errors.newPassword.push(rule.errorMessages.specialCharacter);
+    }
+
+    if (RegistrationPageModel.validatePattern(password, rule.noSpace)) {
+      this.errors.newPassword.push(rule.errorMessages.noSpace);
+    }
+
+    if (this.errors.newPassword.length === 0) {
+      delete this.errors.newPassword;
+    }
+  }
+
   validateName(name: string, field: string): void {
     const rule = validationRules.name;
     this.errors[field] = [];
