@@ -145,8 +145,26 @@ export default class AppModel {
     }
   }
 
-  public async requestGetProducts() {
-    const { body } = await this.apiService.getProducts();
+  public async requestGetProducts(
+    filters?: string[],
+    sorts?: string,
+    texts?: string,
+  ) {
+    let response;
+    if (filters) {
+      response = await this.apiService.getProducts({
+        filter: filters,
+        sort: sorts,
+        text: texts,
+      });
+    } else {
+      response = await this.apiService.getProducts({});
+    }
+    return response.body;
+  }
+
+  public async requestGetCategories() {
+    const { body } = await this.apiService.getCategories();
     return body;
   }
 

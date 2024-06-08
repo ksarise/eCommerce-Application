@@ -51,8 +51,36 @@ export default class API {
     return this.apiRoot.customers().withId({ ID: id }).get().execute();
   }
 
-  public getProducts() {
-    return this.apiRoot.products().get().execute();
+  public getProducts(queryArgs: {
+    filter?: string[];
+    sort?: string;
+    text?: string;
+  }) {
+    if (queryArgs.filter) {
+      return this.apiRoot
+        .productProjections()
+        .search()
+        .get({
+          queryArgs: {
+            'filter.query': queryArgs.filter,
+            sort: queryArgs.sort,
+            'text.en-US': queryArgs.text,
+          },
+        })
+        .execute();
+    }
+    return this.apiRoot
+      .productProjections()
+      .get({
+        queryArgs: {
+          sort: 'name.en-US asc',
+        },
+      })
+      .execute();
+  }
+
+  public getCategories() {
+    return this.apiRoot.categories().get().execute();
   }
 
   public getMyCustomerDraft() {
