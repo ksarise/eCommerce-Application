@@ -7,37 +7,58 @@ import BaseComponentGenerator from '../../tags/base-component';
 export default class MainView {
   private mainContainer: HTMLDivElement;
 
-  private catalogContainer: HTMLDivElement;
+  private catalogListContainer: HTMLDivElement;
 
   private catalogPanelContainer: HTMLDivElement;
 
   private catalogWrapContainer: HTMLDivElement;
 
+  private catalogContainer: HTMLDivElement;
+
   private filterContainer: FilterSideBar;
+
+  private breadcrumbContainer: HTMLDivElement;
 
   constructor() {
     this.mainContainer = tags.div(['main']).getElement() as HTMLDivElement;
     this.filterContainer = new FilterSideBar();
-    this.catalogWrapContainer = tags
-      .div(['catalog-wrap'])
+    this.catalogContainer = tags
+      .div(['catalog'])
       .getElement() as HTMLDivElement;
     this.catalogPanelContainer = tags
-      .div(['catalog-panel', 'container'])
+      .div(['catalog__panel', 'container'])
       .getElement() as HTMLDivElement;
-
-    this.catalogContainer = tags
-      .div(['catalog', 'container'], 'Catalog', {})
+    const filtersBtn = tags.button(['catalog__filters__btn'], 'Open Filters');
+    filtersBtn.addEventListener('click', () => {
+      this.filterContainer.toggleSideBar();
+    });
+    this.catalogPanelContainer.append(filtersBtn);
+    this.catalogListContainer = tags
+      .div(['catalog__list', 'container'], 'Catalog', {})
       .getElement() as HTMLDivElement;
-    this.catalogWrapContainer.append(
+    this.catalogContainer.append(
       this.catalogPanelContainer,
-      this.catalogContainer,
+      this.catalogListContainer,
     );
-    this.mainContainer.append(
+    this.catalogWrapContainer = tags
+      .div(['catalog__wrap'])
+      .getElement() as HTMLDivElement;
+    this.breadcrumbContainer = tags
+      .div(['breadcrumb-container'])
+      .getElement() as HTMLDivElement;
+    const breadcrumbHomeItem = tags.span(['breadcrumb-item'], 'Home >');
+    const breadcrumbCatalogItem = tags.a(['breadcrumb-item'], '/', 'Catalog >');
+    this.breadcrumbContainer.append(breadcrumbHomeItem, breadcrumbCatalogItem);
+    this.catalogWrapContainer.append(
       this.filterContainer.getContent(),
-      this.catalogWrapContainer,
+      this.catalogContainer,
     );
     this.createTextSearch();
     this.createSortDropdown();
+    this.mainContainer.append(
+      this.breadcrumbContainer,
+      this.catalogWrapContainer,
+    );
   }
 
   public getContent(): HTMLElement {
@@ -45,8 +66,7 @@ export default class MainView {
   }
 
   public renderProducts(products: Product[]) {
-    console.log('products', products);
-    this.catalogContainer.innerHTML = '';
+    this.catalogListContainer.innerHTML = '';
 
     products.forEach((product: Product) => {
       const productCard = new ProductCard(
@@ -57,12 +77,45 @@ export default class MainView {
         product.price,
         product.discount,
       );
-      this.catalogContainer.append(productCard.renderCard());
+      this.catalogListContainer.append(productCard.renderCard());
     });
   }
 
   public setCategories(categories: Map<string, ParsedCategory>) {
     this.filterContainer.createOptionList(categories);
+  }
+
+  public bindCategoryList(
+    callback: (
+      option: string,
+      name: string,
+      id: string,
+      checked: boolean,
+      main?: string,
+    ) => void,
+  ): void {
+    this.filterContainer
+      .getContent()
+      .querySelectorAll('.option-list__link')
+      .forEach((element: Element) => {
+        element.addEventListener('click', (event: Event) => {
+          event.preventDefault();
+          const target = event.target as HTMLAnchorElement;
+          const { optiontype, optionname, id, main } = target.dataset;
+          const checked = true;
+          if (optiontype && optionname && id && main) {
+            callback(optiontype, optionname, id, checked, main);
+            this.filterContainer
+              .getContent()
+              .querySelectorAll('.category-container')
+              .forEach((category) =>
+                category.classList.toggle('category-container_hidden'),
+              );
+            this.filterContainer.toggleSideBar();
+            this.updateBreadcrumb([main, optionname]);
+          }
+        });
+      });
   }
 
   public bindOptionList(
@@ -81,7 +134,6 @@ export default class MainView {
           const target = event.target as HTMLInputElement;
           const { optiontype, optionname } = target.dataset;
           const { checked, id } = target;
-          console.log(optiontype, optionname);
           if (optiontype && optionname) {
             callback(optiontype, optionname, id, checked);
           }
@@ -90,11 +142,12 @@ export default class MainView {
   }
 
   public bindApplyFilters(callback: () => void): void {
-    const applyButton = this.mainContainer.querySelector(
+    const applyButton = this.catalogWrapContainer.querySelector(
       '.filter-side-bar__apply-button',
     );
     if (applyButton) {
       applyButton.addEventListener('click', () => {
+        this.filterContainer.toggleSideBar();
         callback();
       });
     } else {
@@ -103,12 +156,13 @@ export default class MainView {
   }
 
   public bindResetFilters(callback: () => void): void {
-    const resetButton = this.mainContainer.querySelector(
+    const resetButton = this.catalogWrapContainer.querySelector(
       '.filter-side-bar__reset-button',
     );
     if (resetButton) {
       resetButton.addEventListener('click', () => {
         callback();
+        this.clearBreadcrumb();
       });
     } else {
       console.error('not found');
@@ -118,10 +172,10 @@ export default class MainView {
   public bindPriceFilter(
     callback: (minValue: number, maxValue: number) => void,
   ): void {
-    const priceFilterMin = this.mainContainer.querySelector(
+    const priceFilterMin = this.catalogWrapContainer.querySelector(
       '.price-range-min',
     ) as HTMLInputElement;
-    const priceFilterMax = this.mainContainer.querySelector(
+    const priceFilterMax = this.catalogWrapContainer.querySelector(
       '.price-range-max',
     ) as HTMLInputElement;
 
@@ -131,7 +185,6 @@ export default class MainView {
           parseInt(priceFilterMin.value, 10),
           parseInt(priceFilterMax.value, 10),
         );
-        console.log('change', priceFilterMin.value);
       });
       priceFilterMax.addEventListener('input', () => {
         callback(
@@ -152,14 +205,14 @@ export default class MainView {
       const check = checkbox;
       check.checked = false;
     });
-    const textSearchInput = this.mainContainer.querySelector(
+    const textSearchInput = this.catalogWrapContainer.querySelector(
       '.text-search-input',
     )! as HTMLInputElement;
     textSearchInput.value = '';
-    const priceFilterMin = this.mainContainer.querySelector(
+    const priceFilterMin = this.catalogWrapContainer.querySelector(
       '.price-range-min',
     ) as HTMLInputElement;
-    const priceFilterMax = this.mainContainer.querySelector(
+    const priceFilterMax = this.catalogWrapContainer.querySelector(
       '.price-range-max',
     ) as HTMLInputElement;
 
@@ -259,5 +312,26 @@ export default class MainView {
         }
       });
     }
+  }
+
+  public updateBreadcrumb(categoryNames: string[]) {
+    this.clearBreadcrumb();
+    let pathname = '/categories';
+    categoryNames.forEach((categoryName) => {
+      pathname += `/${categoryName.toLowerCase()}`;
+      const breadcrumbItem = tags.a(
+        ['breadcrumb-item'],
+        pathname,
+        `${categoryName}>`,
+      );
+      this.breadcrumbContainer.appendChild(breadcrumbItem);
+    });
+  }
+
+  private clearBreadcrumb() {
+    this.breadcrumbContainer.innerHTML = '';
+    const breadcrumbHomeItem = tags.a(['breadcrumb-item'], '/', 'Home >');
+    const breadcrumbCatalogItem = tags.a(['breadcrumb-item'], '/', 'Catalog >');
+    this.breadcrumbContainer.prepend(breadcrumbHomeItem, breadcrumbCatalogItem);
   }
 }

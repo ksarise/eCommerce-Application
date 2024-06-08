@@ -24,21 +24,20 @@ export default class MainModel {
 
   public sort: string = 'name.en-US asc';
 
-  public textSearch: string;
+  public textSearch: string = '';
+
+  public currentCategory: { name: string; id: string } | null = null;
 
   public selectedFilters: {
-    categoryIds: string[];
     attributes: { key: string; value: string }[];
     priceRange: { min: number; max: number };
   };
 
   constructor() {
     this.selectedFilters = {
-      categoryIds: [],
       attributes: [],
       priceRange: { min: 0, max: 1000 },
     };
-    this.textSearch = '';
   }
 
   public setProducts(products: PagedQueryResponse) {
@@ -47,7 +46,6 @@ export default class MainModel {
 
   public setCategories(categories: PagedQueryResponse) {
     this.categories = categories.results as Category[];
-    console.log('this', this.categories);
   }
 
   public getData() {
@@ -109,23 +107,19 @@ export default class MainModel {
     this.parseCategories(
       new Map(this.categories.map((category) => [category.id, category])),
     );
-    console.log(this.parsedCategories);
     return this.parsedCategories;
   }
 
   public createFilterResponse() {
-    const {
-      categoryIds = [],
-      attributes = [],
-      priceRange = { min: 0, max: 5000 },
-    } = this.selectedFilters;
+    const { attributes = [], priceRange = { min: 0, max: 5000 } } =
+      this.selectedFilters;
     const query = [];
 
-    // Add category filters
-    if (categoryIds.length > 0) {
-      const categoryFilter = categoryIds.map((categoryId) => `"${categoryId}"`);
-      query.push(`categories.id:${categoryFilter}`);
+    // Add category filter
+    if (this.currentCategory) {
+      query.push(`categories.id:"${this.currentCategory.id}"`);
     }
+
     // Add attribute filters
     const attributeMap: { [key: string]: string[] } = {};
     attributes.forEach(({ key, value }) => {
@@ -143,6 +137,7 @@ export default class MainModel {
         query.push(`variants.attributes.${key}:"${values[0]}"`);
       }
     });
+
     // Add price range filter
     if (priceRange.min !== undefined && priceRange.max !== undefined) {
       const minPrice = priceRange.min * 100;
@@ -152,7 +147,6 @@ export default class MainModel {
       );
     }
     this.searchQuery = query;
-    console.log('Search Query:', this.searchQuery);
   }
 
   public handleOptionListCheck(
@@ -160,28 +154,33 @@ export default class MainModel {
     name: string,
     id: string,
     checked: boolean,
+    main?: string,
   ) {
     if (checked) {
       if (option === 'category') {
-        this.selectedFilters.categoryIds.push(id);
+        MainModel.updateURLWithCategory(name, main!);
+        this.currentCategory = { name, id };
       } else {
         if (!this.selectedFilters.attributes) {
           this.selectedFilters.attributes = [];
         }
         this.selectedFilters.attributes.push({ key: name, value: id });
       }
-    } else if (option === 'category') {
-      this.selectedFilters.categoryIds =
-        this.selectedFilters.categoryIds.filter(
-          (identifier) => identifier !== id,
-        );
-    } else {
+    } else if (option === 'attribute') {
       this.selectedFilters.attributes = this.selectedFilters.attributes.filter(
         (attr) => !(attr.key === name && attr.value === id),
       );
     }
+  }
 
-    console.log('Selected Filters:', this.selectedFilters);
+  static updateURLWithCategory(name: string, main: string) {
+    const currentURL = new URL(window.location.href);
+    if (main) {
+      currentURL.pathname = `categories/${main.toLowerCase()}/${name.toLowerCase()}`;
+    } else {
+      currentURL.pathname = `categories/${name.toLowerCase()}`;
+    }
+    window.history.pushState({}, '', currentURL.toString());
   }
 
   public handlePriceRangeChange(minPrice: number, maxPrice: number) {
@@ -189,15 +188,14 @@ export default class MainModel {
       min: minPrice,
       max: maxPrice,
     };
-    console.log('Price Range:', this.selectedFilters.priceRange);
   }
 
   public resetFilters() {
     this.selectedFilters = {
-      categoryIds: [],
       attributes: [],
       priceRange: { min: 0, max: 1000 },
     };
+    this.currentCategory = null;
     this.textSearch = '';
   }
 

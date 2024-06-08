@@ -18,8 +18,26 @@ export default class FilterSideBar {
   }
 
   public createOptionList(categories: Map<string, ParsedCategory>) {
-    const categoriesHeader = tags.h2(['category-header'], 'Categories');
-    this.filterSideBar.appendChild(categoriesHeader);
+    const categoriesHead = tags
+      .div(['categories-head'])
+      .getElement() as HTMLDivElement;
+    const categoriesHeader = tags.h2(['categories-header'], 'Categories');
+    const categoriesHeadButton = tags.button(['categories-head__button'], 'X');
+    categoriesHeadButton.addEventListener('click', () => {
+      this.toggleSideBar();
+    });
+    categoriesHead.append(categoriesHeader, categoriesHeadButton);
+    categoriesHeader.addEventListener('click', () => {
+      this.filterSideBar
+        .querySelectorAll('.category-container')
+        .forEach((category) =>
+          category.classList.toggle('category-container_hidden'),
+        );
+    });
+    const categoriesList = tags
+      .div(['category-list'])
+      .getElement() as HTMLDivElement;
+    categoriesList.prepend(categoriesHead);
     categories.forEach(({ name: mainCategoryName, subCategories }) => {
       const categoryContainer = tags
         .div(['category-container'])
@@ -32,32 +50,32 @@ export default class FilterSideBar {
       const optionList = tags.ul(['option-list']);
       subCategories.forEach(({ id, name }) => {
         const listItem = tags.li(['option-list__item']);
-        const checkbox = tags.input(['option-list__checkbox'], {
-          type: 'checkbox',
-        });
-        checkbox.id = id;
-        checkbox.name = name;
-        checkbox.dataset.optiontype = 'category';
-        checkbox.dataset.optionname = `${name}`;
-        const label = tags.label(['option-list__label'], name, {
-          for: id,
-        });
-        label.dataset.optiontype = 'category';
-        label.dataset.optionname = `${name}`;
-        listItem.appendChild(checkbox);
-        listItem.appendChild(label);
+        const link = tags.a(
+          ['option-list__link'],
+          `${mainCategoryName.toLowerCase()}/${name.toLowerCase()}`,
+          name,
+          {
+            'data-optiontype': 'category',
+            'data-optionname': name,
+            'data-id': id,
+            'data-main': mainCategoryName,
+          },
+        );
+        listItem.appendChild(link);
         optionList.appendChild(listItem);
       });
 
       categoryContainer.appendChild(optionList);
-      this.filterSideBar.append(categoryContainer);
+      categoriesList.appendChild(categoryContainer);
     });
+    this.filterSideBar.prepend(categoriesList);
   }
 
   private createPriceRangeSlider() {
     const priceRangeContainer = tags
       .div(['price-range-container'])
       .getElement() as HTMLDivElement;
+    const priceRangeHeader = tags.h2(['price-range-header'], 'Price Range');
 
     const priceMinRange = tags.input(['price-range-min'], {
       type: 'range',
@@ -87,16 +105,18 @@ export default class FilterSideBar {
     const maxRangeContainer = tags.div(['range-wrapper']).getElement();
     maxRangeContainer.append(priceMaxRange, maxTooltip);
 
-    priceRangeContainer.append(minRangeContainer, maxRangeContainer);
+    const rangesContainer = tags.div(['price-ranges']).getElement();
+    rangesContainer.append(minRangeContainer, maxRangeContainer);
+    priceRangeContainer.append(priceRangeHeader, rangesContainer);
     this.filterSideBar.append(priceRangeContainer);
 
     priceMinRange.addEventListener('input', () => {
-      minTooltip.textContent = priceMinRange.value;
+      minTooltip.textContent = `${priceMinRange.value}$`;
       FilterSideBar.updateSliderStyles(priceMinRange, priceMaxRange);
     });
 
     priceMaxRange.addEventListener('input', () => {
-      maxTooltip.textContent = priceMaxRange.value;
+      maxTooltip.textContent = `$${priceMaxRange.value}$`;
       FilterSideBar.updateSliderStyles(priceMinRange, priceMaxRange);
     });
 
@@ -118,7 +138,6 @@ export default class FilterSideBar {
       ((Number(maxSlider.value) - Number(maxSlider.min)) /
         (Number(maxSlider.max) - Number(maxSlider.min))) *
       100;
-    console.log('update', minValue, maxValue);
     const primaryColor = '#b88e2f';
     maxSliderCopy.style.background = `linear-gradient(to right, ${primaryColor} 0%, ${primaryColor} ${maxValue}%, #ddd ${maxValue}%, #ddd 100%)`;
     minSliderCopy.style.background = `linear-gradient(to right, #ddd 0%, #ddd ${minValue}%, ${primaryColor} ${minValue}%, ${primaryColor} 100%)`;
@@ -148,5 +167,14 @@ export default class FilterSideBar {
 
   public getContent() {
     return this.filterSideBar as HTMLDivElement;
+  }
+
+  public toggleSideBar() {
+    console.log('toogle');
+    if (this.filterSideBar.classList.contains('visible')) {
+      this.filterSideBar.classList.remove('visible');
+    } else if (window.innerWidth < 1150) {
+      this.filterSideBar.classList.add('visible');
+    }
   }
 }

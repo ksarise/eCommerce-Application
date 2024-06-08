@@ -31,7 +31,6 @@ export default class MainController {
   private handlePriceRangeChange(minValue: number, maxValue: number) {
     this.mainModel.handlePriceRangeChange(minValue, maxValue);
     this.mainModel.createFilterResponse();
-    console.log(this.mainModel.searchQuery);
   }
 
   public handleResetFilters() {
@@ -40,16 +39,8 @@ export default class MainController {
     this.renderProducts();
   }
 
-  public handleSortChange(value: string) {
-    if (value !== this.mainModel.sort) {
-      this.mainModel.handleSort(value);
-      this.renderProducts();
-    }
-  }
-
   public renderProducts() {
     const products = this.mainModel.getProducts();
-    console.log('render', products);
     this.mainView.renderProducts(products);
   }
 }

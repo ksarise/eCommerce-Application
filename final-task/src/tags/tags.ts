@@ -165,10 +165,11 @@ const button = (
   }).getElement() as HTMLButtonElement;
 };
 
-const span = (classNames: string[]): HTMLElement => {
+const span = (classNames: string[], content?: string): HTMLElement => {
   return new BaseComponentGenerator({
     tag: 'span',
     classNames,
+    content,
   }).getElement();
 };
 
