@@ -12,7 +12,7 @@
     "ci:format": "npx prettier --check .",
     "prepare": "cd .. && husky final-task/.husky",
     "test": "jest",
-    "test-coverage": "jest --coverage --collectCoverageFrom='src/**/*.{ts,tsx}'"
+    "test-coverage": "jest --ci --reporters=default --reporters=jest-junit --collectCoverageFrom='src/**/*.{ts,tsx}'"
   },
   "devDependencies": {
     "@testing-library/dom": "^10.1.0",

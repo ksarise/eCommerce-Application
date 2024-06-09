@@ -1,0 +1,59 @@
+name: "Netlify Previews"
+
+on:
+  pull_request:
+    types: ["opened", "edited", "synchronize"]
+
+permissions:
+  contents: read
+  statuses: write
+  pull-requests: write
+
+jobs:
+  deploy:
+    name: "Deploy"
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v3
+
+      # Navigate to the correct directory
+      - name: Navigate to project directory
+        run: cd final-task
+
+      # Install dependencies
+      - name: Install dependencies
+        run: npm install
+
+      # Build project
+      - name: Build project
+        run: npm run build
+
+      # Deploy to Netlify
+      - name: Deploy to Netlify
+        id: netlify_deploy
+        uses: fntsrlike/action-netlify-deploy@v2
+        with:
+          NETLIFY_AUTH_TOKEN: ${{ secrets.NETLIFY_AUTH_TOKEN }}
+          NETLIFY_SITE_ID: ${{ secrets.NETLIFY_SITE_ID }}
+          build_directory: dist
+          deploy_alias: ${{ env.BRANCH_NAME }}
+
+      # Capture Netlify preview URL
+      - name: Capture Netlify preview URL
+        run: |
+          echo "NETLIFY_PREVIEW_URL=$(cat $GITHUB_WORKSPACE/netlify-deploy-output.txt | grep -oP 'Live URL: \K.*')" >> $GITHUB_ENV
+
+      # Debug Netlify preview URL
+      - name: Debug Netlify preview URL
+        run: |
+          echo "Netlify Preview URL: ${{ env.NETLIFY_PREVIEW_URL }}"
+
+      # Create a status check with link to preview
+      - name: Status check
+        uses: Sibz/github-status-action@v1.1.1
+        with:
+          authToken: ${{ secrets.GITHUB_TOKEN }}
+          context: Netlify preview
+          state: success
+          target_url: ${{ env.NETLIFY_PREVIEW_URL }}
