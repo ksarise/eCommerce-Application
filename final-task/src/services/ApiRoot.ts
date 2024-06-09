@@ -8,6 +8,7 @@ import {
   createPasswordClient,
   createAnonymousClient,
   createRefreshTokenClient,
+  createExistingTokenClient,
 } from './client';
 import { CustomerDraft, ApiResponse } from '../global/interfaces/registration';
 
@@ -18,12 +19,36 @@ export default class API {
     const keyToken = localStorage.getItem('key-token');
     const userCreds = JSON.parse(localStorage.getItem('userCreds') as string);
     if (keyToken) {
-      const { refreshToken } = JSON.parse(keyToken);
-      this.apiRoot = createApiBuilderFromCtpClient(
-        createRefreshTokenClient(refreshToken),
-      ).withProjectKey({
-        projectKey: import.meta.env.VITE_CTP_PROJECT_KEY,
-      });
+      const { token, expirationTime, refreshToken } = JSON.parse(keyToken);
+      const currentTime = Math.floor(Date.now() / 1000);
+      console.log(currentTime, expirationTime);
+      if (expirationTime < currentTime) {
+        if (refreshToken) {
+          this.apiRoot = createApiBuilderFromCtpClient(
+            createRefreshTokenClient(refreshToken),
+          ).withProjectKey({
+            projectKey: import.meta.env.VITE_CTP_PROJECT_KEY,
+          });
+        } else if (userCreds) {
+          this.apiRoot = createApiBuilderFromCtpClient(
+            createPasswordClient(userCreds.email, userCreds.password),
+          ).withProjectKey({
+            projectKey: import.meta.env.VITE_CTP_PROJECT_KEY,
+          });
+        } else {
+          this.apiRoot = createApiBuilderFromCtpClient(
+            createAnonymousClient(),
+          ).withProjectKey({
+            projectKey: import.meta.env.VITE_CTP_PROJECT_KEY,
+          });
+        }
+      } else {
+        this.apiRoot = createApiBuilderFromCtpClient(
+          createExistingTokenClient(token),
+        ).withProjectKey({
+          projectKey: import.meta.env.VITE_CTP_PROJECT_KEY,
+        });
+      }
     } else if (userCreds && !keyToken) {
       this.apiRoot = createApiBuilderFromCtpClient(
         createPasswordClient(userCreds.email, userCreds.password),
@@ -242,10 +267,12 @@ export default class API {
 
   public async postCustomerLogin(email: string, password: string) {
     try {
-      await this.changeTypeClient('password', {
-        email,
-        password,
-      });
+      if (!localStorage.getItem('userCreds')) {
+        await this.changeTypeClient('password', {
+          email,
+          password,
+        });
+      }
       const response = await this.apiRoot
         .login()
         .post({
