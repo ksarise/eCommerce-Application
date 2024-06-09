@@ -1,4 +1,4 @@
-import { Cart } from '@commercetools/platform-sdk';
+import { Cart, LineItemDraft } from '@commercetools/platform-sdk';
 import API from '../../services/ApiRoot';
 
 export default class ProductPageModel {
@@ -14,10 +14,21 @@ export default class ProductPageModel {
     }
   }
 
-  public async addToCart() {
+  public async addToCart(productId: string) {
     if (!this.cart) {
-      this.createCart();
+      await this.createCart();
     }
+    const currentCart = await this.getCartById(this.cart!.id);
+    const lineItemDraft: LineItemDraft = {
+      productId,
+      // variantId: 1, // ID варианта товара (если есть)
+      quantity: 1,
+    };
+    await this.apiService.addLineItemToCart(
+      this.cart!.id,
+      lineItemDraft,
+      currentCart.version,
+    );
   }
 
   public async createCart() {
@@ -27,5 +38,6 @@ export default class ProductPageModel {
 
   public async getCartById(cartId: string) {
     this.cart = (await this.apiService.getCartById(cartId)).body;
+    return this.cart;
   }
 }
