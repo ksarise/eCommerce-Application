@@ -268,7 +268,6 @@ export default class API {
   public async postCustomerLogin(email: string, password: string) {
     try {
       if (!localStorage.getItem('userCreds')) {
-        console.log('dawdawddaw');
         await this.changeTypeClient('password', {
           email,
           password,
