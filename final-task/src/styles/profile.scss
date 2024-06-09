@@ -1,0 +1,314 @@
+@import './variables.scss';
+
+.body-scroll {
+  height: 100vh;
+  overflow-y: hidden;
+}
+
+.profile {
+  &__popup {
+    position: fixed;
+    top: 0;
+    height: 100vh;
+    width: 100vw;
+    background-color: rgba(0, 0, 0, 0.504);
+    z-index: 1000;
+    left: 0;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    transition: 0.3s;
+  }
+
+  &__popup_hidden {
+    transition: 0.3s;
+    opacity: 0;
+    z-index: -5;
+  }
+
+  .popup__error {
+    color: $light-red;
+    transition: 0.6s;
+    opacity: 1;
+    width: 100%;
+    overflow-wrap: break-word;
+  }
+
+  .error__hidden {
+    transition: 0.6s;
+    opacity: 0;
+    display: none;
+  }
+
+  .input {
+    width: 100%;
+  }
+
+  .label {
+    align-self: flex-start;
+  }
+
+  .input:focus {
+    box-shadow: 0 0 6px 1px black;
+  }
+
+  .input__red {
+    box-shadow: 0 0 6px 1px $light-red;
+  }
+
+  .input__red:focus {
+    box-shadow: 0 0 6px 1px $light-red;
+  }
+
+  &__form {
+    max-height: 80vh;
+    width: 350px;
+    text-align: center;
+    position: relative;
+    padding: 2em 2em;
+    background-color: $secondary;
+    border: $primary 3px solid;
+    border-radius: 10px;
+    overflow-y: scroll;
+  }
+
+  .popup__block {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+  }
+
+  width: 100%;
+
+  &__block {
+    padding: 1em;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    transition: 0.6s ease-in-out;
+    border: #fff 3px solid;
+
+    &:hover {
+      border: $primary 3px solid;
+      border-radius: 10px;
+      box-shadow: 0 0px 8px 5px rgba(0, 0, 0, 0.1);
+    }
+  }
+
+  .profile__line {
+    padding: 5px 15px;
+    cursor: pointer;
+    border: 2px solid #ffffff00;
+    background-color: #ffffff00;
+    font-size: 16px;
+    font-weight: 500;
+    line-height: 150%;
+    color: $primary;
+    transition: 0.3s;
+    border-radius: 5px;
+    background-image: url('/svg/line.svg');
+    background-position: center;
+    background-repeat: no-repeat;
+    background-size: 80% 80%;
+    width: 30px;
+    height: 30px;
+    transform: rotate(90deg);
+
+    &:hover {
+      background-color: $primary;
+      background-image: url('/svg/line-hover.svg');
+      border: 2px solid $primary;
+    }
+  }
+
+  &__address_hidden {
+    transition: 0.6s;
+
+    .address {
+      overflow: hidden;
+      height: 0;
+      opacity: 0;
+    }
+
+    .profile__line {
+      transform: rotate(0);
+    }
+  }
+
+  .address {
+    transition: height 0.6s ease-in-out;
+  }
+
+  .addresses__header {
+    display: flex;
+    align-items: center;
+  }
+
+  &__header,
+  .addresses__header,
+  .addresses__header_bill,
+  .addresses__header_ship {
+    position: relative;
+    color: $primary;
+    text-decoration: none;
+    transition: 0.6s ease-in-out;
+  }
+
+  &__header {
+    &:after {
+      content: '';
+      display: block;
+      width: 100%;
+      height: 2px;
+      background-color: $primary;
+    }
+  }
+
+  &__personal {
+    .profile__header {
+      margin-top: 30px;
+      background-color: #ffffff75;
+    }
+    position: relative;
+    background-image: url('/images/snowboard2.jpg');
+    background-repeat: no-repeat;
+    background-position: center 52%;
+    background-size: 100% auto;
+
+    @media (max-width: 800px) {
+      background-image: url('/images/snowboard.jpg');
+      background-position: left bottom;
+    }
+  }
+
+  &__all {
+    .profile__edit {
+      position: static;
+      background-color: #ffffff00;
+      border: none;
+    }
+    .profile__rubbish {
+      position: static;
+      background-color: #ffffff00;
+      border: none;
+    }
+    position: relative;
+    background-color: $secondary;
+  }
+
+  &__shippingBilling {
+    position: relative;
+    background-color: $secondary;
+
+    background-image: url('/images/snowboard4.jpg');
+    background-repeat: no-repeat;
+    background-position: center 20%;
+    background-size: 100% auto;
+
+    @media (max-width: 800px) {
+      background-image: url('/images/snowboard3.jpg');
+      background-position: center;
+    }
+  }
+
+  &__change {
+    position: absolute;
+    top: 3px;
+    left: 10px;
+    display: flex;
+    gap: 5px;
+    padding: 5px 15px;
+    cursor: pointer;
+    border: 2px solid $primary;
+    background: #fff;
+    font-size: 16px;
+    font-weight: 500;
+    line-height: 150%;
+    color: $primary;
+    transition: 0.3s;
+    border-radius: 5px;
+
+    &:hover:not(:disabled) {
+      background-color: $primary;
+      color: #fff;
+    }
+  }
+
+  &__edit,
+  &__add,
+  &__rubbish,
+  &__save,
+  &__changepass {
+    position: absolute;
+    top: 3px;
+    right: 10px;
+    display: flex;
+    gap: 5px;
+    padding: 5px 15px;
+    cursor: pointer;
+    border: 2px solid $primary;
+    background: #fff;
+    font-size: 16px;
+    font-weight: 500;
+    line-height: 150%;
+    color: $primary;
+    transition: 0.3s;
+    border-radius: 5px;
+
+    .img_edit,
+    .img_rubbish {
+      width: 21px;
+      height: 21px;
+      background-image: url('/svg/pen-svgrepo-com.svg');
+      background-size: 22px 22px;
+      background-repeat: no-repeat;
+      background-position: center;
+    }
+
+    .img_rubbish {
+      background-image: url('/svg/rubbish.svg');
+    }
+
+    .img-edit {
+      background-image: url('/svg/pen-svgrepo-com.svg');
+    }
+
+    &:disabled {
+      border: gray 3px solid;
+      color: gray;
+      cursor: auto;
+    }
+
+    &:hover:not(:disabled) {
+      background-color: $primary;
+      color: #fff;
+
+      .img_edit {
+        background-image: url('/svg/pen-svgrepo-com-hover.svg');
+      }
+
+      .img_rubbish {
+        background-image: url('/svg/rubbish-hover.svg');
+      }
+    }
+  }
+
+  &__data {
+    color: $text;
+    font-size: 1.1em;
+    font-style: italic;
+  }
+
+  &__info {
+    margin: 10px;
+    color: $primary;
+    box-shadow: 0px 2px 2px rgba(0, 0, 0, 0.1);
+    font-weight: 500;
+    font-size: 1.3em;
+    background-color: #ffffffba;
+  }
+
+  .select {
+    width: 100%;
+    border-radius: 10px;
+    border: 3px $primary solid;
+  }
+}

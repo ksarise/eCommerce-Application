@@ -1,7 +1,10 @@
 @import './variables.scss';
 
 .header {
-  position: relative;
+  position: sticky;
+  z-index: 999;
+  background-color: #fff;
+  border-bottom: 2px solid $primary;
   top: 0;
   left: 0;
   display: flex;
@@ -9,6 +12,7 @@
   width: 100%;
   justify-content: space-between;
   height: 70px;
+  width: 99% !important;
 
   &__navigation {
     display: flex;
@@ -49,6 +53,8 @@
   }
 
   &__button {
+    display: flex;
+    gap: 5px;
     padding: 5px 15px;
     cursor: pointer;
     border: 2px solid $primary;
@@ -60,9 +66,22 @@
     transition: 0.3s;
     border-radius: 5px;
 
+    .img_profile {
+      width: 25px;
+      height: 25px;
+      background-image: url('/svg/snowboarder.svg');
+      background-size: 50px 50px;
+      background-repeat: no-repeat;
+      background-position: center;
+    }
+
     &:hover {
       background-color: $primary;
       color: #fff;
+
+      .img_profile {
+        background-image: url('/svg/snowboarder-hover.svg');
+      }
     }
   }
 
@@ -70,20 +89,24 @@
     display: flex;
     gap: 5px;
     &:not(.loginned) {
-      > *:last-child {
-        display: none;
-      }
-      > *:not(:last-child) {
+      > *:not(:last-child),
+      > *:not(:nth-child(3)) {
         display: block;
+      }
+      > *:last-child,
+      > *:nth-child(3) {
+        display: none;
       }
     }
 
     &.loginned {
-      > *:not(:last-child) {
+      > *:not(:last-child),
+      > *:not(:nth-child(3)) {
         display: none;
       }
-      > *:last-child {
-        display: block;
+      > *:last-child,
+      > *:nth-child(3) {
+        display: flex;
       }
     }
   }

@@ -1,8 +1,10 @@
-import MainView from './main';
+import MainView from './Main/MainView';
 import LoginView from './login';
 import RegistrationView from './Registration/RegistrationView';
 import HeaderView from './header/header';
 import NotFoundView from './404/404';
+import ProductPageView from './ProductPage/ProductPageView';
+import Profile from './myProfile/myProfileView';
 
 const appViewHeader = `<div id="content" class="view container"></div>`;
 
@@ -19,6 +21,10 @@ export default class AppView {
 
   public notFoundView: NotFoundView;
 
+  public productPageView: ProductPageView;
+
+  public profileView: Profile;
+
   public constructor() {
     this.loginView = new LoginView();
     this.innerHTML = appViewHeader;
@@ -26,11 +32,14 @@ export default class AppView {
     this.mainView = new MainView();
     this.notFoundView = new NotFoundView();
     this.registrationView = new RegistrationView();
+    this.productPageView = new ProductPageView();
+    this.profileView = new Profile();
   }
 
   public create() {
     this.headerView.create();
     this.notFoundView.create();
+    this.productPageView.create();
   }
 
   public renderContent(page: string) {
@@ -54,12 +63,24 @@ export default class AppView {
         content!.append(this.registrationView.RenderPage());
         this.loginView.addClassToLogin(false);
         break;
+      case 'my_profile':
+        content!.innerHTML = '';
+        content!.append(this.profileView.createProfile());
+        this.loginView.addClassToLogin(false);
+        break;
       case '404':
         document.getElementById('content')!.innerHTML = '';
         document
           .getElementById('content')!
           .appendChild(this.notFoundView.getContent());
         this.notFoundView.assignAnimation();
+        this.loginView.addClassToLogin(false);
+        break;
+      case 'product':
+        document.getElementById('content')!.innerHTML = '';
+        document
+          .getElementById('content')!
+          .appendChild(this.productPageView.getContent());
         this.loginView.addClassToLogin(false);
         break;
       default:

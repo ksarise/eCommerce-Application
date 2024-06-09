@@ -7,6 +7,12 @@ class Router {
 
   public changeContent: ((page: string) => void) | undefined;
 
+  public fecthProductById: ((id: string) => void) | undefined;
+
+  public fetchProductsByCategory:
+    | ((pathSegments: string[]) => void)
+    | undefined;
+
   constructor() {
     this.router = new Navigo(this.root);
     this.routerListeners();
@@ -36,6 +42,20 @@ class Router {
       this.router.resolve();
     });
 
+    this.router.on('/product/:productId', () => {
+      this.changeContent?.('product');
+      this.router.resolve();
+    });
+
+    this.router.on('/my_profile', () => {
+      if (!localStorage.getItem('userCreds')) {
+        this.goToPage('/login');
+      } else {
+        this.changeContent?.('my_profile');
+      }
+      this.router.resolve();
+    });
+
     this.router.notFound(() => {
       this.changeContent?.('404');
       this.router.resolve();
@@ -48,6 +68,13 @@ class Router {
 
   public handleLocation() {
     const path = window.location.pathname;
+    if (path.includes('product')) {
+      this.fecthProductById?.(path.split('/product/')[1]);
+    } else if (path.includes('categories')) {
+      this.fetchProductsByCategory?.(
+        path.split('/').filter((segment) => segment),
+      );
+    }
     this.goToPage(path);
   }
 }

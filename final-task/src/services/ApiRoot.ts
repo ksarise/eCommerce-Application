@@ -1,6 +1,8 @@
 import {
   createApiBuilderFromCtpClient,
   ByProjectKeyRequestBuilder,
+  Product,
+  ClientResponse,
 } from '@commercetools/platform-sdk';
 import {
   createPasswordClient,
@@ -12,14 +14,19 @@ import { CustomerDraft, ApiResponse } from '../global/interfaces/registration';
 export default class API {
   private apiRoot: ByProjectKeyRequestBuilder;
 
-  // private login: boolean;
-
   constructor() {
     const keyToken = localStorage.getItem('key-token');
+    const userCreds = JSON.parse(localStorage.getItem('userCreds') as string);
     if (keyToken) {
       const { refreshToken } = JSON.parse(keyToken);
       this.apiRoot = createApiBuilderFromCtpClient(
         createRefreshTokenClient(refreshToken),
+      ).withProjectKey({
+        projectKey: import.meta.env.VITE_CTP_PROJECT_KEY,
+      });
+    } else if (userCreds && !keyToken) {
+      this.apiRoot = createApiBuilderFromCtpClient(
+        createPasswordClient(userCreds.email, userCreds.password),
       ).withProjectKey({
         projectKey: import.meta.env.VITE_CTP_PROJECT_KEY,
       });
@@ -30,7 +37,6 @@ export default class API {
         projectKey: import.meta.env.VITE_CTP_PROJECT_KEY,
       });
     }
-    // this.login = false;
   }
 
   public getProject() {
@@ -45,24 +51,201 @@ export default class API {
     return this.apiRoot.customers().withId({ ID: id }).get().execute();
   }
 
-  public getProducts() {
-    return this.apiRoot.products().get().execute();
+  public getProducts(queryArgs: {
+    filter?: string[];
+    sort?: string;
+    text?: string;
+  }) {
+    if (queryArgs.filter) {
+      return this.apiRoot
+        .productProjections()
+        .search()
+        .get({
+          queryArgs: {
+            'filter.query': queryArgs.filter,
+            sort: queryArgs.sort,
+            'text.en-US': queryArgs.text,
+          },
+        })
+        .execute();
+    }
+    return this.apiRoot
+      .productProjections()
+      .get({
+        queryArgs: {
+          sort: 'name.en-US asc',
+        },
+      })
+      .execute();
   }
 
-  public async postCustomerLogin(
+  public getCategories() {
+    return this.apiRoot.categories().get().execute();
+  }
+
+  public getMyCustomerDraft() {
+    return this.apiRoot.me().get().execute();
+  }
+
+  public changePersonalInfo(
+    name: string,
+    surname: string,
+    date: string,
     email: string,
-    password: string,
-    // isLogined: boolean,
+    version: number,
   ) {
-    // this.login = isLogined;
-    // if (!this.login) {
-    //   this.apiRoot = createApiBuilderFromCtpClient(
-    //     createPasswordClient(email, password),
-    //   ).withProjectKey({
-    //     projectKey: import.meta.env.VITE_CTP_PROJECT_KEY,
-    //   });
-    // }
+    return this.apiRoot
+      .me()
+      .post({
+        body: {
+          version,
+          actions: [
+            {
+              action: 'setFirstName',
+              firstName: name,
+            },
+            {
+              action: 'setLastName',
+              lastName: surname,
+            },
+            {
+              action: 'changeEmail',
+              email,
+            },
+            {
+              action: 'setDateOfBirth',
+              dateOfBirth: date,
+            },
+          ],
+        },
+      })
+      .execute();
+  }
+
+  public async changePasswordLogin() {
+    const { email } = JSON.parse(localStorage.getItem('userCreds') as string);
+    const { password } = JSON.parse(
+      localStorage.getItem('userCreds') as string,
+    );
+    await this.changeTypeClient('password', { email, password });
+    await this.postCustomerLogin(email, password);
+  }
+
+  public changePassword(version: number, current: string, newPassword: string) {
+    return this.apiRoot
+      .me()
+      .password()
+      .post({
+        body: {
+          version,
+          currentPassword: current,
+          newPassword,
+        },
+      })
+      .execute();
+  }
+
+  public addNewAddress(
+    streetName: string,
+    city: string,
+    country: string,
+    postalCode: string,
+    version: number,
+  ) {
+    return this.apiRoot
+      .me()
+      .post({
+        body: {
+          version,
+          actions: [
+            {
+              action: 'addAddress',
+              address: {
+                streetName,
+                city,
+                country,
+                postalCode,
+              },
+            },
+          ],
+        },
+      })
+      .execute();
+  }
+
+  public editAddress(
+    streetName: string,
+    city: string,
+    country: string,
+    postalCode: string,
+    version: number,
+    index: string,
+  ) {
+    return this.apiRoot
+      .me()
+      .post({
+        body: {
+          version,
+          actions: [
+            {
+              action: 'changeAddress',
+              addressId: `${index}`,
+              address: {
+                streetName,
+                city,
+                country,
+                postalCode,
+              },
+            },
+          ],
+        },
+      })
+      .execute();
+  }
+
+  public removeAddress(index: string, version: number) {
+    return this.apiRoot
+      .me()
+      .post({
+        body: {
+          version,
+          actions: [
+            {
+              action: 'removeAddress',
+              addressId: `${index}`,
+            },
+          ],
+        },
+      })
+      .execute();
+  }
+
+  public setDefaultAddress(index: string, version: number, shipping: boolean) {
+    const address = shipping
+      ? 'setDefaultShippingAddress'
+      : 'setDefaultBillingAddress';
+    return this.apiRoot
+      .me()
+      .post({
+        body: {
+          version,
+          actions: [
+            {
+              action: address,
+              addressId: `${index}`,
+            },
+          ],
+        },
+      })
+      .execute();
+  }
+
+  public async postCustomerLogin(email: string, password: string) {
     try {
+      await this.changeTypeClient('password', {
+        email,
+        password,
+      });
       const response = await this.apiRoot
         .login()
         .post({
@@ -72,10 +255,6 @@ export default class API {
           },
         })
         .execute();
-      this.changeTypeClient('password', {
-        email,
-        password,
-      });
       return { result: true, obj: response };
     } catch (error) {
       return { result: false, obj: error };
@@ -119,5 +298,10 @@ export default class API {
       default:
         break;
     }
+  }
+
+  public getProductById(id: string): Promise<ClientResponse<Product>> {
+    const response = this.apiRoot.products().withId({ ID: id }).get().execute();
+    return response;
   }
 }

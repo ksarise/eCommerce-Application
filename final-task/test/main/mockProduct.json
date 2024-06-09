@@ -1,0 +1,215 @@
+{
+  "id": "b6446fc6-4675-4f95-99e4-bc85d8510f40",
+  "version": 14,
+  "productType": {
+    "typeId": "product-type",
+    "id": "f1a95d30-0e7d-4612-a330-a7e660149cf0"
+  },
+  "name": {
+    "en-US": "Arbor Ethos Snowboard - Women's 2024"
+  },
+  "description": {
+    "en-US": "The Arbor Ethos Rocker Snowboard is a women-specific board designed to help beginner and intermediate riders progress their skills. With a fully rockered profile and smooth, soft flex, this board offers easy turn initiation and catch-free riding. Whether you're building confidence on park features or learning to ride top-to-bottom from the summit chair, the The Arbor Ethos Rocker Snowboard inspires growth all around the mountain."
+  },
+  "categories": [
+    {
+      "typeId": "category",
+      "id": "dede6a4b-9348-4d31-86fd-bdab9d05c845"
+    },
+    {
+      "typeId": "category",
+      "id": "5f870833-ea62-4cef-89eb-159051c34422"
+    },
+    {
+      "typeId": "category",
+      "id": "e7b30d52-7126-49ea-97a6-b64cf33e6381"
+    },
+    {
+      "typeId": "category",
+      "id": "441d95e2-71c7-4508-ae11-cc9593f4cb0c"
+    }
+  ],
+  "categoryOrderHints": {},
+  "slug": {
+    "en-US": "snowboardSlug1036"
+  },
+  "masterVariant": {
+    "id": 1,
+    "sku": "SNW-3037-01",
+    "key": "SNW-36-01",
+    "prices": [
+      {
+        "id": "120ef3d5-d96c-41be-9bc7-8a63e1e4fa63",
+        "value": {
+          "type": "centPrecision",
+          "currencyCode": "USD",
+          "centAmount": 27996,
+          "fractionDigits": 2
+        },
+        "key": "SNW-Price-36-01",
+        "country": "US",
+        "discounted": {
+          "value": {
+            "type": "centPrecision",
+            "currencyCode": "USD",
+            "centAmount": 20997,
+            "fractionDigits": 2
+          },
+          "discount": {
+            "typeId": "product-discount",
+            "id": "f868a8da-6b89-47fc-b889-5ad77b9d2fb1"
+          }
+        }
+      }
+    ],
+    "images": [
+      {
+        "url": "https://raw.githubusercontent.com/ksarise/parser/main/assets/SNW-36-01/0.jpg",
+        "label": "SNW-Image36-01",
+        "dimensions": {
+          "w": 700,
+          "h": 700
+        }
+      },
+      {
+        "url": "https://raw.githubusercontent.com/ksarise/parser/main/assets/SNW-36-01/1.jpg",
+        "label": "SNW-Image36-02",
+        "dimensions": {
+          "w": 700,
+          "h": 700
+        }
+      },
+      {
+        "url": "https://raw.githubusercontent.com/ksarise/parser/main/assets/SNW-36-01/2.jpg",
+        "label": "SNW-Image36-03",
+        "dimensions": {
+          "w": 700,
+          "h": 700
+        }
+      },
+      {
+        "url": "https://raw.githubusercontent.com/ksarise/parser/main/assets/SNW-36-01/3.jpg",
+        "label": "SNW-Image36-04",
+        "dimensions": {
+          "w": 700,
+          "h": 700
+        }
+      },
+      {
+        "url": "https://raw.githubusercontent.com/ksarise/parser/main/assets/SNW-36-01/4.jpg",
+        "label": "SNW-Image36-05",
+        "dimensions": {
+          "w": 700,
+          "h": 700
+        }
+      },
+      {
+        "url": "https://raw.githubusercontent.com/ksarise/parser/main/assets/SNW-36-01/5.jpg",
+        "label": "SNW-Image36-06",
+        "dimensions": {
+          "w": 700,
+          "h": 700
+        }
+      },
+      {
+        "url": "https://raw.githubusercontent.com/ksarise/parser/main/assets/SNW-36-01/6.jpg",
+        "label": "SNW-Image36-07",
+        "dimensions": {
+          "w": 700,
+          "h": 700
+        }
+      },
+      {
+        "url": "https://raw.githubusercontent.com/ksarise/parser/main/assets/SNW-36-01/7.jpg",
+        "label": "SNW-Image36-08",
+        "dimensions": {
+          "w": 700,
+          "h": 700
+        }
+      },
+      {
+        "url": "https://raw.githubusercontent.com/ksarise/parser/main/assets/SNW-36-01/8.jpg",
+        "label": "SNW-Image36-09",
+        "dimensions": {
+          "w": 700,
+          "h": 700
+        }
+      },
+      {
+        "url": "https://raw.githubusercontent.com/ksarise/parser/main/assets/SNW-36-01/9.jpg",
+        "label": "SNW-Image36-010",
+        "dimensions": {
+          "w": 700,
+          "h": 700
+        }
+      }
+    ],
+    "attributes": [
+      {
+        "name": "RockerType",
+        "value": "Rocker"
+      },
+      {
+        "name": "FlexRating",
+        "value": "Soft"
+      },
+      {
+        "name": "BindingMountPattern",
+        "value": "2x4"
+      },
+      {
+        "name": "Core-Laminates",
+        "value": "Wood"
+      },
+      {
+        "name": "Warranty",
+        "value": "3 Years"
+      },
+      {
+        "name": "Size",
+        "value": "138"
+      },
+      {
+        "name": "EffectiveEdge",
+        "value": "1035"
+      },
+      {
+        "name": "TipWidth",
+        "value": "268"
+      },
+      {
+        "name": "WaistWidth",
+        "value": "231"
+      },
+      {
+        "name": "TailWidth",
+        "value": "268"
+      },
+      {
+        "name": "SidecutRadius",
+        "value": "7.65 ​/ 6.75 ​/ 7.65"
+      },
+      {
+        "name": "StanceRange",
+        "value": "20"
+      },
+      {
+        "name": "Width",
+        "value": "Regular"
+      }
+    ],
+    "assets": []
+  },
+  "variants": [],
+  "searchKeywords": {},
+  "hasStagedChanges": false,
+  "published": true,
+  "key": "snowboard1036",
+  "taxCategory": {
+    "typeId": "tax-category",
+    "id": "31268331-edad-426b-ba05-137951f8fa4f"
+  },
+  "priceMode": "Embedded",
+  "createdAt": "2024-06-04T07:11:17.910Z",
+  "lastModifiedAt": "2024-06-04T07:16:57.187Z"
+}

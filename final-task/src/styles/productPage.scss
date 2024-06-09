@@ -1,0 +1,204 @@
+@import './variables.scss';
+
+.product {
+  display: flex;
+  gap: 10px;
+  color: $text;
+  &__right-container {
+    position: relative;
+  }
+  &__name {
+    margin: 0;
+    font-size: 30px;
+    font-weight: 500;
+    line-height: 150%;
+    @media (max-width: 620px) {
+      font-size: 20px;
+    }
+  }
+  &__description {
+    margin: 0;
+    padding-top: 20px;
+    font-size: 16px;
+    font-weight: 400;
+    line-height: 150%;
+    @media (max-width: 620px) {
+      font-size: 14px;
+    }
+  }
+  &__price {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    font-size: 30px;
+    font-weight: 500;
+    line-height: 150%;
+    &_value {
+      margin: 0;
+      color: $light-text;
+      &-crossed {
+        text-decoration: line-through;
+      }
+      @media (max-width: 620px) {
+        font-size: 20px;
+      }
+    }
+    &_discount {
+      margin: 0;
+      color: $light-red;
+      @media (max-width: 620px) {
+        font-size: 20px;
+      }
+    }
+  }
+  &__buttons {
+    position: absolute;
+    bottom: 0;
+    right: 0;
+    @media (max-width: 1280px) {
+      position: static;
+      display: flex;
+      justify-content: end;
+      align-items: center;
+    }
+    &_cart {
+      padding: 5px 15px;
+      cursor: pointer;
+      border: 2px solid $primary;
+      background: #fff;
+      font-size: 30px;
+      font-weight: 400;
+      line-height: 150%;
+      color: $primary;
+      transition: 0.3s;
+      border-radius: 5px;
+      @media (max-width: 620px) {
+        font-size: 20px;
+      }
+      &:hover {
+        background-color: $primary;
+        color: #fff;
+      }
+    }
+  }
+  &__hero {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 10px;
+    &_main {
+      width: 700px;
+      height: 700px;
+      border: 1px solid $primary;
+      border-radius: 5px;
+      @media (max-width: 840px) {
+        width: 100%;
+        height: fit-content;
+      }
+    }
+  }
+  &__main_image {
+    cursor: pointer;
+    width: 100%;
+    height: 100%;
+  }
+  @media (max-width: 1280px) {
+    flex-direction: column;
+    align-items: center;
+  }
+}
+
+.alt-column {
+  width: 70px;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  &__container {
+    width: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+  }
+  &__image {
+    width: 100%;
+    height: 100%;
+  }
+  @media (max-width: 840px) {
+    display: none;
+  }
+}
+
+.altSwiper .swiper-slide {
+  border: 1px solid $primary;
+  border-radius: 5px;
+  overflow: hidden;
+  cursor: pointer;
+  opacity: 0.4;
+}
+
+.altSwiper .swiper-slide-thumb-active {
+  opacity: 1;
+}
+
+.swiper-button {
+  color: $primary;
+  transition: opacity 0.3s;
+  &:hover {
+    opacity: 0.7;
+  }
+}
+
+.mainSwiper .swiper-pagination .swiper-pagination-bullet-active {
+  background: $primary;
+}
+
+.modalSwiper .swiper-pagination .swiper-pagination-bullet-active {
+  background: $primary;
+}
+
+.modal {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.5);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 1000;
+  &__close {
+    position: absolute;
+    top: 5px;
+    right: 5px;
+    cursor: pointer;
+    color: rgb(255, 255, 255);
+    font-size: 40px;
+    font-weight: 500;
+    line-height: 150%;
+    z-index: 2;
+    background-color: transparent;
+    border: none;
+    transition: 0.3s;
+    &:hover {
+      opacity: 0.7;
+    }
+    @media (max-width: 840px) {
+      top: 2px;
+    }
+  }
+  &__content {
+    position: relative;
+    width: 90%;
+    height: 90%;
+    background-color: #fff;
+    border-radius: 5px;
+    padding: 10px;
+    display: flex;
+    &_image {
+      width: 100%;
+      height: 100%;
+      object-fit: contain;
+    }
+  }
+}
