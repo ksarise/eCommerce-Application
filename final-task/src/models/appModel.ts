@@ -1,5 +1,6 @@
 import API from '../services/ApiRoot';
 import RegistrationPageModel from './Registration/RegistrationModel';
+import ProductPageModel from './Product/productModel';
 import {
   ApiResponse,
   RegistrationFormData,
@@ -14,12 +15,15 @@ export default class AppModel {
 
   public mainModel: MainModel = new MainModel();
 
+  public productPageModel: ProductPageModel;
+
   public isLogined: boolean = false;
 
   constructor() {
     this.apiService = new API();
     this.registrationModel = new RegistrationPageModel();
     this.mainModel = new MainModel();
+    this.productPageModel = new ProductPageModel(this.apiService);
     if (localStorage.getItem('userCreds')) {
       this.isLogined = true;
       this.apiService.postCustomerLogin(

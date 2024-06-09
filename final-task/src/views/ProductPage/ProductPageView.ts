@@ -24,6 +24,8 @@ export default class ProductPageView {
 
   private productImages: Image[] = [];
 
+  public handleClickAddToCartButton: ((event?: Event) => void) | undefined;
+
   constructor() {
     this.container = tags.div(['product'], '', {});
     this.heroContainer = tags
@@ -64,6 +66,11 @@ export default class ProductPageView {
 
   public createProductPage(): void {
     const buttonCart = tags.button(['product__buttons_cart'], 'Add To Cart');
+    if (this.handleClickAddToCartButton) {
+      buttonCart.addEventListener('click', this.handleClickAddToCartButton!);
+    } else {
+      console.log('no func for add to cart button');
+    }
     this.buttonContainer.append(buttonCart);
     const rightContainer = tags
       .div(['product__right-container'], '', {})

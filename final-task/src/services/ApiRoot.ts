@@ -3,6 +3,7 @@ import {
   ByProjectKeyRequestBuilder,
   Product,
   ClientResponse,
+  Cart,
 } from '@commercetools/platform-sdk';
 import {
   createPasswordClient,
@@ -329,6 +330,23 @@ export default class API {
 
   public getProductById(id: string): Promise<ClientResponse<Product>> {
     const response = this.apiRoot.products().withId({ ID: id }).get().execute();
+    return response;
+  }
+
+  public async createCartRequest(): Promise<ClientResponse<Cart>> {
+    const response = await this.apiRoot
+      .carts()
+      .post({ body: { currency: 'USD' } })
+      .execute();
+    return response;
+  }
+
+  public async getCartById(cartId: string): Promise<ClientResponse<Cart>> {
+    const response = await this.apiRoot
+      .carts()
+      .withId({ ID: cartId })
+      .get()
+      .execute();
     return response;
   }
 }
