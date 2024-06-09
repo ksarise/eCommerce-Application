@@ -24,7 +24,11 @@ export default class ProductPageView {
 
   private productImages: Image[] = [];
 
-  public handleClickAddToCartButton: ((event?: Event) => void) | undefined;
+  private productId: string | undefined;
+
+  public handleClickAddToCartButton:
+    | ((productId: string, event?: Event) => void)
+    | undefined;
 
   constructor() {
     this.container = tags.div(['product'], '', {});
@@ -50,6 +54,7 @@ export default class ProductPageView {
   public render(body: Product) {
     this.reset();
     this.create();
+    this.productId = body.id;
     this.productImages = Array.from(
       body.masterData.staged.masterVariant.images!,
     );
@@ -67,7 +72,9 @@ export default class ProductPageView {
   public createProductPage(): void {
     const buttonCart = tags.button(['product__buttons_cart'], 'Add To Cart');
     if (this.handleClickAddToCartButton) {
-      buttonCart.addEventListener('click', this.handleClickAddToCartButton!);
+      buttonCart.addEventListener('click', () =>
+        this.handleClickAddToCartButton!(this.productId!),
+      );
     } else {
       console.log('no func for add to cart button');
     }
