@@ -32,6 +32,10 @@ export default class ProductPageView {
     | ((productId: string, variantId?: number, event?: Event) => void)
     | undefined;
 
+  public handleClickVariantButton:
+    | ((productId: string, variantId: number, event?: Event) => void)
+    | undefined;
+
   constructor() {
     this.container = tags.div(['product'], '', {});
     this.heroContainer = tags
@@ -311,16 +315,29 @@ export default class ProductPageView {
           const active = document.querySelector(
             '.product__variants_button-active',
           );
+          if (this.handleClickVariantButton) {
+            this.handleClickVariantButton(this.productId!, idx + 1);
+          }
           if (active) {
             active.classList.remove('product__variants_button-active');
           }
           nameTag.classList.add('product__variants_button-active');
-          this.activeVariantId = idx;
+          this.activeVariantId = idx + 1;
         });
         sizesContainer.append(nameTag);
       }
     });
     variantsContainer.append(sizesContainer);
     this.descriptionContainer.append(variantsContainer);
+  }
+
+  // eslint-disable-next-line class-methods-use-this
+  public changeButtonCart(isAdded: boolean) {
+    const cartButton = document.querySelector('.product__buttons_cart');
+    if (isAdded) {
+      cartButton!.innerHTML = 'Remove from Cart';
+    } else {
+      cartButton!.innerHTML = 'Add to Cart';
+    }
   }
 }

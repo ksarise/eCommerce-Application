@@ -14,7 +14,11 @@ export default class ProductPageModel {
     }
   }
 
-  public async addToCart(productId: string, variantId?: number) {
+  public async addToCart(
+    productId: string,
+    _changeButtonCart: (isAdded: boolean) => void,
+    variantId?: number,
+  ) {
     if (!this.cart) {
       await this.createCart();
     }
@@ -24,11 +28,16 @@ export default class ProductPageModel {
       variantId,
       quantity: 1,
     };
-    await this.apiService.addLineItemToCart(
+    const response = await this.apiService.addLineItemToCart(
       this.cart!.id,
       lineItemDraft,
       currentCart.version,
     );
+    if (response.statusCode === 200 || response.statusCode === 201) {
+      _changeButtonCart(true);
+    } else {
+      _changeButtonCart(false);
+    }
   }
 
   public async createCart() {
@@ -39,5 +48,19 @@ export default class ProductPageModel {
   public async getCartById(cartId: string) {
     this.cart = (await this.apiService.getCartById(cartId)).body;
     return this.cart;
+  }
+
+  public async isVariantInCart(productId: string, variantId: number) {
+    if (this.cart) {
+      await this.getCartById(this.cart.id);
+      const lineItemProducts = this.cart.lineItems.filter(
+        (item) => item.productId === productId,
+      );
+      if (lineItemProducts.length > 0) {
+        return lineItemProducts.some((item) => item.variant.id === variantId);
+      }
+      return false;
+    }
+    return false;
   }
 }
