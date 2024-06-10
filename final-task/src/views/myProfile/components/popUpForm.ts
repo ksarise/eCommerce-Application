@@ -240,7 +240,7 @@ export default class PopUpForm {
     this.deleteErrors();
     this.header.innerHTML = text;
     this.form.innerHTML = '';
-    this.buttonRemoveAddress.id = `remove-${index}`;
+    this.buttonRemoveAddress.id = `remove__${index}`;
     this.form.append(this.header, this.buttonRemoveAddress);
     this.openClosePopUp(false);
   }
@@ -298,10 +298,11 @@ export default class PopUpForm {
     this.select.innerHTML = '';
     headers.forEach((elem) => {
       const code =
-        document.getElementById(`${PopupFields.CODE}-${elem.id.split('-')[1]}`)
-          ?.innerHTML || '';
+        document.getElementById(
+          `${PopupFields.CODE}__${elem.id.split('__')[1]}`,
+        )?.innerHTML || '';
       const option = tags.option(['option'], `${elem.innerText} ${code}`, {
-        value: `${elem.id.split('-')[1]}`,
+        value: `${elem.id.split('__')[1]}`,
       });
       this.select.append(option);
     });

@@ -98,19 +98,19 @@ export default class Addresses {
 
   private createAddressOne(elem: Address) {
     const rubbish = tags.button(['profile__rubbish'], '', {
-      id: `rubbish-${elem.id}`,
+      id: `rubbish__${elem.id}`,
       title: 'Delete',
     });
     const edit = tags.button(['profile__edit'], '', {
-      id: `edit-${elem.id}`,
+      id: `edit__${elem.id}`,
       title: 'Edit',
     });
     edit.addEventListener('click', () => {
-      this.addressesAll.id = `address-${elem.id}`;
+      this.addressesAll.id = `address__${elem.id}`;
       if (this.handleClickEditAddress) this.handleClickEditAddress();
     });
     rubbish.addEventListener('click', () => {
-      this.addressesAll.id = `address-${elem.id}`;
+      this.addressesAll.id = `address__${elem.id}`;
       if (this.handleClickRemoveAddress) this.handleClickRemoveAddress();
     });
     const imgRubbish = tags.div(['img_rubbish']).getElement();
@@ -125,7 +125,7 @@ export default class Addresses {
     const header = tags.p(
       ['addresses__header'],
       `${elem.country} ${elem.city} ${elem.streetName}`,
-      { id: `heading-${elem.id}` },
+      { id: `heading__${elem.id}` },
     );
     header.append(edit, rubbish);
     const buttonLine = tags.button(['profile__line'], '', {
@@ -145,7 +145,7 @@ export default class Addresses {
       ) {
         const data = tags.div(['profile__data'], `${key}`).getElement();
         const info = tags
-          .div(['profile__info'], `${value}`, { id: `${key}-${elem.id}` })
+          .div(['profile__info'], `${value}`, { id: `${key}__${elem.id}` })
           .getElement();
         blockAddress.append(data, info);
       }
@@ -165,7 +165,7 @@ export default class Addresses {
             ['addresses__header_bill'],
             `${elem.country} ${elem.city} ${elem.streetName}`,
             {
-              id: `bill-${index}`,
+              id: `bill__${index}`,
             },
           );
           this.defaultBilling.innerHTML = '';
@@ -182,7 +182,7 @@ export default class Addresses {
             ['addresses__header_ship'],
             `${elem.country} ${elem.city} ${elem.streetName}`,
             {
-              id: `ship-${index}`,
+              id: `ship__${index}`,
             },
           );
           this.defaultShipping.innerHTML = '';
