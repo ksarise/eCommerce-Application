@@ -53,6 +53,7 @@ export default class ProductPageView {
     );
     this.renderHeroContainer(this.productImages);
     this.renderDestiptionContainer(body.masterData.current);
+    this.renderVariantsContainer(body.masterData.current);
   }
 
   private reset(): void {
@@ -262,5 +263,47 @@ export default class ProductPageView {
         clickable: true,
       },
     });
+  }
+
+  private renderVariantsContainer(current: ProductData) {
+    if (current.variants.length === 0) {
+      return;
+    }
+    const variantsContainer = tags
+      .div(['product__variants'], '', {})
+      .getElement() as HTMLDivElement;
+    const { variants } = current;
+    variantsContainer.append(
+      tags.p(['product__variants_title'], 'Select Size:'),
+    );
+    const sizesContainer = tags
+      .div(['product__variants_sizes'], '', {})
+      .getElement();
+    variants.forEach((variant, idx) => {
+      if (variant.attributes) {
+        const size = variant.attributes.find(
+          (attribute) => attribute.name === 'Size',
+        ) || { value: '' };
+        const nameTag = tags.button(
+          ['product__variants_button'],
+          String(size.value),
+        );
+        if (idx === 0) {
+          nameTag.classList.add('product__variants_button-active');
+        }
+        nameTag.addEventListener('click', () => {
+          const active = document.querySelector(
+            '.product__variants_button-active',
+          );
+          if (active) {
+            active.classList.remove('product__variants_button-active');
+          }
+          nameTag.classList.add('product__variants_button-active');
+        });
+        sizesContainer.append(nameTag);
+      }
+    });
+    variantsContainer.append(sizesContainer);
+    this.descriptionContainer.append(variantsContainer);
   }
 }
