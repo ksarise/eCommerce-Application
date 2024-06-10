@@ -62,6 +62,7 @@
   }
 
   &__form {
+    position: relative;
     display: flex;
     flex-direction: column;
     gap: 10px;
@@ -251,6 +252,23 @@
     &:hover:not(:disabled) {
       background-color: $primary;
       color: #fff;
+    }
+  }
+
+  .popup__cross {
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    width: 30px;
+    height: 30px;
+    background-image: url('/svg/cross.svg');
+    background-size: 30px 30px;
+    background-repeat: no-repeat;
+    background-position: center;
+    transition: 0.6s;
+
+    &:hover {
+      transform: rotate(90deg);
     }
   }
 

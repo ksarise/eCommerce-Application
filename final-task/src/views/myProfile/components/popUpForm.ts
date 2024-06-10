@@ -49,6 +49,8 @@ export default class PopUpForm {
 
   public buttonRemoveAddress: HTMLButtonElement;
 
+  public popUpcross: HTMLElement;
+
   public closePopUp: (event: Event) => void;
 
   constructor() {
@@ -137,6 +139,8 @@ export default class PopUpForm {
       'Confirm Password',
     );
 
+    this.popUpcross = tags.div(['popup__cross']).getElement();
+
     this.select = tags.select(['select']);
 
     this.header = tags.h2(['popup__header'], Heading.CHANGEPERSONAL);
@@ -178,6 +182,7 @@ export default class PopUpForm {
       'Change',
       { type: 'submit', id: 'change-password' },
     );
+    this.addListenerCross();
   }
 
   public createPopUpBlock() {
@@ -187,6 +192,12 @@ export default class PopUpForm {
   private createPopUp() {
     this.popUp.addEventListener('click', this.closePopUp);
     this.popUp.append(this.form);
+  }
+
+  private addListenerCross() {
+    this.popUpcross.onclick = () => {
+      this.openClosePopUp(true);
+    };
   }
 
   public openClosePopUp(flag: boolean) {
@@ -250,6 +261,7 @@ export default class PopUpForm {
       this.popUpDateofBirth.getBlock(),
       this.popUpEmail.getBlock(),
       this.buttonPersonal,
+      this.popUpcross,
     );
     this.openClosePopUp(false);
   }
@@ -259,7 +271,7 @@ export default class PopUpForm {
     this.header.innerHTML = text;
     this.form.innerHTML = '';
     this.buttonRemoveAddress.id = `remove__${index}`;
-    this.form.append(this.header, this.buttonRemoveAddress);
+    this.form.append(this.header, this.buttonRemoveAddress, this.popUpcross);
     this.openClosePopUp(false);
   }
 
@@ -284,6 +296,7 @@ export default class PopUpForm {
       this.popUpCity.getBlock(),
       this.poUpCountry.getBlock(),
       this.popUppostalCode.getBlock(),
+      this.popUpcross,
     );
   }
 
@@ -331,7 +344,7 @@ export default class PopUpForm {
     (this.select as HTMLSelectElement).value = value || 'none';
     const button = flag ? this.buttonShipping : this.buttonBilling;
     this.header.innerHTML = flag ? Heading.SHIP : Heading.BILL;
-    this.form.append(this.header, label, this.select, button);
+    this.form.append(this.header, label, this.select, button, this.popUpcross);
     this.openClosePopUp(false);
   }
 
@@ -349,6 +362,7 @@ export default class PopUpForm {
       this.popUpNewPassword.getBlock(),
       this.popUpConfirmPassword.getBlock(),
       this.buttonChangePassword,
+      this.popUpcross,
     );
     this.openClosePopUp(false);
   }
