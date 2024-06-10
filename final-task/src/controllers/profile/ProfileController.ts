@@ -306,12 +306,15 @@ export default class ProfileController {
     this.validation.validatePassword(
       variables.popUpCurrentPassword.getInput().value,
     );
-    this.validation.validateNewPassword(
+    this.validation.validatePassword(
       variables.popUpNewPassword.getInput().value,
+      'newPassword',
       variables.popUpCurrentPassword.getInput().value,
     );
-    this.validation.validateConfirmPassword(
+    this.validation.validatePassword(
       variables.popUpConfirmPassword.getInput().value,
+      'confirmPassword',
+      '',
       variables.popUpNewPassword.getInput().value,
     );
     this.createErrors();

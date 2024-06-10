@@ -43,120 +43,59 @@ export default class RegistrationPageModel {
     }
   }
 
-  validatePassword(password: string): void {
+  validatePassword(
+    password: string,
+    type: 'password' | 'newPassword' | 'confirmPassword' = 'password',
+    currentPassword?: string,
+    newPassword?: string,
+  ): void {
     const rule = validationRules.password;
-    this.errors.password = [];
+    this.errors[type] = [];
 
     if (password.length < rule.minLength) {
-      this.errors.password.push(rule.errorMessages.minLength);
+      this.errors[type].push(rule.errorMessages.minLength);
     }
 
     if (!RegistrationPageModel.validatePattern(password, rule.uppercase)) {
-      this.errors.password.push(rule.errorMessages.uppercase);
+      this.errors[type].push(rule.errorMessages.uppercase);
     }
 
     if (!RegistrationPageModel.validatePattern(password, rule.lowercase)) {
-      this.errors.password.push(rule.errorMessages.lowercase);
+      this.errors[type].push(rule.errorMessages.lowercase);
     }
 
     if (!RegistrationPageModel.validatePattern(password, rule.number)) {
-      this.errors.password.push(rule.errorMessages.number);
+      this.errors[type].push(rule.errorMessages.number);
     }
 
     if (
       !RegistrationPageModel.validatePattern(password, rule.specialCharacter)
     ) {
-      this.errors.password.push(rule.errorMessages.specialCharacter);
+      this.errors[type].push(rule.errorMessages.specialCharacter);
     }
 
     if (RegistrationPageModel.validatePattern(password, rule.noSpace)) {
-      this.errors.password.push(rule.errorMessages.noSpace);
+      this.errors[type].push(rule.errorMessages.noSpace);
     }
 
-    if (this.errors.password.length === 0) {
-      delete this.errors.password;
-    }
-  }
+    if (type === 'newPassword') {
+      if (currentPassword === '' || !currentPassword) {
+        this.errors[type].push(rule.errorMessages.enterCurrent);
+      }
 
-  validateNewPassword(password: string, currentPassword: string = ''): void {
-    const rule = validationRules.password;
-    this.errors.newPassword = [];
-
-    if (currentPassword === '') {
-      this.errors.newPassword.push(rule.errorMessages.enterCurrent);
+      if (currentPassword === password) {
+        this.errors[type].push(rule.errorMessages.equalCurrent);
+      }
     }
 
-    if (password.length < rule.minLength) {
-      this.errors.newPassword.push(rule.errorMessages.minLength);
+    if (type === 'confirmPassword') {
+      if (newPassword !== password) {
+        this.errors[type].push(rule.errorMessages.confirm);
+      }
     }
 
-    if (!RegistrationPageModel.validatePattern(password, rule.uppercase)) {
-      this.errors.newPassword.push(rule.errorMessages.uppercase);
-    }
-
-    if (!RegistrationPageModel.validatePattern(password, rule.lowercase)) {
-      this.errors.newPassword.push(rule.errorMessages.lowercase);
-    }
-
-    if (!RegistrationPageModel.validatePattern(password, rule.number)) {
-      this.errors.newPassword.push(rule.errorMessages.number);
-    }
-
-    if (
-      !RegistrationPageModel.validatePattern(password, rule.specialCharacter)
-    ) {
-      this.errors.newPassword.push(rule.errorMessages.specialCharacter);
-    }
-
-    if (RegistrationPageModel.validatePattern(password, rule.noSpace)) {
-      this.errors.newPassword.push(rule.errorMessages.noSpace);
-    }
-
-    if (currentPassword === password) {
-      this.errors.newPassword.push(rule.errorMessages.equalCurrent);
-    }
-
-    if (this.errors.newPassword.length === 0) {
-      delete this.errors.newPassword;
-    }
-  }
-
-  validateConfirmPassword(password: string, newPassword: string = ''): void {
-    const rule = validationRules.password;
-    this.errors.confirmPassword = [];
-
-    if (password.length < rule.minLength) {
-      this.errors.confirmPassword.push(rule.errorMessages.minLength);
-    }
-
-    if (!RegistrationPageModel.validatePattern(password, rule.uppercase)) {
-      this.errors.confirmPassword.push(rule.errorMessages.uppercase);
-    }
-
-    if (!RegistrationPageModel.validatePattern(password, rule.lowercase)) {
-      this.errors.confirmPassword.push(rule.errorMessages.lowercase);
-    }
-
-    if (!RegistrationPageModel.validatePattern(password, rule.number)) {
-      this.errors.confirmPassword.push(rule.errorMessages.number);
-    }
-
-    if (
-      !RegistrationPageModel.validatePattern(password, rule.specialCharacter)
-    ) {
-      this.errors.confirmPassword.push(rule.errorMessages.specialCharacter);
-    }
-
-    if (RegistrationPageModel.validatePattern(password, rule.noSpace)) {
-      this.errors.confirmPassword.push(rule.errorMessages.noSpace);
-    }
-
-    if (newPassword !== password) {
-      this.errors.confirmPassword.push(rule.errorMessages.confirm);
-    }
-
-    if (this.errors.confirmPassword.length === 0) {
-      delete this.errors.confirmPassword;
+    if (this.errors[type].length === 0) {
+      delete this.errors[type];
     }
   }
 
