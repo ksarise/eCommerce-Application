@@ -22,10 +22,6 @@ export default class AppModel {
     this.mainModel = new MainModel();
     if (localStorage.getItem('userCreds')) {
       this.isLogined = true;
-      this.apiService.postCustomerLogin(
-        JSON.parse(localStorage.getItem('userCreds') as string).email,
-        JSON.parse(localStorage.getItem('userCreds') as string).password,
-      );
     } else {
       this.isLogined = false;
     }
@@ -40,7 +36,7 @@ export default class AppModel {
     const result = await this.apiService.postCustomerLogin(email, password);
     if (result.result) {
       this.isLogined = true;
-      localStorage.setItem('userCreds', JSON.stringify({ email, password }));
+      localStorage.setItem('userCreds', JSON.stringify(true));
     }
     return result;
   }
