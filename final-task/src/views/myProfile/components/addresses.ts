@@ -51,8 +51,8 @@ export default class Addresses {
   private createShippingBilling() {
     const imgProfile = tags.div(['img_edit']).getElement();
     const imgProfileShipping = tags.div(['img_edit']).getElement();
-    const shippingH3 = tags.h3(['profile__header'], 'default Shipping');
-    const billingH3 = tags.h3(['profile__header'], 'default Billing');
+    const shippingH3 = tags.h3(['profile__header'], 'Default Shipping');
+    const billingH3 = tags.h3(['profile__header'], 'Default Billing');
     const buttonEditBilling = tags.button(
       ['profile__edit', 'profile__button_billing'],
       'Edit',
