@@ -310,6 +310,9 @@ export default class ProductPageView {
         );
         if (idx === 0) {
           nameTag.classList.add('product__variants_button-active');
+          if (this.handleClickVariantButton) {
+            this.handleClickVariantButton(this.productId!, idx + 1);
+          }
         }
         nameTag.addEventListener('click', () => {
           const active = document.querySelector(
