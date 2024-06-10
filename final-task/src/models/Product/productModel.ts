@@ -1,5 +1,6 @@
 import { Cart, LineItemDraft } from '@commercetools/platform-sdk';
 import API from '../../services/ApiRoot';
+import showToast from '../../services/ToastMessages';
 
 export default class ProductPageModel {
   private apiService: API;
@@ -37,6 +38,38 @@ export default class ProductPageModel {
       _changeButtonCart(true);
     } else {
       _changeButtonCart(false);
+    }
+  }
+
+  public async removeFromCart(
+    productId: string,
+    _changeButtonCart: (isAdded: boolean) => void,
+    variantId?: number,
+  ) {
+    if (this.cart) {
+      const currentCart = await this.getCartById(this.cart!.id);
+      const lineItemProducts = this.cart.lineItems.filter(
+        (item) => item.productId === productId,
+      );
+      const rightVariantId = variantId || 1;
+      const lineItem = lineItemProducts.find(
+        (item) => item.variant.id === rightVariantId,
+      );
+      if (!lineItem) {
+        showToast({ text: 'This variant not in Card', type: 'negative' });
+        return;
+      }
+      const lineItemId = lineItem.id;
+      const response = await this.apiService.removeLineItemFromCart(
+        this.cart.id,
+        lineItemId,
+        currentCart.version,
+      );
+      if (response.statusCode === 200 || response.statusCode === 201) {
+        _changeButtonCart(false);
+      } else {
+        _changeButtonCart(true);
+      }
     }
   }
 

@@ -373,4 +373,27 @@ export default class API {
       .execute();
     return response;
   }
+
+  public async removeLineItemFromCart(
+    cartId: string,
+    lineItemId: string,
+    cartVersion?: number,
+  ): Promise<ClientResponse<Cart>> {
+    const response = await this.apiRoot
+      .carts()
+      .withId({ ID: cartId })
+      .post({
+        body: {
+          version: cartVersion || 1,
+          actions: [
+            {
+              action: 'removeLineItem',
+              lineItemId,
+            },
+          ],
+        },
+      })
+      .execute();
+    return response;
+  }
 }

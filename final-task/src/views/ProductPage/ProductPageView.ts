@@ -32,6 +32,10 @@ export default class ProductPageView {
     | ((productId: string, variantId?: number, event?: Event) => void)
     | undefined;
 
+  public handleClickRemoveFromCartButton:
+    | ((productId: string, variantId?: number, event?: Event) => void)
+    | undefined;
+
   public handleClickVariantButton:
     | ((productId: string, variantId: number, event?: Event) => void)
     | undefined;
@@ -77,15 +81,32 @@ export default class ProductPageView {
   }
 
   public createProductPage(): void {
-    const buttonCart = tags.button(['product__buttons_cart'], 'Add To Cart');
+    const buttonCartAdd = tags.button(
+      ['product__buttons_cart', 'product__buttons_cart-add'],
+      'Add To Cart',
+    );
+    const buttonCartRemove = tags.button(
+      ['product__buttons_cart', 'product__buttons_cart-remove'],
+      'Remove From Cart',
+    );
     if (this.handleClickAddToCartButton) {
-      buttonCart.addEventListener('click', () =>
+      buttonCartAdd.addEventListener('click', () =>
         this.handleClickAddToCartButton!(this.productId!, this.activeVariantId),
       );
     } else {
       console.log('no func for add to cart button');
     }
-    this.buttonContainer.append(buttonCart);
+    if (this.handleClickRemoveFromCartButton) {
+      buttonCartRemove.addEventListener('click', () =>
+        this.handleClickRemoveFromCartButton!(
+          this.productId!,
+          this.activeVariantId,
+        ),
+      );
+    } else {
+      console.log('no func for remove to cart button');
+    }
+    this.buttonContainer.append(buttonCartAdd, buttonCartRemove);
     const rightContainer = tags
       .div(['product__right-container'], '', {})
       .getElement();
@@ -336,11 +357,16 @@ export default class ProductPageView {
 
   // eslint-disable-next-line class-methods-use-this
   public changeButtonCart(isAdded: boolean) {
-    const cartButton = document.querySelector('.product__buttons_cart');
+    const cartButtonAdd = document.querySelector('.product__buttons_cart-add');
+    const cartButtonRemove = document.querySelector(
+      '.product__buttons_cart-remove',
+    );
     if (isAdded) {
-      cartButton!.innerHTML = 'Remove from Cart';
+      (cartButtonAdd! as HTMLElement).style.display = 'none';
+      (cartButtonRemove! as HTMLElement).style.display = 'block';
     } else {
-      cartButton!.innerHTML = 'Add to Cart';
+      (cartButtonAdd! as HTMLElement).style.display = 'block';
+      (cartButtonRemove! as HTMLElement).style.display = 'none';
     }
   }
 }

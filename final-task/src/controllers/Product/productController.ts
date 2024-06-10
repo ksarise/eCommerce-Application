@@ -17,12 +17,25 @@ export default class ProductPageController {
   public initializeListeners() {
     this.productPageView.handleClickAddToCartButton =
       this.handleClickAddToCartButton.bind(this);
+    this.productPageView.handleClickRemoveFromCartButton =
+      this.handleClickRemoveFromCartButton.bind(this);
     this.productPageView.handleClickVariantButton =
       this.handleClickVariantButton.bind(this);
   }
 
   private handleClickAddToCartButton(productId: string, variantId?: number) {
     this.productPageModel.addToCart(
+      productId,
+      this.changeButtonCart.bind(this),
+      variantId,
+    );
+  }
+
+  private handleClickRemoveFromCartButton(
+    productId: string,
+    variantId?: number,
+  ) {
+    this.productPageModel.removeFromCart(
       productId,
       this.changeButtonCart.bind(this),
       variantId,

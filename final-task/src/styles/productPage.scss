@@ -72,6 +72,9 @@
       color: $primary;
       transition: 0.3s;
       border-radius: 5px;
+      &-remove {
+        display: none;
+      }
       @media (max-width: 620px) {
         font-size: 20px;
       }
