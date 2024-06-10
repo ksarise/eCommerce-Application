@@ -17,7 +17,6 @@ export default class API {
 
   constructor() {
     const keyToken = localStorage.getItem('key-token');
-    const userCreds = JSON.parse(localStorage.getItem('userCreds') as string);
     if (keyToken) {
       const { token, expirationTime, refreshToken } = JSON.parse(keyToken);
       const currentTime = Date.now();
@@ -26,12 +25,6 @@ export default class API {
         if (refreshToken) {
           this.apiRoot = createApiBuilderFromCtpClient(
             createRefreshTokenClient(refreshToken),
-          ).withProjectKey({
-            projectKey: import.meta.env.VITE_CTP_PROJECT_KEY,
-          });
-        } else if (userCreds) {
-          this.apiRoot = createApiBuilderFromCtpClient(
-            createPasswordClient(userCreds.email, userCreds.password),
           ).withProjectKey({
             projectKey: import.meta.env.VITE_CTP_PROJECT_KEY,
           });
@@ -49,12 +42,6 @@ export default class API {
           projectKey: import.meta.env.VITE_CTP_PROJECT_KEY,
         });
       }
-    } else if (userCreds && !keyToken) {
-      this.apiRoot = createApiBuilderFromCtpClient(
-        createPasswordClient(userCreds.email, userCreds.password),
-      ).withProjectKey({
-        projectKey: import.meta.env.VITE_CTP_PROJECT_KEY,
-      });
     } else {
       this.apiRoot = createApiBuilderFromCtpClient(
         createAnonymousClient(),
@@ -147,11 +134,7 @@ export default class API {
       .execute();
   }
 
-  public async changePasswordLogin() {
-    const { email } = JSON.parse(localStorage.getItem('userCreds') as string);
-    const { password } = JSON.parse(
-      localStorage.getItem('userCreds') as string,
-    );
+  public async changePasswordLogin(email: string, password: string) {
     await this.changeTypeClient('password', { email, password });
     await this.postCustomerLogin(email, password);
   }

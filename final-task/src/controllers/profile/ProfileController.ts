@@ -9,13 +9,15 @@ import { PopupFields } from '../../global/enums/profile';
 
 function handleFieldError(fields: ProfileFieldBlock, error: string[]) {
   const field = fields;
-  if (error) {
-    field.fieldError.innerHTML = error[0];
-    field.fieldError.classList.remove('error__hidden');
-    field.fieldInput.classList.add('input__red');
-  } else {
-    field.fieldError.classList.add('error__hidden');
-    field.fieldInput.classList.remove('input__red');
+  if (field.getInput().value !== '') {
+    if (error) {
+      field.fieldError.innerHTML = error[0];
+      field.fieldError.classList.remove('error__hidden');
+      field.fieldInput.classList.add('input__red');
+    } else {
+      field.fieldError.classList.add('error__hidden');
+      field.fieldInput.classList.remove('input__red');
+    }
   }
 }
 
@@ -53,6 +55,7 @@ export default class ProfileController {
     this.validateInput(this.view.popUpBlock.poUpCountry.fieldInput);
     this.validateInput(this.view.popUpBlock.popUppostalCode.fieldInput);
     this.validateInput(this.view.popUpBlock.popUpNewPassword.fieldInput);
+    this.validateInput(this.view.popUpBlock.popUpConfirmPassword.fieldInput);
     this.validateInput(this.view.popUpBlock.popUpCurrentPassword.fieldInput);
     this.view.popUpBlock.buttonPersonal.addEventListener(
       'click',
@@ -86,7 +89,7 @@ export default class ProfileController {
     this.view.popUpBlock.buttonEditAddress.addEventListener(
       'click',
       async (event) => {
-        const index = this.view.popUpBlock.buttonEditAddress.id.split('-')[1];
+        const index = this.view.popUpBlock.buttonEditAddress.id.split('__')[1];
         event.preventDefault();
         await this.addOrEditAddress(index);
       },
@@ -102,7 +105,8 @@ export default class ProfileController {
       'click',
       async (event) => {
         event.preventDefault();
-        const index = this.view.popUpBlock.buttonRemoveAddress.id.split('-')[1];
+        const index =
+          this.view.popUpBlock.buttonRemoveAddress.id.split('__')[1];
         await this.removeAddressServer(index);
       },
     );
@@ -146,19 +150,19 @@ export default class ProfileController {
   }
 
   public handleClickEditAddress() {
-    this.view.popUpBlock.buttonEditAddress.id = `popup-${this.view.addressesBlock.addressesAll.id.split('-')[1]}`;
-    const ID = this.view.addressesBlock.addressesAll.id.split('-')[1];
+    this.view.popUpBlock.buttonEditAddress.id = `popup__${this.view.addressesBlock.addressesAll.id.split('__')[1]}`;
+    const ID = this.view.addressesBlock.addressesAll.id.split('__')[1];
     const street = document.getElementById(
-      `${PopupFields.STREET}-${ID}`,
+      `${PopupFields.STREET}__${ID}`,
     )?.innerHTML;
     const city = document.getElementById(
-      `${PopupFields.CITY}-${ID}`,
+      `${PopupFields.CITY}__${ID}`,
     )?.innerHTML;
     const country = document.getElementById(
-      `${PopupFields.COUNTRY}-${ID}`,
+      `${PopupFields.COUNTRY}__${ID}`,
     )?.innerHTML;
     const code = document.getElementById(
-      `${PopupFields.CODE}-${ID}`,
+      `${PopupFields.CODE}__${ID}`,
     )?.innerHTML;
     this.view.popUpBlock.createEditAddressForm(street, city, country, code);
   }
@@ -169,8 +173,8 @@ export default class ProfileController {
 
   public removeAddress() {
     const index =
-      document.querySelector('.profile__all')?.id.split('-')[1] || '';
-    const name = (document.getElementById(`heading-${index}`) as HTMLElement)
+      document.querySelector('.profile__all')?.id.split('__')[1] || '';
+    const name = (document.getElementById(`heading__${index}`) as HTMLElement)
       .innerText;
     console.log(index, name);
     this.view.popUpBlock.createDeletePopUp(name, index);
@@ -185,16 +189,12 @@ export default class ProfileController {
         variables.popUpCurrentPassword.getInput().value,
         variables.popUpNewPassword.getInput().value,
       );
-      showMessage(`Successfully change password`, 'positive');
-      const info = JSON.parse(localStorage.getItem('userCreds') as string);
-      info.password = variables.popUpNewPassword.getInput().value;
-      localStorage.setItem('userCreds', JSON.stringify(info));
-      localStorage.removeItem('key-token');
+      await this.model.changePasswordLogin(
+        this.view.personalBlock.profileEmail.innerHTML,
+        variables.popUpNewPassword.getInput().value,
+      );
       await this.view.popUpBlock.openClosePopUp(true);
-      setTimeout(() => {
-        window.location.reload();
-      }, 2000);
-      // // await this.model.changePasswordLogin()
+      showMessage(`Successfully change password`, 'positive');
     } catch (error) {
       showMessage(`${error}`, 'negative');
     }
@@ -217,8 +217,8 @@ export default class ProfileController {
   private async removeAddressServer(index: string) {
     await this.view.popUpBlock.openClosePopUp(true);
     try {
-      document.getElementById(`bill-${index}`)?.remove();
-      document.getElementById(`ship-${index}`)?.remove();
+      document.getElementById(`bill__${index}`)?.remove();
+      document.getElementById(`ship__${index}`)?.remove();
       const { body } = await this.model.getCustomerProfile();
       await this.model.removeAddress(body.version, index);
       const result = (await this.model.getCustomerProfile()).body;
@@ -270,9 +270,6 @@ export default class ProfileController {
       const result = (await this.model.getCustomerProfile()).body;
       await this.updateData(result);
       showMessage('Successfully change personal information', 'positive');
-      const info = JSON.parse(localStorage.getItem('userCreds') as string);
-      info.email = variables.popUpEmail.getInput().value;
-      localStorage.setItem('userCreds', JSON.stringify(info));
     } catch (error) {
       showMessage(`${error}`, 'negative');
       console.log(error);
@@ -309,7 +306,15 @@ export default class ProfileController {
     this.validation.validatePassword(
       variables.popUpCurrentPassword.getInput().value,
     );
-    this.validation.validateNewPassword(
+    this.validation.validatePassword(
+      variables.popUpNewPassword.getInput().value,
+      'newPassword',
+      variables.popUpCurrentPassword.getInput().value,
+    );
+    this.validation.validatePassword(
+      variables.popUpConfirmPassword.getInput().value,
+      'confirmPassword',
+      '',
       variables.popUpNewPassword.getInput().value,
     );
     this.createErrors();
@@ -335,7 +340,7 @@ export default class ProfileController {
       this.view.popUpBlock.buttonAddAddress.disabled = true;
       this.view.popUpBlock.buttonEditAddress.disabled = true;
     }
-    if (!errors.password && !errors.newPassword) {
+    if (!errors.password && !errors.newPassword && !errors.confirmPassword) {
       this.view.popUpBlock.buttonChangePassword.disabled = false;
     } else {
       this.view.popUpBlock.buttonChangePassword.disabled = true;
@@ -350,6 +355,7 @@ export default class ProfileController {
     handleFieldError(variables.popUppostalCode, errors.postalCode);
     handleFieldError(variables.popUpCurrentPassword, errors.password);
     handleFieldError(variables.popUpNewPassword, errors.newPassword);
+    handleFieldError(variables.popUpConfirmPassword, errors.confirmPassword);
   }
 
   public updateData(body: Customer) {
@@ -378,7 +384,7 @@ export default class ProfileController {
   private handleClickEditShipping() {
     const id = document
       .querySelector('.addresses__header_ship')
-      ?.id.split('-')[1];
+      ?.id.split('__')[1];
     this.view.popUpBlock.createDefaultAddressForm(
       'Default Shipping Address',
       true,
@@ -389,7 +395,7 @@ export default class ProfileController {
   private handleClickEditBilling() {
     const id = document
       .querySelector('.addresses__header_bill')
-      ?.id.split('-')[1];
+      ?.id.split('__')[1];
     this.view.popUpBlock.createDefaultAddressForm(
       'Default Billing Address',
       false,
