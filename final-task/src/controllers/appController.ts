@@ -204,7 +204,6 @@ export default class AppController {
   public handleClickLogoutButton() {
     this.appModel.logout();
     this.routerController.goToPage('/');
-    localStorage.removeItem('userCreds');
     this.handleVisiblityButtons();
   }
 

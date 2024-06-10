@@ -16,7 +16,10 @@
       "lowercase": "Password must contain at least one lowercase letter",
       "number": "Password must contain at least one number",
       "specialCharacter": "Password must contain at least one special character",
-      "noSpace": "Password cannot contain spaces"
+      "noSpace": "Password cannot contain spaces",
+      "equalCurrent": "New password must be different from the current password",
+      "enterCurrent": "Enter your current password",
+      "confirm": "Passwords must match"
     }
   },
   "name": {

@@ -78,9 +78,13 @@ export default class RegistrationPageModel {
     }
   }
 
-  validateNewPassword(password: string): void {
+  validateNewPassword(password: string, currentPassword: string = ''): void {
     const rule = validationRules.password;
     this.errors.newPassword = [];
+
+    if (currentPassword === '') {
+      this.errors.newPassword.push(rule.errorMessages.enterCurrent);
+    }
 
     if (password.length < rule.minLength) {
       this.errors.newPassword.push(rule.errorMessages.minLength);
@@ -108,8 +112,51 @@ export default class RegistrationPageModel {
       this.errors.newPassword.push(rule.errorMessages.noSpace);
     }
 
+    if (currentPassword === password) {
+      this.errors.newPassword.push(rule.errorMessages.equalCurrent);
+    }
+
     if (this.errors.newPassword.length === 0) {
       delete this.errors.newPassword;
+    }
+  }
+
+  validateConfirmPassword(password: string, newPassword: string = ''): void {
+    const rule = validationRules.password;
+    this.errors.confirmPassword = [];
+
+    if (password.length < rule.minLength) {
+      this.errors.confirmPassword.push(rule.errorMessages.minLength);
+    }
+
+    if (!RegistrationPageModel.validatePattern(password, rule.uppercase)) {
+      this.errors.confirmPassword.push(rule.errorMessages.uppercase);
+    }
+
+    if (!RegistrationPageModel.validatePattern(password, rule.lowercase)) {
+      this.errors.confirmPassword.push(rule.errorMessages.lowercase);
+    }
+
+    if (!RegistrationPageModel.validatePattern(password, rule.number)) {
+      this.errors.confirmPassword.push(rule.errorMessages.number);
+    }
+
+    if (
+      !RegistrationPageModel.validatePattern(password, rule.specialCharacter)
+    ) {
+      this.errors.confirmPassword.push(rule.errorMessages.specialCharacter);
+    }
+
+    if (RegistrationPageModel.validatePattern(password, rule.noSpace)) {
+      this.errors.confirmPassword.push(rule.errorMessages.noSpace);
+    }
+
+    if (newPassword !== password) {
+      this.errors.confirmPassword.push(rule.errorMessages.confirm);
+    }
+
+    if (this.errors.confirmPassword.length === 0) {
+      delete this.errors.confirmPassword;
     }
   }
 

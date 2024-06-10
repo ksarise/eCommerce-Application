@@ -9,13 +9,15 @@ import { PopupFields } from '../../global/enums/profile';
 
 function handleFieldError(fields: ProfileFieldBlock, error: string[]) {
   const field = fields;
-  if (error) {
-    field.fieldError.innerHTML = error[0];
-    field.fieldError.classList.remove('error__hidden');
-    field.fieldInput.classList.add('input__red');
-  } else {
-    field.fieldError.classList.add('error__hidden');
-    field.fieldInput.classList.remove('input__red');
+  if (field.getInput().value !== '') {
+    if (error) {
+      field.fieldError.innerHTML = error[0];
+      field.fieldError.classList.remove('error__hidden');
+      field.fieldInput.classList.add('input__red');
+    } else {
+      field.fieldError.classList.add('error__hidden');
+      field.fieldInput.classList.remove('input__red');
+    }
   }
 }
 
@@ -53,6 +55,7 @@ export default class ProfileController {
     this.validateInput(this.view.popUpBlock.poUpCountry.fieldInput);
     this.validateInput(this.view.popUpBlock.popUppostalCode.fieldInput);
     this.validateInput(this.view.popUpBlock.popUpNewPassword.fieldInput);
+    this.validateInput(this.view.popUpBlock.popUpConfirmPassword.fieldInput);
     this.validateInput(this.view.popUpBlock.popUpCurrentPassword.fieldInput);
     this.view.popUpBlock.buttonPersonal.addEventListener(
       'click',
@@ -186,16 +189,12 @@ export default class ProfileController {
         variables.popUpCurrentPassword.getInput().value,
         variables.popUpNewPassword.getInput().value,
       );
-      showMessage(`Successfully change password`, 'positive');
-      const info = JSON.parse(localStorage.getItem('userCreds') as string);
-      info.password = variables.popUpNewPassword.getInput().value;
-      localStorage.setItem('userCreds', JSON.stringify(info));
-      localStorage.removeItem('key-token');
+      await this.model.changePasswordLogin(
+        this.view.personalBlock.profileEmail.innerHTML,
+        variables.popUpNewPassword.getInput().value,
+      );
       await this.view.popUpBlock.openClosePopUp(true);
-      setTimeout(() => {
-        window.location.reload();
-      }, 2000);
-      // // await this.model.changePasswordLogin()
+      showMessage(`Successfully change password`, 'positive');
     } catch (error) {
       showMessage(`${error}`, 'negative');
     }
@@ -271,9 +270,6 @@ export default class ProfileController {
       const result = (await this.model.getCustomerProfile()).body;
       await this.updateData(result);
       showMessage('Successfully change personal information', 'positive');
-      const info = JSON.parse(localStorage.getItem('userCreds') as string);
-      info.email = variables.popUpEmail.getInput().value;
-      localStorage.setItem('userCreds', JSON.stringify(info));
     } catch (error) {
       showMessage(`${error}`, 'negative');
       console.log(error);
@@ -312,6 +308,11 @@ export default class ProfileController {
     );
     this.validation.validateNewPassword(
       variables.popUpNewPassword.getInput().value,
+      variables.popUpCurrentPassword.getInput().value,
+    );
+    this.validation.validateConfirmPassword(
+      variables.popUpConfirmPassword.getInput().value,
+      variables.popUpNewPassword.getInput().value,
     );
     this.createErrors();
   }
@@ -336,7 +337,7 @@ export default class ProfileController {
       this.view.popUpBlock.buttonAddAddress.disabled = true;
       this.view.popUpBlock.buttonEditAddress.disabled = true;
     }
-    if (!errors.password && !errors.newPassword) {
+    if (!errors.password && !errors.newPassword && !errors.confirmPassword) {
       this.view.popUpBlock.buttonChangePassword.disabled = false;
     } else {
       this.view.popUpBlock.buttonChangePassword.disabled = true;
@@ -351,6 +352,7 @@ export default class ProfileController {
     handleFieldError(variables.popUppostalCode, errors.postalCode);
     handleFieldError(variables.popUpCurrentPassword, errors.password);
     handleFieldError(variables.popUpNewPassword, errors.newPassword);
+    handleFieldError(variables.popUpConfirmPassword, errors.confirmPassword);
   }
 
   public updateData(body: Customer) {

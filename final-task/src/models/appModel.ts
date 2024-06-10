@@ -115,8 +115,8 @@ export default class AppModel {
     return result;
   }
 
-  public async changePasswordLogin() {
-    await this.apiService.changePasswordLogin();
+  public async changePasswordLogin(email: string, password: string) {
+    await this.apiService.changePasswordLogin(email, password);
   }
 
   public async setDefaultAddress(
@@ -171,6 +171,7 @@ export default class AppModel {
   public logout() {
     this.isLogined = false;
     localStorage.removeItem('key-token');
+    localStorage.removeItem('userCreds');
     this.apiService.changeTypeClient('anonymous');
     window.location.reload();
   }

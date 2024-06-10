@@ -20,7 +20,7 @@ export default class API {
     const userCreds = JSON.parse(localStorage.getItem('userCreds') as string);
     if (keyToken) {
       const { token, expirationTime, refreshToken } = JSON.parse(keyToken);
-      const currentTime = Math.floor(Date.now() / 1000);
+      const currentTime = Date.now();
       console.log(currentTime, expirationTime);
       if (expirationTime < currentTime) {
         if (refreshToken) {
@@ -147,11 +147,7 @@ export default class API {
       .execute();
   }
 
-  public async changePasswordLogin() {
-    const { email } = JSON.parse(localStorage.getItem('userCreds') as string);
-    const { password } = JSON.parse(
-      localStorage.getItem('userCreds') as string,
-    );
+  public async changePasswordLogin(email: string, password: string) {
     await this.changeTypeClient('password', { email, password });
     await this.postCustomerLogin(email, password);
   }
