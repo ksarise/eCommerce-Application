@@ -20,7 +20,7 @@ export default class API {
     const userCreds = JSON.parse(localStorage.getItem('userCreds') as string);
     if (keyToken) {
       const { token, expirationTime, refreshToken } = JSON.parse(keyToken);
-      const currentTime = Math.floor(Date.now() / 1000);
+      const currentTime = Date.now();
       console.log(currentTime, expirationTime);
       if (expirationTime < currentTime) {
         if (refreshToken) {
