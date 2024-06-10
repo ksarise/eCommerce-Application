@@ -19,7 +19,7 @@ export default class ProductPageController {
       this.handleClickAddToCartButton.bind(this);
   }
 
-  private handleClickAddToCartButton(productId: string) {
-    this.productPageModel.addToCart(productId);
+  private handleClickAddToCartButton(productId: string, variantId?: number) {
+    this.productPageModel.addToCart(productId, variantId);
   }
 }

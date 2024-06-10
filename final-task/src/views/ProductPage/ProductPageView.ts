@@ -26,8 +26,10 @@ export default class ProductPageView {
 
   private productId: string | undefined;
 
+  private activeVariantId: number | undefined;
+
   public handleClickAddToCartButton:
-    | ((productId: string, event?: Event) => void)
+    | ((productId: string, variantId?: number, event?: Event) => void)
     | undefined;
 
   constructor() {
@@ -74,7 +76,7 @@ export default class ProductPageView {
     const buttonCart = tags.button(['product__buttons_cart'], 'Add To Cart');
     if (this.handleClickAddToCartButton) {
       buttonCart.addEventListener('click', () =>
-        this.handleClickAddToCartButton!(this.productId!),
+        this.handleClickAddToCartButton!(this.productId!, this.activeVariantId),
       );
     } else {
       console.log('no func for add to cart button');
@@ -313,6 +315,7 @@ export default class ProductPageView {
             active.classList.remove('product__variants_button-active');
           }
           nameTag.classList.add('product__variants_button-active');
+          this.activeVariantId = idx;
         });
         sizesContainer.append(nameTag);
       }

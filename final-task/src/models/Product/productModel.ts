@@ -14,14 +14,14 @@ export default class ProductPageModel {
     }
   }
 
-  public async addToCart(productId: string) {
+  public async addToCart(productId: string, variantId?: number) {
     if (!this.cart) {
       await this.createCart();
     }
     const currentCart = await this.getCartById(this.cart!.id);
     const lineItemDraft: LineItemDraft = {
       productId,
-      // variantId: 1, // ID варианта товара (если есть)
+      variantId,
       quantity: 1,
     };
     await this.apiService.addLineItemToCart(
