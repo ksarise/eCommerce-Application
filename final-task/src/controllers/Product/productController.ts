@@ -1,5 +1,6 @@
 import ProductPageView from '../../views/ProductPage/ProductPageView';
 import ProductPageModel from '../../models/Product/productModel';
+import showToast from '../../services/ToastMessages';
 
 export default class ProductPageController {
   private productPageView: ProductPageView;
@@ -23,23 +24,34 @@ export default class ProductPageController {
       this.handleClickVariantButton.bind(this);
   }
 
-  private handleClickAddToCartButton(productId: string, variantId?: number) {
-    this.productPageModel.addToCart(
-      productId,
-      this.changeButtonCart.bind(this),
-      variantId,
-    );
-  }
-
-  private handleClickRemoveFromCartButton(
+  private async handleClickAddToCartButton(
     productId: string,
     variantId?: number,
   ) {
-    this.productPageModel.removeFromCart(
-      productId,
-      this.changeButtonCart.bind(this),
-      variantId,
-    );
+    try {
+      await this.productPageModel.addToCart(
+        productId,
+        this.changeButtonCart.bind(this),
+        variantId,
+      );
+    } catch (error) {
+      showToast({ text: (error as Error).message, type: 'negative' });
+    }
+  }
+
+  private async handleClickRemoveFromCartButton(
+    productId: string,
+    variantId?: number,
+  ) {
+    try {
+      await this.productPageModel.removeFromCart(
+        productId,
+        this.changeButtonCart.bind(this),
+        variantId,
+      );
+    } catch (errors) {
+      showToast({ text: (errors as Error).message, type: 'negative' });
+    }
   }
 
   public async handleClickVariantButton(productId: string, variantId: number) {
