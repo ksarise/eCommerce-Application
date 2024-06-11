@@ -107,7 +107,7 @@ export default class Login {
     const register = tags.a(
       ['register-link'],
       '/registration',
-      'Did you registered? Register',
+      "Don't have an account? Sign up",
       { title: 'Register', 'data-navigo': 'true' },
     );
     this.form.append(

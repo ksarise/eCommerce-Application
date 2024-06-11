@@ -117,6 +117,11 @@ export default class AppController {
         loginViewVariables.addListenerToLogin();
         this.routerController.goToPage('/');
         this.handleVisiblityButtons();
+        this.getUser();
+        showToast({
+          text: `Successfully logged in! Redirecting...`,
+          type: 'positive',
+        });
       } else {
         showToast({
           text: `${result.obj}`,
@@ -176,6 +181,7 @@ export default class AppController {
   public async afterLogin(data: RegistrationFormData) {
     try {
       await this.appModel.postLoginCustomer(data.email, data.password);
+      this.getUser();
       showToast({
         text: 'Successfully logged in! Redirecting...',
         type: 'positive',
@@ -212,7 +218,6 @@ export default class AppController {
   public handleClickLogoutButton() {
     this.appModel.logout();
     this.routerController.goToPage('/');
-    localStorage.removeItem('userCreds');
     this.handleVisiblityButtons();
   }
 

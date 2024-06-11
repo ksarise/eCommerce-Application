@@ -9,6 +9,8 @@ export default class ProfileFieldBlock {
 
   public fieldError: HTMLElement;
 
+  public fieldCheckBox: HTMLElement;
+
   constructor(
     label: string,
     inputType: string,
@@ -33,6 +35,29 @@ export default class ProfileFieldBlock {
       this.fieldError,
     ]);
     this.fieldBlock = blockContainer.getElement();
+    this.fieldCheckBox = tags
+      .div(['visible__password', 'hidden_password'])
+      .getElement();
+    this.addVisiblePassword();
+  }
+
+  private addVisiblePassword() {
+    if (this.fieldInput.type === 'password') {
+      this.fieldBlock.append(this.fieldCheckBox);
+      this.fieldCheckBox.addEventListener('click', () => {
+        if (this.fieldInput.type === 'password') {
+          this.fieldInput.type = 'text';
+          this.fieldCheckBox.classList.toggle('hidden_password', false);
+        } else {
+          this.hidePassword();
+        }
+      });
+    }
+  }
+
+  public hidePassword() {
+    this.fieldInput.type = 'password';
+    this.fieldCheckBox.classList.toggle('hidden_password', true);
   }
 
   public getBlock(): HTMLElement {
