@@ -3,6 +3,8 @@ import {
   ByProjectKeyRequestBuilder,
   Product,
   ClientResponse,
+  Cart,
+  LineItemDraft,
 } from '@commercetools/platform-sdk';
 import {
   createPasswordClient,
@@ -13,7 +15,7 @@ import {
 import { CustomerDraft, ApiResponse } from '../global/interfaces/registration';
 
 export default class API {
-  private apiRoot: ByProjectKeyRequestBuilder;
+  public apiRoot: ByProjectKeyRequestBuilder;
 
   constructor() {
     const keyToken = localStorage.getItem('key-token');
@@ -312,6 +314,69 @@ export default class API {
 
   public getProductById(id: string): Promise<ClientResponse<Product>> {
     const response = this.apiRoot.products().withId({ ID: id }).get().execute();
+    return response;
+  }
+
+  public async createCartRequest(): Promise<ClientResponse<Cart>> {
+    const response = await this.apiRoot
+      .carts()
+      .post({ body: { currency: 'USD', country: 'US' } })
+      .execute();
+    return response;
+  }
+
+  public async getCartById(cartId: string): Promise<ClientResponse<Cart>> {
+    const response = await this.apiRoot
+      .carts()
+      .withId({ ID: cartId })
+      .get()
+      .execute();
+    return response;
+  }
+
+  public async addLineItemToCart(
+    cartId: string,
+    lineItemDraft: LineItemDraft,
+    cartVersion?: number,
+  ): Promise<ClientResponse<Cart>> {
+    const response = await this.apiRoot
+      .carts()
+      .withId({ ID: cartId })
+      .post({
+        body: {
+          version: cartVersion || 1,
+          actions: [
+            {
+              action: 'addLineItem',
+              ...lineItemDraft,
+            },
+          ],
+        },
+      })
+      .execute();
+    return response;
+  }
+
+  public async removeLineItemFromCart(
+    cartId: string,
+    lineItemId: string,
+    cartVersion?: number,
+  ): Promise<ClientResponse<Cart>> {
+    const response = await this.apiRoot
+      .carts()
+      .withId({ ID: cartId })
+      .post({
+        body: {
+          version: cartVersion || 1,
+          actions: [
+            {
+              action: 'removeLineItem',
+              lineItemId,
+            },
+          ],
+        },
+      })
+      .execute();
     return response;
   }
 }

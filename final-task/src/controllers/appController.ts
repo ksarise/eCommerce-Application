@@ -8,6 +8,7 @@ import AppModel from '../models/appModel';
 import routerController from '../services/router';
 import RegistrationController from './Registration/RegistrationController';
 import ProfileController from './profile/ProfileController';
+import ProductPageController from './Product/productController';
 import showToast from '../services/ToastMessages';
 import { RegistrationFormData } from '../global/interfaces/registration';
 import MainController from './Main/MainController';
@@ -26,6 +27,8 @@ export default class AppController {
 
   private profileController: ProfileController;
 
+  private productPageController: ProductPageController;
+
   constructor() {
     this.appView = new AppView();
     this.appModel = new AppModel();
@@ -40,6 +43,10 @@ export default class AppController {
     this.profileController = new ProfileController(
       this.appView.profileView,
       this.appModel,
+    );
+    this.productPageController = new ProductPageController(
+      this.appView.productPageView,
+      this.appModel.productPageModel,
     );
   }
 
@@ -67,6 +74,7 @@ export default class AppController {
   }
 
   public initializeListeners() {
+    this.productPageController.initializeListeners();
     this.routerController.changeContent = this.changeContent.bind(this);
     this.routerController.fecthProductById = this.fecthProductById.bind(this);
     this.routerController.fetchProductsByCategory =

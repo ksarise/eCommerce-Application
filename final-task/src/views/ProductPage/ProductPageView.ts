@@ -24,6 +24,22 @@ export default class ProductPageView {
 
   private productImages: Image[] = [];
 
+  private productId: string | undefined;
+
+  private activeVariantId: number | undefined;
+
+  public handleClickAddToCartButton:
+    | ((productId: string, variantId?: number, event?: Event) => void)
+    | undefined;
+
+  public handleClickRemoveFromCartButton:
+    | ((productId: string, variantId?: number, event?: Event) => void)
+    | undefined;
+
+  public handleClickVariantButton:
+    | ((productId: string, variantId: number, event?: Event) => void)
+    | undefined;
+
   constructor() {
     this.container = tags.div(['product'], '', {});
     this.heroContainer = tags
@@ -48,6 +64,7 @@ export default class ProductPageView {
   public render(body: Product) {
     this.reset();
     this.create();
+    this.productId = body.id;
     this.productImages = Array.from(
       body.masterData.staged.masterVariant.images!,
     );
@@ -64,8 +81,32 @@ export default class ProductPageView {
   }
 
   public createProductPage(): void {
-    const buttonCart = tags.button(['product__buttons_cart'], 'Add To Cart');
-    this.buttonContainer.append(buttonCart);
+    const buttonCartAdd = tags.button(
+      ['product__buttons_cart', 'product__buttons_cart-add'],
+      'Add To Cart',
+    );
+    const buttonCartRemove = tags.button(
+      ['product__buttons_cart', 'product__buttons_cart-remove'],
+      'Remove From Cart',
+    );
+    if (this.handleClickAddToCartButton) {
+      buttonCartAdd.addEventListener('click', () =>
+        this.handleClickAddToCartButton!(this.productId!, this.activeVariantId),
+      );
+    } else {
+      console.log('no func for add to cart button');
+    }
+    if (this.handleClickRemoveFromCartButton) {
+      buttonCartRemove.addEventListener('click', () =>
+        this.handleClickRemoveFromCartButton!(
+          this.productId!,
+          this.activeVariantId,
+        ),
+      );
+    } else {
+      console.log('no func for remove to cart button');
+    }
+    this.buttonContainer.append(buttonCartAdd, buttonCartRemove);
     const rightContainer = tags
       .div(['product__right-container'], '', {})
       .getElement();
@@ -267,6 +308,9 @@ export default class ProductPageView {
 
   private renderVariantsContainer(current: ProductData) {
     if (current.variants.length === 0) {
+      if (this.handleClickVariantButton) {
+        this.handleClickVariantButton(this.productId!, 1);
+      }
       return;
     }
     const variantsContainer = tags
@@ -290,20 +334,42 @@ export default class ProductPageView {
         );
         if (idx === 0) {
           nameTag.classList.add('product__variants_button-active');
+          if (this.handleClickVariantButton) {
+            this.handleClickVariantButton(this.productId!, idx + 1);
+          }
         }
         nameTag.addEventListener('click', () => {
           const active = document.querySelector(
             '.product__variants_button-active',
           );
+          if (this.handleClickVariantButton) {
+            this.handleClickVariantButton(this.productId!, idx + 1);
+          }
           if (active) {
             active.classList.remove('product__variants_button-active');
           }
           nameTag.classList.add('product__variants_button-active');
+          this.activeVariantId = idx + 1;
         });
         sizesContainer.append(nameTag);
       }
     });
     variantsContainer.append(sizesContainer);
     this.descriptionContainer.append(variantsContainer);
+  }
+
+  // eslint-disable-next-line class-methods-use-this
+  public changeButtonCart(isAdded: boolean) {
+    const cartButtonAdd = document.querySelector('.product__buttons_cart-add');
+    const cartButtonRemove = document.querySelector(
+      '.product__buttons_cart-remove',
+    );
+    if (isAdded) {
+      (cartButtonAdd! as HTMLElement).style.display = 'none';
+      (cartButtonRemove! as HTMLElement).style.display = 'block';
+    } else {
+      (cartButtonAdd! as HTMLElement).style.display = 'block';
+      (cartButtonRemove! as HTMLElement).style.display = 'none';
+    }
   }
 }
