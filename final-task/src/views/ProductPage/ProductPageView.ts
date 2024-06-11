@@ -308,6 +308,9 @@ export default class ProductPageView {
 
   private renderVariantsContainer(current: ProductData) {
     if (current.variants.length === 0) {
+      if (this.handleClickVariantButton) {
+        this.handleClickVariantButton(this.productId!, 1);
+      }
       return;
     }
     const variantsContainer = tags
