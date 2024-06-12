@@ -1,6 +1,7 @@
 import API from '../services/ApiRoot';
 import RegistrationPageModel from './Registration/RegistrationModel';
 import ProductPageModel from './Product/productModel';
+import CartPageModel from './Cart/CartModel';
 import {
   ApiResponse,
   RegistrationFormData,
@@ -17,6 +18,8 @@ export default class AppModel {
 
   public productPageModel: ProductPageModel;
 
+  public cartPageModel: CartPageModel;
+
   public isLogined: boolean = false;
 
   constructor() {
@@ -24,6 +27,7 @@ export default class AppModel {
     this.registrationModel = new RegistrationPageModel();
     this.mainModel = new MainModel();
     this.productPageModel = new ProductPageModel(this.apiService);
+    this.cartPageModel = new CartPageModel(this.apiService);
     if (localStorage.getItem('userCreds')) {
       this.isLogined = true;
     } else {

@@ -56,6 +56,11 @@ class Router {
       this.router.resolve();
     });
 
+    this.router.on('/cart', () => {
+      this.changeContent?.('cart');
+      this.router.resolve();
+    });
+
     this.router.notFound(() => {
       this.changeContent?.('404');
       this.router.resolve();

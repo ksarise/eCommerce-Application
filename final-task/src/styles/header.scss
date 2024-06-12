@@ -75,12 +75,23 @@
       background-position: center;
     }
 
+    .img_cart {
+      width: 25px;
+      height: 25px;
+      fill: $primary;
+      transition: 0.3s;
+    }
+
     &:hover {
       background-color: $primary;
       color: #fff;
 
       .img_profile {
         background-image: url('/svg/snowboarder-hover.svg');
+      }
+
+      .img_cart {
+        fill: #fff;
       }
     }
   }
@@ -90,22 +101,25 @@
     gap: 5px;
     &:not(.loginned) {
       > *:not(:last-child),
-      > *:not(:nth-child(3)) {
+      > *:not(:nth-child(4)) {
         display: block;
       }
       > *:last-child,
-      > *:nth-child(3) {
+      > *:nth-child(4) {
         display: none;
       }
     }
 
     &.loginned {
       > *:not(:last-child),
-      > *:not(:nth-child(3)) {
+      > *:not(:nth-child(4)) {
         display: none;
       }
       > *:last-child,
-      > *:nth-child(3) {
+      > *:nth-child(4) {
+        display: flex;
+      }
+      > *:nth-child(1) {
         display: flex;
       }
     }

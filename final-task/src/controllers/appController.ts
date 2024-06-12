@@ -9,6 +9,7 @@ import routerController from '../services/router';
 import RegistrationController from './Registration/RegistrationController';
 import ProfileController from './profile/ProfileController';
 import ProductPageController from './Product/productController';
+import CartController from './Cart/CartController';
 import showToast from '../services/ToastMessages';
 import { RegistrationFormData } from '../global/interfaces/registration';
 import MainController from './Main/MainController';
@@ -29,6 +30,8 @@ export default class AppController {
 
   private productPageController: ProductPageController;
 
+  private cartPageController: CartController;
+
   constructor() {
     this.appView = new AppView();
     this.appModel = new AppModel();
@@ -47,6 +50,10 @@ export default class AppController {
     this.productPageController = new ProductPageController(
       this.appView.productPageView,
       this.appModel.productPageModel,
+    );
+    this.cartPageController = new CartController(
+      this.appView.cartView,
+      this.appModel.cartPageModel,
     );
   }
 
@@ -89,6 +96,8 @@ export default class AppController {
       this.handleClickLogoutButton.bind(this);
     this.appView.headerView.handleClickMyProfile =
       this.handleClickProfileButton.bind(this);
+    this.appView.headerView.handleClickCartButton =
+      this.handleClickCartButton.bind(this);
     this.appView.notFoundView.handleClickGoHomeButton =
       this.handleClickGoHomeButton.bind(this);
     this.appView.registrationView.bindFormSubmit(
@@ -449,5 +458,9 @@ export default class AppController {
         this.appView.mainView.updateBreadcrumb(breadcrumb);
       },
     );
+  }
+
+  private handleClickCartButton() {
+    this.routerController.goToPage('/cart');
   }
 }
