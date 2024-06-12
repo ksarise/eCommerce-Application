@@ -1,0 +1,133 @@
+@import 'variables';
+
+.my-cart {
+  width: 70%;
+  &__header {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: center;
+    &-title {
+      margin: 0;
+      font-size: 36px;
+      font-weight: 600;
+    }
+    &-button {
+      width: 30px;
+      height: 30px;
+      cursor: pointer;
+      border: none;
+      background-image: url('/svg/clear-cart.svg');
+      background-size: 30px 30px;
+      background-position: center;
+      background-repeat: no-repeat;
+      background-color: transparent;
+    }
+  }
+
+  &__quantity {
+    margin: 0;
+    &_button {
+      width: 30px;
+      height: 30px;
+      cursor: pointer;
+      color: $primary;
+      border: 2px solid $primary;
+      background-color: transparent;
+      border-radius: 50%;
+      font-size: 20px;
+      transition: 0.3s;
+      &:hover {
+        background-color: $primary;
+        color: #fff;
+      }
+    }
+  }
+
+  &__table {
+    width: 100%;
+    margin-top: 30px;
+    &-header {
+      display: flex;
+      flex-direction: row;
+      width: 100%;
+
+      &-cell {
+        display: flex;
+        flex-direction: row;
+        justify-content: start;
+        align-items: center;
+        font-size: 18px;
+        font-weight: 600;
+      }
+      &-product {
+        width: 45%;
+      }
+      &-size {
+        width: 10%;
+      }
+      &-quantity {
+        width: 20%;
+      }
+      &-price {
+        width: 10%;
+      }
+      &-remove {
+        width: 5%;
+      }
+    }
+
+    &-row {
+      display: flex;
+      flex-direction: row;
+      width: 100%;
+      padding: 20px 0;
+    }
+
+    &-cell {
+      display: flex;
+      align-items: center;
+      &-image {
+        width: 100px;
+        height: 100px;
+      }
+      &-product {
+        display: flex;
+        flex-direction: row;
+        justify-content: start;
+        align-items: center;
+        width: 45%;
+      }
+      &-size {
+        width: 10%;
+      }
+      &-quantity {
+        display: flex;
+        justify-content: start;
+        align-items: center;
+        gap: 5px;
+        width: 20%;
+      }
+      &-price {
+        width: 10%;
+      }
+      &-remove {
+        display: flex;
+        width: 5%;
+      }
+
+      &-remove::before {
+        background-image: url('/svg/rubbish.svg');
+        background-size: 20px 20px;
+        background-position: center;
+        background-repeat: no-repeat;
+        background-color: transparent;
+        display: inline-block;
+        width: 20px;
+        height: 20px;
+        cursor: pointer;
+        content: '';
+      }
+    }
+  }
+}

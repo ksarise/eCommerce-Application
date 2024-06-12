@@ -1,4 +1,4 @@
-import { Cart } from '@commercetools/platform-sdk';
+import { Cart, LineItem } from '@commercetools/platform-sdk';
 import API from '../../services/ApiRoot';
 
 export default class CartPageModel {
@@ -14,13 +14,14 @@ export default class CartPageModel {
     }
   }
 
-  public requestGetProductsFromCart(
-    _renderProducts: (products: string) => void,
+  public async requestGetProductsFromCart(
+    _renderProducts: (products: LineItem[]) => void,
   ) {
     if (this.cart) {
-      this.getCartById(this.cart.id);
+      await this.getCartById(this.cart.id);
+      _renderProducts(this.cart.lineItems);
     } else {
-      _renderProducts('Cart is empty');
+      _renderProducts([]);
     }
   }
 
