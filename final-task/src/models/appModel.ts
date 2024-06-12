@@ -26,8 +26,11 @@ export default class AppModel {
     this.apiService = new API();
     this.registrationModel = new RegistrationPageModel();
     this.mainModel = new MainModel();
-    this.productPageModel = new ProductPageModel(this.apiService);
     this.cartPageModel = new CartPageModel(this.apiService);
+    this.productPageModel = new ProductPageModel(
+      this.apiService,
+      this.cartPageModel,
+    );
     if (localStorage.getItem('userCreds')) {
       this.isLogined = true;
     } else {

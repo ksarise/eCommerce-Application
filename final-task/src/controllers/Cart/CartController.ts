@@ -10,4 +10,12 @@ export default class CartPageController {
     this.cartPageView = cartPageView;
     this.cartPageModel = cartPageModel;
   }
+
+  public requestGetProductsFromCart() {
+    this.cartPageModel.requestGetProductsFromCart(
+      this.cartPageView.myCartContainer.renderProducts.bind(
+        this.cartPageView.myCartContainer,
+      ),
+    );
+  }
 }

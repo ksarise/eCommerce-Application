@@ -88,6 +88,10 @@ export default class AppController {
       this.handleCategoryLink.bind(this);
     this.routerController.fetchProductsByCategory =
       this.handleCategoryLink.bind(this);
+    this.routerController.fetchProductsFromCart =
+      this.cartPageController.requestGetProductsFromCart.bind(
+        this.cartPageController,
+      );
     this.appView.headerView.handleClickLoginButton =
       this.handleClickLoginButton.bind(this);
     this.appView.headerView.handleClickRegistrationButton =
@@ -462,5 +466,6 @@ export default class AppController {
 
   private handleClickCartButton() {
     this.routerController.goToPage('/cart');
+    this.cartPageController.requestGetProductsFromCart();
   }
 }
