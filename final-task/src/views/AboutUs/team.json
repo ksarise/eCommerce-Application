@@ -1,32 +1,32 @@
 [
-    {
-      "name": "Alice Johnson",
-      "roles": ["Project Manager", "Backend Developer"],
-      "bio": "Alice is a seasoned project manager and backend developer with over 10 years of experience in the tech industry.",
-      "photo": "https://example.com/photos/alice.jpg",
-      "github": {
-        "profile": "https://github.com/alicejohnson"
-      },
-      "contributions": ["hghghghg"]
+  {
+    "name": "Alice Johnson",
+    "roles": ["Project Manager", "Backend Developer"],
+    "bio": "Alice is a seasoned project manager and backend developer with over 10 years of experience in the tech industry.",
+    "photo": "https://images.unsplash.com/photo-1569124589354-615739ae007b?q=80&w=2070&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
+    "github": {
+      "profile": "https://github.com/alicejohnson"
     },
-    {
-      "name": "Bob Smith",
-      "roles": ["Frontend Developer", "UI/UX Designer"],
-      "bio": "Bob specializes in frontend development and UI/UX design, bringing over 8 years of creative solutions to the table.",
-      "photo": "https://example.com/photos/bob.jpg",
-      "github": {
-        "profile": "https://github.com/bobsmith"
-      },
-      "contributions": ["hghghghg"]
+    "contributions": ["hghghghg"]
+  },
+  {
+    "name": "Bob Smith",
+    "roles": ["Frontend Developer", "UI/UX Designer"],
+    "bio": "Bob specializes in frontend development and UI/UX design, bringing over 8 years of creative solutions to the table.",
+    "photo": "https://images.unsplash.com/photo-1569124589354-615739ae007b?q=80&w=2070&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
+    "github": {
+      "profile": "https://github.com/bobsmith"
     },
-    {
-      "name": "Carol Davis",
-      "roles": ["Full Stack Developer", "DevOps Engineer"],
-      "bio": "Carol is a versatile full stack developer and DevOps engineer with a knack for problem-solving and automation.",
-      "photo": "https://example.com/photos/carol.jpg",
-      "github": {
-        "profile": "https://github.com/caroldavis"
-      },
-      "contributions": ["hghghghg"]
-    }
-  ]
+    "contributions": ["hghghghg"]
+  },
+  {
+    "name": "Carol Davis",
+    "roles": ["Full Stack Developer", "DevOps Engineer"],
+    "bio": "Carol is a versatile full stack developer and DevOps engineer with a knack for problem-solving and automation.",
+    "photo": "https://images.unsplash.com/photo-1569124589354-615739ae007b?q=80&w=2070&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
+    "github": {
+      "profile": "https://github.com/caroldavis"
+    },
+    "contributions": ["hghghghg"]
+  }
+]
