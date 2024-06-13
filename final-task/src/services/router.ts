@@ -47,6 +47,11 @@ class Router {
       this.router.resolve();
     });
 
+    this.router.on('/about_us', () => {
+      this.changeContent?.('about_us');
+      this.router.resolve();
+    });
+
     this.router.on('/my_profile', () => {
       if (!localStorage.getItem('userCreds')) {
         this.goToPage('/login');
