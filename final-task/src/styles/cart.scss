@@ -7,6 +7,32 @@
   align-items: center;
   width: 100%;
   gap: 20px;
+  &__empty {
+    width: 500px;
+    height: 500px;
+    background-image: url('/images/empty_cart.png');
+    background-repeat: no-repeat;
+    background-position: center;
+    background-size: contain;
+    @media (max-width: 768px) {
+      width: 300px;
+      height: 300px;
+    }
+    &_button {
+      padding: 15px 15px;
+      cursor: pointer;
+      border: 2px solid $primary;
+      background: rgb(255, 255, 255);
+      font-size: 20px;
+      color: $primary;
+      transition: 0.3s;
+      border-radius: 5px;
+      &:hover {
+        background: $primary;
+        color: rgb(255, 255, 255);
+      }
+    }
+  }
   &__cost {
     display: flex;
     flex-direction: column;

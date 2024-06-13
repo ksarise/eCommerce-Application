@@ -54,6 +54,7 @@ export default class AppController {
     this.cartPageController = new CartController(
       this.appView.cartView,
       this.appModel.cartPageModel,
+      routerController,
     );
   }
 
@@ -82,6 +83,7 @@ export default class AppController {
 
   public initializeListeners() {
     this.productPageController.initializeListeners();
+    this.cartPageController.initializeListeners();
     this.routerController.changeContent = this.changeContent.bind(this);
     this.routerController.fecthProductById = this.fecthProductById.bind(this);
     this.routerController.fetchProductsByCategory =

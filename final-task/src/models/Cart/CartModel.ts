@@ -15,15 +15,18 @@ export default class CartPageModel {
   }
 
   public async requestGetProductsFromCart(
-    _renderProducts: (products: LineItem[]) => void,
-    _renderTotalCost: (totalCost: number) => void,
+    // _renderProducts: (products: LineItem[]) => void,
+    // _renderTotalCost: (totalCost: number) => void,
+    _render: (products: LineItem[], totalCost: number) => void,
   ) {
     if (this.cart) {
       await this.getCartById(this.cart.id);
-      _renderProducts(this.cart.lineItems);
-      _renderTotalCost(this.cart.totalPrice.centAmount / 100);
+      _render(this.cart.lineItems, this.cart.totalPrice.centAmount / 100);
+      // _renderProducts(this.cart.lineItems);
+      // _renderTotalCost(this.cart.totalPrice.centAmount / 100);
     } else {
-      _renderProducts([]);
+      _render([], 0);
+      // _renderProducts([]);
     }
   }
 
