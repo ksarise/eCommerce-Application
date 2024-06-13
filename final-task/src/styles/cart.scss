@@ -113,15 +113,18 @@
       font-weight: 600;
     }
     &-button {
-      width: 30px;
-      height: 30px;
+      padding: 5px 5px;
       cursor: pointer;
-      border: none;
-      background-image: url('/svg/clear-cart.svg');
-      background-size: 30px 30px;
-      background-position: center;
-      background-repeat: no-repeat;
-      background-color: transparent;
+      border: 2px solid $primary;
+      background: rgb(255, 255, 255);
+      font-size: 20px;
+      color: $primary;
+      transition: 0.3s;
+      border-radius: 5px;
+      &:hover {
+        background: $primary;
+        color: rgb(255, 255, 255);
+      }
     }
   }
 
@@ -232,19 +235,15 @@
         align-items: center;
         width: 10%;
       }
-
-      &-remove::before {
-        background-image: url('/svg/rubbish.svg');
-        background-size: 20px 20px;
-        background-position: center;
-        background-repeat: no-repeat;
-        background-color: transparent;
-        display: inline-block;
-        width: 20px;
-        height: 20px;
-        cursor: pointer;
-        content: '';
-      }
     }
+  }
+}
+
+.img_rubbish {
+  width: 20px;
+  height: 20px;
+  cursor: pointer;
+  &:hover .kryshka {
+    transform: rotate(15deg) translate(30px, -50px);
   }
 }
