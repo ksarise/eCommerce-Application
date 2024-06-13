@@ -57,7 +57,10 @@ export default class TeamMember {
 
   private createContent() {
     const headingName = tags.h2(['about-us__heading'], this.data.name);
-    const headingContribution = tags.h3(['about-us__heading'], 'Contributions');
+    const headingContribution = tags.h3(
+      ['about-us__heading'],
+      'Contributions:',
+    );
     const biography = tags
       .div(['about-us__biography'], this.data.bio)
       .getElement();
@@ -66,12 +69,16 @@ export default class TeamMember {
       const contributionLi = tags.li(['about-us__contribution_li'], elem);
       contribution.append(contributionLi);
     });
-    this.memberContribution.append(
+    const githubLink = tags.a(['about-us__gitinfo'], this.data.github.profile);
+    const personalInfo = tags.div(['about-us__personal_info']).getElement();
+    personalInfo.append(
       headingName,
       biography,
       headingContribution,
       contribution,
+      githubLink,
     );
+    this.memberContribution.append(personalInfo);
   }
 
   public getMainBlock() {

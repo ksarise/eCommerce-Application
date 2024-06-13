@@ -2,6 +2,7 @@ import tags from '../../tags/tags';
 import teamMembers from './team.json';
 import TeamMember from './teamMember';
 import { UserProfile } from '../../global/interfaces/about';
+import teamCollaboration from './collaboration.json';
 
 export default class AboutUs {
   private blockAbout: HTMLElement;
@@ -15,6 +16,7 @@ export default class AboutUs {
     this.team = tags.div(['about-us__team']).getElement();
     this.contribution = tags.div(['about-us__contribution']).getElement();
     this.createContent();
+    this.createCollaboration();
   }
 
   public createAboutUs() {
@@ -22,7 +24,7 @@ export default class AboutUs {
   }
 
   private createContent() {
-    const heading = tags.h2(['about-us__heading'], 'Meet Our team!');
+    const heading = tags.h1(['about-us__heading'], 'Meet Our team!');
     const data: UserProfile[] = teamMembers;
     const membersBlock = tags.div(['about-us__members']).getElement();
     data.forEach((element) => {
@@ -34,5 +36,15 @@ export default class AboutUs {
     });
     this.team.prepend(heading, membersBlock);
     this.blockAbout.append(this.team, this.contribution);
+  }
+
+  private createCollaboration() {
+    const heading = tags.h1(['about-us__heading'], teamCollaboration.heading);
+    const points = tags.div(['about-us__collaboration']).getElement();
+    teamCollaboration.collaboration.forEach((text) => {
+      const point = tags.div(['about-us__point'], `${text}`).getElement();
+      points.append(point);
+    });
+    this.blockAbout.append(heading, points);
   }
 }
