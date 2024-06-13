@@ -31,7 +31,7 @@ export default class TeamMember {
 
   private createElements() {
     this.createMember();
-    // this.createContent()
+    this.createContent();
   }
 
   private createMember() {
@@ -39,8 +39,8 @@ export default class TeamMember {
       src: this.data.photo,
       alt: this.data.name,
     });
-    const blockphoto = tags.div(['about-us__round_photo']).getElement();
-    blockphoto.append(photo);
+    const blockPhoto = tags.div(['about-us__round_photo']).getElement();
+    blockPhoto.append(photo);
     const name = tags.div(['about-us__name'], this.data.name).getElement();
     const nameCopy = name.cloneNode(true);
     const roles = tags.ul(['about-us__role']);
@@ -48,12 +48,30 @@ export default class TeamMember {
       const roleLi = tags.li(['about-us__li'], role);
       roles.append(roleLi);
     });
-
     const githubLink = tags.a(['about-us__github'], this.data.github.profile);
     const bio = `${this.data.bio.slice(0, 250)}...`;
-    const biografy = tags.div(['about-us__bio'], bio).getElement();
-    this.memberMainBlock.append(blockphoto, name);
-    this.memberBackBlock.append(nameCopy, roles, biografy, githubLink);
+    const biography = tags.div(['about-us__bio'], bio).getElement();
+    this.memberMainBlock.append(blockPhoto, name);
+    this.memberBackBlock.append(nameCopy, roles, biography, githubLink);
+  }
+
+  private createContent() {
+    const headingName = tags.h2(['about-us__heading'], this.data.name);
+    const headingContribution = tags.h3(['about-us__heading'], 'Contributions');
+    const biography = tags
+      .div(['about-us__biography'], this.data.bio)
+      .getElement();
+    const contribution = tags.ul(['about-us__contribution']);
+    this.data.contributions.forEach((elem) => {
+      const contributionLi = tags.li(['about-us__contribution_li'], elem);
+      contribution.append(contributionLi);
+    });
+    this.memberContribution.append(
+      headingName,
+      biography,
+      headingContribution,
+      contribution,
+    );
   }
 
   public getMainBlock() {
@@ -62,5 +80,9 @@ export default class TeamMember {
 
   public getBackBlock() {
     return this.memberBackBlock;
+  }
+
+  public getContributionBlock() {
+    return this.memberContribution;
   }
 }
