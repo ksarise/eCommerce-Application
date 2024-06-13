@@ -16,6 +16,9 @@ export default class CartPageController {
       this.cartPageView.myCartContainer.renderProducts.bind(
         this.cartPageView.myCartContainer,
       ),
+      this.cartPageView.totalCostContainer.renderTotalCost.bind(
+        this.cartPageView.totalCostContainer,
+      ),
     );
   }
 }

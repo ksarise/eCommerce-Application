@@ -1,7 +1,107 @@
 @import 'variables';
 
+.cart {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  width: 100%;
+  gap: 20px;
+  &__cost {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+    font-size: 20px;
+    width: 30%;
+    @media (max-width: 768px) {
+      width: 60%;
+    }
+    &_subtotal {
+      display: flex;
+      flex-direction: row;
+      justify-content: space-between;
+      width: 100%;
+    }
+    &_discount {
+      display: flex;
+      flex-direction: row;
+      justify-content: space-between;
+      width: 100%;
+    }
+    &_promocode {
+      display: flex;
+      flex-direction: row;
+      justify-content: space-between;
+      gap: 5%;
+      width: 100%;
+      @media (max-width: 1100px) {
+        flex-direction: column;
+        gap: 5px;
+        &-input {
+          min-width: 100%;
+        }
+      }
+      &-input {
+        width: 70%;
+        border: 2px solid $primary;
+        border-radius: 5px;
+        padding: 5px 10px;
+        font-size: 20px;
+        color: $text;
+        transition: box-shadow 0.3s;
+        &:focus {
+          box-shadow: 0 0 10px rgba(184, 142, 47, 0.5);
+          outline: none;
+        }
+        &::placeholder {
+          color: $light-text;
+        }
+      }
+      &-button {
+        padding: 5px 5px;
+        cursor: pointer;
+        border: 2px solid $primary;
+        background: rgb(255, 255, 255);
+        font-size: 20px;
+        color: $primary;
+        transition: 0.3s;
+        border-radius: 5px;
+        &:hover {
+          background: $primary;
+          color: rgb(255, 255, 255);
+        }
+      }
+    }
+    &_total {
+      display: flex;
+      flex-direction: row;
+      justify-content: space-between;
+      width: 100%;
+    }
+  }
+
+  &__button {
+    &_continue {
+      padding: 5px 5px;
+      cursor: pointer;
+      border: 2px solid $primary;
+      background: rgb(255, 255, 255);
+      font-size: 30px;
+      color: $primary;
+      transition: 0.3s;
+      border-radius: 5px;
+      &:hover {
+        background: $primary;
+        color: rgb(255, 255, 255);
+      }
+    }
+  }
+}
+
 .my-cart {
-  width: 70%;
+  width: 100%;
   &__header {
     display: flex;
     flex-direction: row;
@@ -28,6 +128,9 @@
   &__quantity {
     margin: 0;
     &_button {
+      display: flex;
+      align-items: center;
+      justify-content: center;
       width: 30px;
       height: 30px;
       cursor: pointer;
@@ -41,6 +144,11 @@
         background-color: $primary;
         color: #fff;
       }
+      @media (max-width: 500px) {
+        width: 20px;
+        height: 20px;
+        font-size: 14px;
+      }
     }
   }
 
@@ -51,7 +159,6 @@
       display: flex;
       flex-direction: row;
       width: 100%;
-
       &-cell {
         display: flex;
         flex-direction: row;
@@ -59,6 +166,9 @@
         align-items: center;
         font-size: 18px;
         font-weight: 600;
+        @media (max-width: 500px) {
+          font-size: 14px;
+        }
       }
       &-product {
         width: 45%;
@@ -70,10 +180,10 @@
         width: 20%;
       }
       &-price {
-        width: 10%;
+        width: 15%;
       }
       &-remove {
-        width: 5%;
+        width: 10%;
       }
     }
 
@@ -87,8 +197,14 @@
     &-cell {
       display: flex;
       align-items: center;
+      @media (max-width: 500px) {
+        font-size: 12px;
+        &-image {
+          height: 70px !important;
+        }
+      }
       &-image {
-        width: 100px;
+        width: auto;
         height: 100px;
       }
       &-product {
@@ -109,11 +225,12 @@
         width: 20%;
       }
       &-price {
-        width: 10%;
+        width: 15%;
       }
       &-remove {
-        display: flex;
-        width: 5%;
+        justify-content: center;
+        align-items: center;
+        width: 10%;
       }
 
       &-remove::before {

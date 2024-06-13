@@ -16,10 +16,12 @@ export default class CartPageModel {
 
   public async requestGetProductsFromCart(
     _renderProducts: (products: LineItem[]) => void,
+    _renderTotalCost: (totalCost: number) => void,
   ) {
     if (this.cart) {
       await this.getCartById(this.cart.id);
       _renderProducts(this.cart.lineItems);
+      _renderTotalCost(this.cart.totalPrice.centAmount / 100);
     } else {
       _renderProducts([]);
     }

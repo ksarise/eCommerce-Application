@@ -335,7 +335,7 @@ export default class ProductPageView {
         if (idx === 0) {
           nameTag.classList.add('product__variants_button-active');
           if (this.handleClickVariantButton) {
-            this.handleClickVariantButton(this.productId!, idx + 1);
+            this.handleClickVariantButton(this.productId!, idx + 2);
           }
         }
         nameTag.addEventListener('click', () => {
@@ -343,13 +343,13 @@ export default class ProductPageView {
             '.product__variants_button-active',
           );
           if (this.handleClickVariantButton) {
-            this.handleClickVariantButton(this.productId!, idx + 1);
+            this.handleClickVariantButton(this.productId!, idx + 2);
           }
           if (active) {
             active.classList.remove('product__variants_button-active');
           }
           nameTag.classList.add('product__variants_button-active');
-          this.activeVariantId = idx + 1;
+          this.activeVariantId = idx + 2;
         });
         sizesContainer.append(nameTag);
       }
