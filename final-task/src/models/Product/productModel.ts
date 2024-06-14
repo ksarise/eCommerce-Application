@@ -1,17 +1,22 @@
-import { Cart, LineItemDraft } from '@commercetools/platform-sdk';
+// import { Cart, LineItemDraft } from '@commercetools/platform-sdk';
+import { LineItemDraft } from '@commercetools/platform-sdk';
 import API from '../../services/ApiRoot';
 import showToast from '../../services/ToastMessages';
+import CartPageModel from '../Cart/CartModel';
 
 export default class ProductPageModel {
   private apiService: API;
 
-  private cart: Cart | undefined;
+  // private cart: Cart | undefined;
 
-  constructor(apiService: API) {
+  private cartPageModel: CartPageModel;
+
+  constructor(apiService: API, cartModel: CartPageModel) {
     this.apiService = apiService;
+    this.cartPageModel = cartModel;
     const cartId = localStorage.getItem('cartId');
     if (cartId) {
-      this.getCartById(cartId);
+      this.cartPageModel.getCartById(cartId);
     }
   }
 
@@ -20,17 +25,17 @@ export default class ProductPageModel {
     _changeButtonCart: (isAdded: boolean) => void,
     variantId?: number,
   ) {
-    if (!this.cart) {
+    if (!this.cartPageModel.cart) {
       await this.createCart();
     }
-    const currentCart = await this.getCartById(this.cart!.id);
+    const currentCart = await this.getCartById(this.cartPageModel.cart!.id);
     const lineItemDraft: LineItemDraft = {
       productId,
       variantId,
       quantity: 1,
     };
     const response = await this.apiService.addLineItemToCart(
-      this.cart!.id,
+      this.cartPageModel.cart!.id,
       lineItemDraft,
       currentCart.version,
     );
@@ -46,9 +51,9 @@ export default class ProductPageModel {
     _changeButtonCart: (isAdded: boolean) => void,
     variantId?: number,
   ) {
-    if (this.cart) {
-      const currentCart = await this.getCartById(this.cart!.id);
-      const lineItemProducts = this.cart.lineItems.filter(
+    if (this.cartPageModel.cart) {
+      const currentCart = await this.getCartById(this.cartPageModel.cart!.id);
+      const lineItemProducts = this.cartPageModel.cart.lineItems.filter(
         (item) => item.productId === productId,
       );
       const rightVariantId = variantId || 1;
@@ -61,7 +66,7 @@ export default class ProductPageModel {
       }
       const lineItemId = lineItem.id;
       const response = await this.apiService.removeLineItemFromCart(
-        this.cart.id,
+        this.cartPageModel.cart.id,
         lineItemId,
         currentCart.version,
       );
@@ -74,19 +79,19 @@ export default class ProductPageModel {
   }
 
   public async createCart() {
-    this.cart = (await this.apiService.createCartRequest()).body;
-    localStorage.setItem('cartId', this.cart.id);
+    this.cartPageModel.cart = (await this.apiService.createCartRequest()).body;
+    localStorage.setItem('cartId', this.cartPageModel.cart.id);
   }
 
   public async getCartById(cartId: string) {
-    this.cart = (await this.apiService.getCartById(cartId)).body;
-    return this.cart;
+    this.cartPageModel.cart = (await this.apiService.getCartById(cartId)).body;
+    return this.cartPageModel.cart;
   }
 
   public async isVariantInCart(productId: string, variantId: number) {
-    if (this.cart) {
-      await this.getCartById(this.cart.id);
-      const lineItemProducts = this.cart.lineItems.filter(
+    if (this.cartPageModel.cart) {
+      await this.getCartById(this.cartPageModel.cart.id);
+      const lineItemProducts = this.cartPageModel.cart.lineItems.filter(
         (item) => item.productId === productId,
       );
       if (lineItemProducts.length > 0) {
