@@ -305,7 +305,7 @@
     line-height: 1.5em;
 
     &:hover {
-        background-color: white;
+      background-color: white;
     }
 
     &::before {
@@ -315,10 +315,26 @@
       transition: 0.6s;
     }
 
-        margin-left: 20px;
-        &::before {
-          content: '↪';
-          color: $primary-color;
-        }
-      }
+    margin-left: 20px;
+    &::before {
+      content: '↪';
+      color: $primary-color;
+    }
+  }
+
+  &__rss {
+    height: 100px;
+    width: 200px;
+    background-image: url('/svg/rs_school_js.svg');
+    background-size:150px auto;
+    background-repeat: no-repeat;
+    align-self: center;
+    background-position: center;
+    transition: 0.6s;
+
+    &:hover {
+      background-color: $primary-color;
+      border-radius: 20px;
+    }
+  }
 }

@@ -17,6 +17,7 @@ export default class AboutUs {
     this.contribution = tags.div(['about-us__contribution']).getElement();
     this.createContent();
     this.createCollaboration();
+    this.cteateLinkCourses();
   }
 
   public createAboutUs() {
@@ -46,5 +47,11 @@ export default class AboutUs {
       points.append(point);
     });
     this.blockAbout.append(heading, points);
+  }
+
+  private cteateLinkCourses() {
+    const heading = tags.h1(['about-us__heading'], 'Courses');
+    const link = tags.a(['about-us__rss'], 'https://rs.school/');
+    this.blockAbout.append(heading, link);
   }
 }
