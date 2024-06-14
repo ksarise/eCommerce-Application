@@ -34,4 +34,38 @@ export default class CartPageModel {
     this.cart = (await this.apiService.getCartById(cartId)).body;
     return this.cart;
   }
+
+  public async updateProductQuantity(
+    lineItemId: string,
+    quantity: number,
+    _changeQuantityTotalCost: (
+      lineItemId: string,
+      quantity: number,
+      totalCost: number,
+    ) => void,
+  ) {
+    await this.getCartById(this.cart!.id);
+    const lineItem = this.cart?.lineItems.find(
+      (item) => item.id === lineItemId,
+    );
+    const nowQuantity = lineItem?.quantity || 0;
+    const newQuantity = nowQuantity + quantity;
+    try {
+      const response = await this.apiService.updateProductQuantity(
+        this.cart!.id,
+        lineItemId,
+        newQuantity,
+        this.cart!.version,
+      );
+      await this.getCartById(this.cart!.id);
+      _changeQuantityTotalCost(
+        lineItemId,
+        newQuantity,
+        this.cart!.totalPrice.centAmount / 100,
+      );
+      return response;
+    } catch (error) {
+      return error;
+    }
+  }
 }

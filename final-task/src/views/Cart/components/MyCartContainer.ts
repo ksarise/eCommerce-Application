@@ -10,6 +10,10 @@ export default class MyCartContainer {
 
   public myCartHeaderContainer: BaseComponentGenerator;
 
+  public handleClickQuantity:
+    | ((productId: string, delta: number) => void)
+    | undefined;
+
   constructor() {
     this.myCartContainer = tags
       .div(['cart__my-cart', 'my-cart'])
@@ -78,6 +82,7 @@ export default class MyCartContainer {
       tag: 'tr',
       classNames: ['my-cart__table-row'],
     });
+    productRow.getElement().setAttribute('data-line-item-id', product.id);
     const productCellName = new BaseComponentGenerator({
       tag: 'td',
       classNames: ['my-cart__table-cell', 'my-cart__table-cell-product'],
@@ -119,10 +124,20 @@ export default class MyCartContainer {
       ['my-cart__quantity_plus', 'my-cart__quantity_button'],
       '+',
     );
+    buttonPlus.addEventListener('click', () => {
+      if (this.handleClickQuantity) {
+        this.handleClickQuantity(product.id, 1);
+      }
+    });
     const buttonMinus = tags.button(
       ['my-cart__quantity_minus', 'my-cart__quantity_button'],
       '-',
     );
+    buttonMinus.addEventListener('click', () => {
+      if (this.handleClickQuantity) {
+        this.handleClickQuantity(product.id, -1);
+      }
+    });
     quantityCell.getElement().append(buttonMinus);
     quantityCell.getElement().append(quantityTag);
     quantityCell.getElement().append(buttonPlus);
@@ -158,5 +173,21 @@ export default class MyCartContainer {
     removeCell.getElement().append(svgCartElement);
     productRow.getElement().append(removeCell.getElement());
     this.myCartTable.getElement().append(productRow.getElement());
+  }
+
+  public changeQuantity(lineItemId: string, quantity: number) {
+    console.log(lineItemId, quantity);
+    const row = this.myCartTable
+      .getElement()
+      .querySelector(`[data-line-item-id="${lineItemId}"]`);
+    if (row) {
+      if (quantity === 0) {
+        row.remove();
+      }
+      const quantityCell = row.querySelector(
+        '.my-cart__quantity',
+      ) as HTMLTableCellElement;
+      quantityCell.textContent = `${quantity}`;
+    }
   }
 }

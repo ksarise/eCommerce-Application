@@ -1,6 +1,7 @@
 import CartPageView from '../../views/Cart/CartView';
 import CartPageModel from '../../models/Cart/CartModel';
 import routerController from '../../services/router';
+import showToast from '../../services/ToastMessages';
 
 export default class CartPageController {
   private cartPageView: CartPageView;
@@ -28,9 +29,23 @@ export default class CartPageController {
   public initializeListeners() {
     this.cartPageView.handleClickGoToCatalog =
       this.handleClickGoToCatalog.bind(this);
+    this.cartPageView.myCartContainer.handleClickQuantity =
+      this.handleClickQuantity.bind(this);
   }
 
   public handleClickGoToCatalog() {
     this.routerControllerInstance.goToPage('/');
+  }
+
+  private async handleClickQuantity(productId: string, delta: number) {
+    try {
+      await this.cartPageModel.updateProductQuantity(
+        productId,
+        delta,
+        this.cartPageView.changeQuantityTotalCost.bind(this.cartPageView),
+      );
+    } catch (error) {
+      showToast({ text: (error as Error).message, type: 'negative' });
+    }
   }
 }
