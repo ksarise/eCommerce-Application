@@ -14,6 +14,8 @@ export default class MyCartContainer {
     | ((productId: string, delta: number) => void)
     | undefined;
 
+  public handleClickRemove: ((productId: string) => void) | undefined;
+
   constructor() {
     this.myCartContainer = tags
       .div(['cart__my-cart', 'my-cart'])
@@ -170,6 +172,11 @@ export default class MyCartContainer {
     </svg>`;
     const svgCartElement = parseSVG(svgRemoveCode);
     svgCartElement.classList.add('img_rubbish');
+    svgCartElement.addEventListener('click', () => {
+      if (this.handleClickRemove) {
+        this.handleClickRemove(product.id);
+      }
+    });
     removeCell.getElement().append(svgCartElement);
     productRow.getElement().append(removeCell.getElement());
     this.myCartTable.getElement().append(productRow.getElement());

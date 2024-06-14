@@ -68,4 +68,31 @@ export default class CartPageModel {
       return error;
     }
   }
+
+  public async removeFromCart(
+    lineItemId: string,
+    _changeQuantityTotalCost: (
+      lineItemId: string,
+      quantity: number,
+      totalCost: number,
+    ) => void,
+  ) {
+    await this.getCartById(this.cart!.id);
+    try {
+      const response = await this.apiService.removeLineItemFromCart(
+        this.cart!.id,
+        lineItemId,
+        this.cart!.version,
+      );
+      await this.getCartById(this.cart!.id);
+      _changeQuantityTotalCost(
+        lineItemId,
+        0,
+        this.cart!.totalPrice.centAmount / 100,
+      );
+      return response;
+    } catch (error) {
+      return error;
+    }
+  }
 }

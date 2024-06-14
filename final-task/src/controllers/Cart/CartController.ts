@@ -31,6 +31,8 @@ export default class CartPageController {
       this.handleClickGoToCatalog.bind(this);
     this.cartPageView.myCartContainer.handleClickQuantity =
       this.handleClickQuantity.bind(this);
+    this.cartPageView.myCartContainer.handleClickRemove =
+      this.handleClickRemove.bind(this);
   }
 
   public handleClickGoToCatalog() {
@@ -42,6 +44,17 @@ export default class CartPageController {
       await this.cartPageModel.updateProductQuantity(
         productId,
         delta,
+        this.cartPageView.changeQuantityTotalCost.bind(this.cartPageView),
+      );
+    } catch (error) {
+      showToast({ text: (error as Error).message, type: 'negative' });
+    }
+  }
+
+  private async handleClickRemove(productId: string) {
+    try {
+      await this.cartPageModel.removeFromCart(
+        productId,
         this.cartPageView.changeQuantityTotalCost.bind(this.cartPageView),
       );
     } catch (error) {
