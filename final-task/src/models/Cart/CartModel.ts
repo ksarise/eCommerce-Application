@@ -95,4 +95,16 @@ export default class CartPageModel {
       return error;
     }
   }
+
+  public async clearCart(
+    _render: (products: LineItem[], totalCost: number) => void,
+  ) {
+    await this.createCart();
+    await this.requestGetProductsFromCart(_render);
+  }
+
+  public async createCart() {
+    this.cart = (await this.apiService.createCartRequest()).body;
+    localStorage.setItem('cartId', this.cart.id);
+  }
 }

@@ -16,6 +16,8 @@ export default class MyCartContainer {
 
   public handleClickRemove: ((productId: string) => void) | undefined;
 
+  public handleClickClearCart: (() => void) | undefined;
+
   constructor() {
     this.myCartContainer = tags
       .div(['cart__my-cart', 'my-cart'])
@@ -40,6 +42,11 @@ export default class MyCartContainer {
       ['my-cart__header-button'],
       'Clear Cart',
     );
+    clearCartButton.addEventListener('click', () => {
+      if (this.handleClickClearCart) {
+        this.handleClickClearCart();
+      }
+    });
     this.myCartHeaderContainer.getElement().append(header);
     this.myCartHeaderContainer.getElement().append(clearCartButton);
   }
