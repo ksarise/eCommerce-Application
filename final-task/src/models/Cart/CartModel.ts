@@ -42,6 +42,7 @@ export default class CartPageModel {
       lineItemId: string,
       quantity: number,
       totalCost: number,
+      totalCostLineItem?: number,
     ) => void,
   ) {
     await this.getCartById(this.cart!.id);
@@ -58,10 +59,18 @@ export default class CartPageModel {
         this.cart!.version,
       );
       await this.getCartById(this.cart!.id);
+      const tmpLineItem = this.cart?.lineItems.find(
+        (item) => item.id === lineItemId,
+      );
+      let rightLineItemPrice;
+      if (tmpLineItem) {
+        rightLineItemPrice = tmpLineItem!.totalPrice.centAmount / 100;
+      }
       _changeQuantityTotalCost(
         lineItemId,
         newQuantity,
         this.cart!.totalPrice.centAmount / 100,
+        rightLineItemPrice,
       );
       return response;
     } catch (error) {
@@ -75,6 +84,7 @@ export default class CartPageModel {
       lineItemId: string,
       quantity: number,
       totalCost: number,
+      totalCostLineItem?: number,
     ) => void,
   ) {
     await this.getCartById(this.cart!.id);
@@ -85,10 +95,18 @@ export default class CartPageModel {
         this.cart!.version,
       );
       await this.getCartById(this.cart!.id);
+      const tmpLineItem = this.cart?.lineItems.find(
+        (item) => item.id === lineItemId,
+      );
+      let rightLineItemPrice;
+      if (tmpLineItem) {
+        rightLineItemPrice = tmpLineItem!.totalPrice.centAmount / 100;
+      }
       _changeQuantityTotalCost(
         lineItemId,
         0,
         this.cart!.totalPrice.centAmount / 100,
+        rightLineItemPrice,
       );
       return response;
     } catch (error) {

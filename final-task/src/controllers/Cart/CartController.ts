@@ -35,6 +35,8 @@ export default class CartPageController {
       this.handleClickRemove.bind(this);
     this.cartPageView.myCartContainer.handleClickClearCart =
       this.handleClickClearCart.bind(this);
+    this.cartPageView.myCartContainer.handleClickProduct =
+      this.handleClickProduct.bind(this);
   }
 
   public handleClickGoToCatalog() {
@@ -42,6 +44,7 @@ export default class CartPageController {
   }
 
   private async handleClickQuantity(productId: string, delta: number) {
+    console.log('here', productId, delta);
     try {
       await this.cartPageModel.updateProductQuantity(
         productId,
@@ -72,5 +75,9 @@ export default class CartPageController {
     } catch (error) {
       showToast({ text: (error as Error).message, type: 'negative' });
     }
+  }
+
+  private async handleClickProduct(productId: string) {
+    this.routerControllerInstance.goToPage(`/product/${productId}`);
   }
 }

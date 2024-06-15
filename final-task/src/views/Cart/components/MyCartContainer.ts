@@ -18,6 +18,8 @@ export default class MyCartContainer {
 
   public handleClickClearCart: (() => void) | undefined;
 
+  public handleClickProduct: ((productId: string) => void) | undefined;
+
   constructor() {
     this.myCartContainer = tags
       .div(['cart__my-cart', 'my-cart'])
@@ -99,6 +101,13 @@ export default class MyCartContainer {
     const productNameTag = tags.p(['my-cart__table-cell-product-name'], '');
     productNameTag.textContent = product.name['en-US'];
     productCellName.getElement().append(productNameTag);
+    if (this.handleClickProduct) {
+      productCellName.getElement().addEventListener('click', () => {
+        if (this.handleClickProduct) {
+          this.handleClickProduct(product.productId);
+        }
+      });
+    }
     productRow.getElement().append(productCellName.getElement());
     if (product.variant?.images && product.variant?.images.length > 0) {
       const productImage = new BaseComponentGenerator({
@@ -189,8 +198,12 @@ export default class MyCartContainer {
     this.myCartTable.getElement().append(productRow.getElement());
   }
 
-  public changeQuantity(lineItemId: string, quantity: number) {
-    console.log(lineItemId, quantity);
+  public changeQuantity(
+    lineItemId: string,
+    quantity: number,
+    totalCostLineItem?: number,
+  ) {
+    console.log(quantity, totalCostLineItem);
     const row = this.myCartTable
       .getElement()
       .querySelector(`[data-line-item-id="${lineItemId}"]`);
@@ -201,7 +214,11 @@ export default class MyCartContainer {
       const quantityCell = row.querySelector(
         '.my-cart__quantity',
       ) as HTMLTableCellElement;
+      const totalCostCell = row.querySelector(
+        '.my-cart__table-cell-price',
+      ) as HTMLTableCellElement;
       quantityCell.textContent = `${quantity}`;
+      totalCostCell.textContent = `$${totalCostLineItem}`;
     }
   }
 }
