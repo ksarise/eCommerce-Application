@@ -52,6 +52,7 @@
       position: relative;
       min-height: 300px;
       perspective: 2000px;
+      z-index: 5;
 
       &:hover {
         .about-us__front {
