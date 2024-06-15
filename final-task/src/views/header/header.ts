@@ -98,16 +98,16 @@ export default class HeaderView {
     const buttonLogin = tags.button(
       ['header__button', 'header__button_login'],
       '',
-      {},
+      { title: 'Login' },
       'click',
       this.handleClickLoginButton,
     );
     const imgLogin = tags.div(['img_login']).getElement();
     buttonLogin.appendChild(imgLogin);
     const buttonRegistration = tags.button(
-      ['header__button', 'header__button_login'],
+      ['header__button', 'header__button_registration'],
       '',
-      {},
+      { title: 'Register' },
       'click',
       this.handleClickRegistrationButton,
     );
@@ -116,7 +116,7 @@ export default class HeaderView {
     const buttonLogout = tags.button(
       ['header__button', 'header__button_login'],
       '',
-      {},
+      { title: 'Logout' },
       'click',
       this.handleClickLogoutButton,
     );
@@ -125,7 +125,7 @@ export default class HeaderView {
     const buttonMyProfile = tags.button(
       ['header__button', 'header__button_profile'],
       '',
-      {},
+      { title: 'Profile' },
     );
     const svgCartCode = `<svg fill="#000000" version="1.1" id="Capa_1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink"
     	 width="800px" height="800px" viewBox="0 0 902.86 902.86"
