@@ -7,26 +7,41 @@
     "github": {
       "profile": "https://github.com/ksarise"
     },
-    "contributions": ["Structured our repository for efficient collaboration and version control, ensuring clarity and ease of use for the team.", "Spearheaded the development of our Telegram chat bot for pull requests!", "Crafted intuitive registration and catalog pages, prioritizing user experience and interface usability.", "Improved codebase efficiency and successfully tackled complex technical challenges, optimizing performance across our project."]
+    "contributions": [
+      "Structured our repository for efficient collaboration and version control, ensuring clarity and ease of use for the team.",
+      "Spearheaded the development of our Telegram chat bot for pull requests!",
+      "Crafted intuitive registration and catalog pages, prioritizing user experience and interface usability.",
+      "Improved codebase efficiency and successfully tackled complex technical challenges, optimizing performance across our project."
+    ]
   },
   {
     "name": "Victoria",
-    "roles": ["Team-lead for sprint 3","Frontend Developer"],
+    "roles": ["Team-lead for sprint 3", "Frontend Developer"],
     "bio": "I'm a Barbie in the frontend, implementing my incredible ideas in the virtual world. I'm passionate about creating sleek, user-friendly experiences that look great and perform even better.",
     "photo": "victoria.jpeg",
     "github": {
       "profile": "https://github.com/kitakiv"
     },
-    "contributions": ["Meticulously set up our project environment, ensuring smooth integration and efficient development workflow from the outset.", "designed and implemented our login page, focusing on user-friendly authentication and security features.", "Crafted our profile page. Their creative approach made the profile page both functional and aesthetically pleasing.", "Developed our About Us page, skillfully combining compelling content with engaging visuals to effectively convey our mission, values, and team culture."]
+    "contributions": [
+      "Meticulously set up our project environment, ensuring smooth integration and efficient development workflow from the outset.",
+      "designed and implemented our login page, focusing on user-friendly authentication and security features.",
+      "Crafted our profile page. Their creative approach made the profile page both functional and aesthetically pleasing.",
+      "Developed our About Us page, skillfully combining compelling content with engaging visuals to effectively convey our mission, values, and team culture."
+    ]
   },
   {
     "name": "Andrey",
-    "roles": ["Team-lead for sprint 2","Frontend Developer"],
+    "roles": ["Team-lead for sprint 2", "Frontend Developer"],
     "bio": "Developer who's traded in snowboarding for coding, and now I'm building a snowboard shop online. I've been busy with client authentication, building product pages and shopping carts to help snowboarders from around the world find their perfect gear. Information security specialist with a background, gained through 3 years of experience and a university degree in 'Information Security of Telecommunication Systems'. In my free time, I engage in frontend development, which is my hobby and allows me to develop skills in web development.",
     "photo": "andrey.png",
     "github": {
       "profile": "https://github.com/andrey257686"
     },
-    "contributions": ["Conceived the initial design concept, designed and implemented a captivating 404 page, turning an error into an engaging user experience.", "Crafted our product page, ensuring it showcases products effectively with clear information and enticing visuals.", "Developed our cart page, focusing on seamless functionality and user-friendly design. They optimized the checkout process for a smooth shopping experience.", "Recommended and integrated Navigo for routing across the website, ensuring efficient navigation."]
+    "contributions": [
+      "Conceived the initial design concept, designed and implemented a captivating 404 page, turning an error into an engaging user experience.",
+      "Crafted our product page, ensuring it showcases products effectively with clear information and enticing visuals.",
+      "Developed our cart page, focusing on seamless functionality and user-friendly design. They optimized the checkout process for a smooth shopping experience.",
+      "Recommended and integrated Navigo for routing across the website, ensuring efficient navigation."
+    ]
   }
 ]
