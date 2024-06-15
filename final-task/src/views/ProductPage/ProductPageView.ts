@@ -26,7 +26,7 @@ export default class ProductPageView {
 
   private productId: string | undefined;
 
-  private activeVariantId: number | undefined;
+  private activeVariantId: number = 2;
 
   public handleClickAddToCartButton:
     | ((productId: string, variantId?: number, event?: Event) => void)
