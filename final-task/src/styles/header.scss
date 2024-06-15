@@ -101,7 +101,7 @@
     gap: 5px;
     &:not(.loginned) {
       > *:not(:last-child),
-      > *:not(:nth-child(4)) {
+      > *:not(:nth-child(5)) {
         display: block;
       }
       > *:last-child,
@@ -112,14 +112,15 @@
 
     &.loginned {
       > *:not(:last-child),
-      > *:not(:nth-child(4)) {
+      > *:not(:nth-child(5)) {
         display: none;
       }
       > *:last-child,
-      > *:nth-child(4) {
+      > *:nth-child(5) {
         display: flex;
       }
-      > *:nth-child(1) {
+      > *:nth-child(1),
+      > *:nth-child(2) {
         display: flex;
       }
     }

@@ -21,6 +21,8 @@ export default class HeaderView {
 
   public handleClickCartButton: (() => void) | undefined;
 
+  public handleClickAboutUsButton: (() => void) | undefined;
+
   constructor() {
     this.header = new BaseComponentGenerator({
       tag: 'header',
@@ -126,6 +128,13 @@ export default class HeaderView {
       'Cart',
       {},
     );
+    const buttonAboutUs = tags.button(
+      ['header__button', 'header__button_about-us'],
+      'About Us',
+      {},
+      'click',
+      this.handleClickAboutUsButton,
+    );
     buttonCart.addEventListener('click', () => {
       this.handleClickCartButton!();
     });
@@ -155,6 +164,7 @@ export default class HeaderView {
     const imgProfile = tags.div(['img_profile']).getElement();
     buttonMyProfile.prepend(imgProfile);
     this.buttonContainer.append(
+      buttonAboutUs,
       buttonCart,
       buttonLogin,
       buttonRegistration,
