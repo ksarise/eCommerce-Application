@@ -160,6 +160,7 @@ export default class ProductPageView {
       direction: 'vertical',
       spaceBetween: 10,
       slidesPerView: 'auto',
+      autoHeight: true,
     });
     const mainSwiper = new Swiper('.mainSwiper', {
       slidesPerView: 'auto',
