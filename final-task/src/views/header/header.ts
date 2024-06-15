@@ -97,38 +97,36 @@ export default class HeaderView {
   private createbuttonNavigation(): HTMLDivElement {
     const buttonLogin = tags.button(
       ['header__button', 'header__button_login'],
-      'Log In',
+      '',
       {},
       'click',
       this.handleClickLoginButton,
     );
+    const imgLogin = tags.div(['img_login']).getElement();
+    buttonLogin.appendChild(imgLogin);
     const buttonRegistration = tags.button(
       ['header__button', 'header__button_login'],
-      'Sign Up',
+      '',
       {},
       'click',
       this.handleClickRegistrationButton,
     );
+    const imgRegistration = tags.div(['img_registration']).getElement();
+    buttonRegistration.appendChild(imgRegistration);
     const buttonLogout = tags.button(
       ['header__button', 'header__button_login'],
-      'Log Out',
+      '',
       {},
       'click',
       this.handleClickLogoutButton,
     );
+    const imgLogout = tags.div(['img_logout']).getElement();
+    buttonLogout.appendChild(imgLogout);
     const buttonMyProfile = tags.button(
       ['header__button', 'header__button_profile'],
-      'Profile',
+      '',
       {},
     );
-    const buttonCart = tags.button(
-      ['header__button', 'header__button_cart'],
-      'Cart',
-      {},
-    );
-    buttonCart.addEventListener('click', () => {
-      this.handleClickCartButton!();
-    });
     const svgCartCode = `<svg fill="#000000" version="1.1" id="Capa_1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink"
     	 width="800px" height="800px" viewBox="0 0 902.86 902.86"
     	 xml:space="preserve">
@@ -146,9 +144,11 @@ export default class HeaderView {
     	</g>
     </g>
     </svg>`;
-    const svgCartElement = parseSVG(svgCartCode);
-    svgCartElement.classList.add('img_cart');
-    buttonCart.prepend(svgCartElement);
+    const buttonCart = parseSVG(svgCartCode);
+    buttonCart.classList.add('img_cart');
+    buttonCart.addEventListener('click', () => {
+      this.handleClickCartButton!();
+    });
     buttonMyProfile.addEventListener('click', async () => {
       if (this.handleClickMyProfile) await this.handleClickMyProfile();
     });
@@ -158,8 +158,8 @@ export default class HeaderView {
       buttonCart,
       buttonLogin,
       buttonRegistration,
-      buttonLogout,
       buttonMyProfile,
+      buttonLogout,
     );
     return this.buttonContainer;
   }
