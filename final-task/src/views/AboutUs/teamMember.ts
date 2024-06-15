@@ -35,12 +35,13 @@ export default class TeamMember {
   }
 
   private createMember() {
-    const photo = tags.img(['about-us__photo'], {
-      src: this.data.photo,
-      alt: this.data.name,
-    });
     const blockPhoto = tags.div(['about-us__round_photo']).getElement();
-    blockPhoto.append(photo);
+    blockPhoto.setAttribute(
+      'style',
+      !this.data.photo.includes('https')
+        ? `background-image: url(/about_us/${this.data.photo});`
+        : `background-image: url(${this.data.photo});`,
+    );
     const name = tags.div(['about-us__name'], this.data.name).getElement();
     const nameCopy = name.cloneNode(true);
     const roles = tags.ul(['about-us__role']);

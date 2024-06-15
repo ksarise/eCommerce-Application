@@ -1,32 +1,32 @@
 [
   {
-    "name": "Alice Johnson",
-    "roles": ["Project Manager", "Backend Developer"],
-    "bio": "Alice is a seasoned project manager and backend developer with over 10 years of experience in the tech industry.",
-    "photo": "https://images.unsplash.com/photo-1569124589354-615739ae007b?q=80&w=2070&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
+    "name": "Sergey",
+    "roles": ["Team-lead for sprints 1 and 4", "Frontend Developer"],
+    "bio": "A physicist who wanted interfaces better than those of an oscilloscope. In a strange love with data parsing, git'work flow and element microdesign.",
+    "photo": "sergey.jpeg",
     "github": {
-      "profile": "https://github.com/alicejohnson"
+      "profile": "https://github.com/ksarise"
     },
-    "contributions": ["hghghghg"]
+    "contributions": ["Structured our repository for efficient collaboration and version control, ensuring clarity and ease of use for the team.", "Spearheaded the development of our Telegram chat bot for pull requests!", "Crafted intuitive registration and catalog pages, prioritizing user experience and interface usability.", "Improved codebase efficiency and successfully tackled complex technical challenges, optimizing performance across our project."]
   },
   {
-    "name": "Bob Smith",
-    "roles": ["Frontend Developer", "UI/UX Designer"],
-    "bio": "Bob specializes in frontend development and UI/UX design, bringing over 8 years of creative solutions to the table.",
-    "photo": "https://images.unsplash.com/photo-1569124589354-615739ae007b?q=80&w=2070&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
+    "name": "Victoria",
+    "roles": ["Team-lead for sprint 3","Frontend Developer"],
+    "bio": "I'm a Barbie in the frontend, implementing my incredible ideas in the virtual world. I'm passionate about creating sleek, user-friendly experiences that look great and perform even better.",
+    "photo": "victoria.jpeg",
     "github": {
-      "profile": "https://github.com/bobsmith"
+      "profile": "https://github.com/kitakiv"
     },
-    "contributions": ["hghghghg"]
+    "contributions": ["Meticulously set up our project environment, ensuring smooth integration and efficient development workflow from the outset.", "designed and implemented our login page, focusing on user-friendly authentication and security features.", "Crafted our profile page. Their creative approach made the profile page both functional and aesthetically pleasing.", "Developed our About Us page, skillfully combining compelling content with engaging visuals to effectively convey our mission, values, and team culture."]
   },
   {
-    "name": "Carol Davis",
-    "roles": ["Full Stack Developer", "DevOps Engineer"],
-    "bio": "Carol is a versatile full stack developer and DevOps engineer with a knack for problem-solving and automation.",
-    "photo": "https://images.unsplash.com/photo-1569124589354-615739ae007b?q=80&w=2070&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
+    "name": "Andrey",
+    "roles": ["Team-lead for sprint 2","Frontend Developer"],
+    "bio": "Developer who's traded in snowboarding for coding, and now I'm building a snowboard shop online. I've been busy with client authentication, building product pages and shopping carts to help snowboarders from around the world find their perfect gear. Information security specialist with a background, gained through 3 years of experience and a university degree in 'Information Security of Telecommunication Systems'. In my free time, I engage in frontend development, which is my hobby and allows me to develop skills in web development.",
+    "photo": "andrey.png",
     "github": {
-      "profile": "https://github.com/caroldavis"
+      "profile": "https://github.com/andrey257686"
     },
-    "contributions": ["hghghghg"]
+    "contributions": ["Conceived the initial design concept, designed and implemented a captivating 404 page, turning an error into an engaging user experience.", "Crafted our product page, ensuring it showcases products effectively with clear information and enticing visuals.", "Developed our cart page, focusing on seamless functionality and user-friendly design. They optimized the checkout process for a smooth shopping experience.", "Recommended and integrated Navigo for routing across the website, ensuring efficient navigation."]
   }
 ]
