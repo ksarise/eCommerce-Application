@@ -6,6 +6,7 @@ import NotFoundView from './404/404';
 import ProductPageView from './ProductPage/ProductPageView';
 import Profile from './myProfile/myProfileView';
 import AboutView from './AboutUs/aboutUsView';
+import CartView from './Cart/CartView';
 
 const appViewHeader = `<div id="content" class="view container"></div>`;
 
@@ -28,6 +29,8 @@ export default class AppView {
 
   public aboutView: AboutView;
 
+  public cartView: CartView;
+
   public constructor() {
     this.loginView = new LoginView();
     this.innerHTML = appViewHeader;
@@ -38,12 +41,14 @@ export default class AppView {
     this.productPageView = new ProductPageView();
     this.profileView = new Profile();
     this.aboutView = new AboutView();
+    this.cartView = new CartView();
   }
 
   public create() {
     this.headerView.create();
     this.notFoundView.create();
     this.productPageView.create();
+    this.cartView.create();
   }
 
   public renderContent(page: string) {
@@ -90,6 +95,13 @@ export default class AppView {
         document
           .getElementById('content')!
           .appendChild(this.productPageView.getContent());
+        this.loginView.addClassToLogin(false);
+        break;
+      case 'cart':
+        document.getElementById('content')!.innerHTML = '';
+        document
+          .getElementById('content')!
+          .appendChild(this.cartView.getContent());
         this.loginView.addClassToLogin(false);
         break;
       default:

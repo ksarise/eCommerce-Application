@@ -13,6 +13,8 @@ class Router {
     | ((pathSegments: string[]) => void)
     | undefined;
 
+  public fetchProductsFromCart: (() => void) | undefined;
+
   constructor() {
     this.router = new Navigo(this.root);
     this.routerListeners();
@@ -61,6 +63,11 @@ class Router {
       this.router.resolve();
     });
 
+    this.router.on('/cart', () => {
+      this.changeContent?.('cart');
+      this.router.resolve();
+    });
+
     this.router.notFound(() => {
       this.changeContent?.('404');
       this.router.resolve();
@@ -79,6 +86,8 @@ class Router {
       this.fetchProductsByCategory?.(
         path.split('/').filter((segment) => segment),
       );
+    } else if (path.includes('cart')) {
+      this.fetchProductsFromCart?.();
     }
     this.goToPage(path);
   }

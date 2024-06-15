@@ -1,0 +1,275 @@
+@import 'variables';
+
+.cart {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  width: 100%;
+  gap: 20px;
+  &__empty {
+    width: 500px;
+    height: 500px;
+    background-image: url('/images/empty_cart.png');
+    background-repeat: no-repeat;
+    background-position: center;
+    background-size: contain;
+    @media (max-width: 768px) {
+      width: 300px;
+      height: 300px;
+    }
+    &_button {
+      padding: 15px 15px;
+      cursor: pointer;
+      border: 2px solid $primary;
+      background: rgb(255, 255, 255);
+      font-size: 20px;
+      color: $primary;
+      transition: 0.3s;
+      border-radius: 5px;
+      &:hover {
+        background: $primary;
+        color: rgb(255, 255, 255);
+      }
+    }
+  }
+  &__cost {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+    font-size: 20px;
+    width: 30%;
+    @media (max-width: 768px) {
+      width: 60%;
+    }
+    &_subtotal {
+      display: flex;
+      flex-direction: row;
+      justify-content: space-between;
+      width: 100%;
+    }
+    &_discount {
+      display: flex;
+      flex-direction: row;
+      justify-content: space-between;
+      width: 100%;
+    }
+    &_promocode {
+      display: flex;
+      flex-direction: row;
+      justify-content: space-between;
+      gap: 5%;
+      width: 100%;
+      @media (max-width: 1100px) {
+        flex-direction: column;
+        gap: 5px;
+        &-input {
+          min-width: 100%;
+        }
+      }
+      &-input {
+        width: 70%;
+        border: 2px solid $primary;
+        border-radius: 5px;
+        padding: 5px 10px;
+        font-size: 20px;
+        color: $text;
+        transition: box-shadow 0.3s;
+        &:focus {
+          box-shadow: 0 0 10px rgba(184, 142, 47, 0.5);
+          outline: none;
+        }
+        &::placeholder {
+          color: $light-text;
+        }
+      }
+      &-button {
+        padding: 5px 5px;
+        cursor: pointer;
+        border: 2px solid $primary;
+        background: rgb(255, 255, 255);
+        font-size: 20px;
+        color: $primary;
+        transition: 0.3s;
+        border-radius: 5px;
+        &:hover {
+          background: $primary;
+          color: rgb(255, 255, 255);
+        }
+      }
+    }
+    &_total {
+      display: flex;
+      flex-direction: row;
+      justify-content: space-between;
+      width: 100%;
+    }
+  }
+
+  &__button {
+    &_continue {
+      padding: 5px 5px;
+      cursor: pointer;
+      border: 2px solid $primary;
+      background: rgb(255, 255, 255);
+      font-size: 30px;
+      color: $primary;
+      transition: 0.3s;
+      border-radius: 5px;
+      &:hover {
+        background: $primary;
+        color: rgb(255, 255, 255);
+      }
+    }
+  }
+}
+
+.my-cart {
+  width: 100%;
+  &__header {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: center;
+    &-title {
+      margin: 0;
+      font-size: 36px;
+      font-weight: 600;
+    }
+    &-button {
+      padding: 5px 5px;
+      cursor: pointer;
+      border: 2px solid $primary;
+      background: rgb(255, 255, 255);
+      font-size: 20px;
+      color: $primary;
+      transition: 0.3s;
+      border-radius: 5px;
+      &:hover {
+        background: $primary;
+        color: rgb(255, 255, 255);
+      }
+    }
+  }
+
+  &__quantity {
+    margin: 0;
+    &_button {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      width: 30px;
+      height: 30px;
+      cursor: pointer;
+      color: $primary;
+      border: 2px solid $primary;
+      background-color: transparent;
+      border-radius: 50%;
+      font-size: 20px;
+      transition: 0.3s;
+      &:hover {
+        background-color: $primary;
+        color: #fff;
+      }
+      @media (max-width: 500px) {
+        width: 20px;
+        height: 20px;
+        font-size: 14px;
+      }
+    }
+  }
+
+  &__table {
+    width: 100%;
+    margin-top: 30px;
+    &-header {
+      display: flex;
+      flex-direction: row;
+      width: 100%;
+      &-cell {
+        display: flex;
+        flex-direction: row;
+        justify-content: start;
+        align-items: center;
+        font-size: 18px;
+        font-weight: 600;
+        @media (max-width: 500px) {
+          font-size: 14px;
+        }
+      }
+      &-product {
+        width: 45%;
+      }
+      &-size {
+        width: 10%;
+      }
+      &-quantity {
+        width: 20%;
+      }
+      &-price {
+        width: 15%;
+      }
+      &-remove {
+        width: 10%;
+      }
+    }
+
+    &-row {
+      display: flex;
+      flex-direction: row;
+      width: 100%;
+      padding: 20px 0;
+    }
+
+    &-cell {
+      display: flex;
+      align-items: center;
+      @media (max-width: 500px) {
+        font-size: 12px;
+        &-image {
+          height: 70px !important;
+        }
+      }
+      &-image {
+        width: auto;
+        height: 100px;
+      }
+      &-product {
+        display: flex;
+        flex-direction: row;
+        justify-content: start;
+        align-items: center;
+        width: 45%;
+      }
+      &-size {
+        width: 10%;
+      }
+      &-quantity {
+        display: flex;
+        justify-content: start;
+        align-items: center;
+        gap: 5px;
+        width: 20%;
+      }
+      &-price {
+        width: 15%;
+      }
+      &-remove {
+        justify-content: center;
+        align-items: center;
+        width: 10%;
+      }
+    }
+  }
+}
+
+.img_rubbish {
+  width: 20px;
+  height: 20px;
+  cursor: pointer;
+  &:hover .kryshka {
+    transform: rotate(15deg) translate(30px, -50px);
+  }
+}
