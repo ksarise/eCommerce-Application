@@ -21,6 +21,8 @@ export default class HeaderView {
 
   public handleClickCartButton: (() => void) | undefined;
 
+  public handleClickAboutUsButton: (() => void) | undefined;
+
   constructor() {
     this.header = new BaseComponentGenerator({
       tag: 'header',
@@ -127,6 +129,15 @@ export default class HeaderView {
       '',
       { title: 'Profile' },
     );
+    const imgAbout = tags.div(['img_about']).getElement();
+    const buttonAboutUs = tags.button(
+      ['header__button', 'header__button_about-us'],
+      '',
+      { title: 'About Us' },
+      'click',
+      this.handleClickAboutUsButton,
+    );
+    buttonAboutUs.append(imgAbout);
     const svgCartCode = `<svg fill="#000000" version="1.1" id="Capa_1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink"
     	 width="800px" height="800px" viewBox="0 0 902.86 902.86"
     	 xml:space="preserve">
@@ -155,6 +166,7 @@ export default class HeaderView {
     const imgProfile = tags.div(['img_profile']).getElement();
     buttonMyProfile.prepend(imgProfile);
     this.buttonContainer.append(
+      buttonAboutUs,
       buttonCart,
       buttonLogin,
       buttonRegistration,

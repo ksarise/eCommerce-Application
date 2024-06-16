@@ -5,6 +5,7 @@ import HeaderView from './header/header';
 import NotFoundView from './404/404';
 import ProductPageView from './ProductPage/ProductPageView';
 import Profile from './myProfile/myProfileView';
+import AboutView from './AboutUs/aboutUsView';
 import CartView from './Cart/CartView';
 
 const appViewHeader = `<div id="content" class="view container"></div>`;
@@ -26,6 +27,8 @@ export default class AppView {
 
   public profileView: Profile;
 
+  public aboutView: AboutView;
+
   public cartView: CartView;
 
   public constructor() {
@@ -37,6 +40,7 @@ export default class AppView {
     this.registrationView = new RegistrationView();
     this.productPageView = new ProductPageView();
     this.profileView = new Profile();
+    this.aboutView = new AboutView();
     this.cartView = new CartView();
   }
 
@@ -71,6 +75,11 @@ export default class AppView {
       case 'my_profile':
         content!.innerHTML = '';
         content!.append(this.profileView.createProfile());
+        this.loginView.addClassToLogin(false);
+        break;
+      case 'about_us':
+        content!.innerHTML = '';
+        content!.append(this.aboutView.createAboutUs());
         this.loginView.addClassToLogin(false);
         break;
       case '404':

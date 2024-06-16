@@ -104,6 +104,8 @@ export default class AppController {
       this.handleClickProfileButton.bind(this);
     this.appView.headerView.handleClickCartButton =
       this.handleClickCartButton.bind(this);
+    this.appView.headerView.handleClickAboutUsButton =
+      this.handleClickAboutUsButton.bind(this);
     this.appView.notFoundView.handleClickGoHomeButton =
       this.handleClickGoHomeButton.bind(this);
     this.appView.registrationView.bindFormSubmit(
@@ -178,9 +180,9 @@ export default class AppController {
 
   public async createCustomer(formData: RegistrationFormData) {
     try {
-      const response = await this.appModel.createCustomer(formData);
+      await this.appModel.createCustomer(formData);
       showToast({
-        text: `Customer created with ID: ${response.body.customer.id}`,
+        text: `Customer created`,
         type: 'positive',
       });
       this.afterLogin(formData);
@@ -469,5 +471,9 @@ export default class AppController {
   private handleClickCartButton() {
     this.routerController.goToPage('/cart');
     this.cartPageController.requestGetProductsFromCart();
+  }
+
+  private handleClickAboutUsButton() {
+    this.routerController.goToPage('/about_us');
   }
 }
