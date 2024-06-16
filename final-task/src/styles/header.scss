@@ -55,9 +55,8 @@
   &__button {
     display: flex;
     gap: 5px;
-    padding: 5px 15px;
     cursor: pointer;
-    border: 2px solid $primary;
+    border: none;
     background: #fff;
     font-size: 16px;
     font-weight: 500;
@@ -75,30 +74,60 @@
       background-position: center;
     }
 
-    .img_cart {
+    .img_logout {
       width: 25px;
       height: 25px;
-      fill: $primary;
-      transition: 0.3s;
+      background-image: url('/svg/logout.svg');
+      background-size: contain;
+      background-repeat: no-repeat;
+      background-position: center;
+    }
+
+    .img_login {
+      width: 25px;
+      height: 25px;
+      background-image: url('/svg/login.svg');
+      background-size: contain;
+      background-repeat: no-repeat;
+      background-position: center;
+    }
+
+    .img_registration {
+      width: 25px;
+      height: 25px;
+      background-image: url('/svg/sign-up.svg');
+      background-size: contain;
+      background-repeat: no-repeat;
+      background-position: center;
     }
 
     &:hover {
-      background-color: $primary;
-      color: #fff;
+      transform: translateY(-3px);
+    }
 
-      .img_profile {
-        background-image: url('/svg/snowboarder-hover.svg');
-      }
+    &[title]:hover:after {
+      content: attr(title);
+      position: absolute;
+      top: 35px;
+      left: -30px;
+      background-color: $secondary;
+      border: 1px solid $primary;
+      color: $primary;
+      padding: 2px;
+      border-radius: 5px;
+      z-index: 1;
+    }
 
-      .img_cart {
-        fill: #fff;
-      }
+    &_registration[title]:hover:after {
+      content: attr(title);
+      left: -40px;
     }
   }
 
   &__buttons {
     display: flex;
     gap: 5px;
+    align-items: center;
     &:not(.loginned) {
       > *:not(:last-child),
       > *:not(:nth-child(5)) {
@@ -124,5 +153,16 @@
         display: flex;
       }
     }
+  }
+}
+
+.img_cart {
+  width: 25px;
+  height: 25px;
+  fill: $primary;
+  transition: 0.3s;
+  cursor: pointer;
+  &:hover {
+    transform: translateY(-3px);
   }
 }
