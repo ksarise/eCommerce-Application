@@ -70,15 +70,14 @@ export default class AppController {
       this.appView.innerHTML;
     await this.fetchAndLogProducts();
     await this.fetchCategories();
-    await this.fetchCategories();
     this.mainController.initialize();
     routerController.handleLocation();
     this.handleVisiblityButtons();
     await this.appView.mainView.bindCategoryList(
       this.handleCategoryNavigation.bind(this),
     );
-    await this.appView.mainView.bindCategoryList(
-      this.handleCategoryNavigation.bind(this),
+    this.appView.mainView.bindClick(
+      this.handleClickProductCartButton.bind(this),
     );
   }
 
@@ -279,6 +278,7 @@ export default class AppController {
       } else {
         const products = await this.appModel.requestGetProducts();
         this.appModel.mainModel.setProducts(products);
+        await this.mainController.renderProducts();
       }
     } catch (error) {
       const errmessage = (error as ErrorResponse).message;
@@ -472,6 +472,31 @@ export default class AppController {
   private handleClickCartButton() {
     this.routerController.goToPage('/cart');
     this.cartPageController.requestGetProductsFromCart();
+  }
+
+  public async handleClickProductCartButton(
+    isAdd: boolean,
+    parentId: string,
+    variantId: number,
+  ) {
+    if (isAdd) {
+      await this.appModel.productPageModel.addToCart(
+        parentId,
+        () => {},
+        variantId,
+      );
+    } else {
+      await this.appModel.productPageModel.removeFromCart(
+        parentId,
+        () => {},
+        variantId,
+      );
+    }
+    await this.appModel.mainModel.getVariantsFromCart();
+    this.appView.mainView.updateProductCards(
+      parentId,
+      this.appModel.mainModel.variantsInCart,
+    );
   }
 
   private handleClickAboutUsButton() {

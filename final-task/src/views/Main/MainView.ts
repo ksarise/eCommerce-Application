@@ -19,6 +19,8 @@ export default class MainView {
 
   private breadcrumbContainer: HTMLDivElement;
 
+  public productCards: ProductCard[] = [];
+
   constructor() {
     this.mainContainer = tags.div(['main']).getElement() as HTMLDivElement;
     this.filterContainer = new FilterSideBar();
@@ -65,14 +67,14 @@ export default class MainView {
     return this.mainContainer;
   }
 
-  public renderProducts(
+  public async renderProducts(
     products: Product[],
     variantsInCart: { [key: string]: string }[],
   ) {
     console.log(variantsInCart, typeof variantsInCart);
     this.catalogListContainer.innerHTML = '';
 
-    products.forEach((product: Product) => {
+    this.productCards = products.map((product: Product) => {
       const productCard = new ProductCard(
         product.name,
         product.desc,
@@ -84,6 +86,7 @@ export default class MainView {
         variantsInCart,
       );
       this.catalogListContainer.append(productCard.renderCard());
+      return productCard;
     });
   }
 
@@ -339,5 +342,33 @@ export default class MainView {
     const breadcrumbHomeItem = tags.a(['breadcrumb-item'], '/', 'Home >');
     const breadcrumbCatalogItem = tags.a(['breadcrumb-item'], '/', 'Catalog >');
     this.breadcrumbContainer.prepend(breadcrumbHomeItem, breadcrumbCatalogItem);
+  }
+
+  public bindClick(
+    callback: (isAdd: boolean, parentId: string, variantId: number) => void,
+  ): void {
+    this.productCards.forEach((productCard) => {
+      productCard.cardAddBtn.addEventListener('click', () => {
+        callback(
+          productCard.cardAddBtn.textContent === 'Add to cart',
+          productCard.id,
+          productCard.chosenSize,
+        );
+        productCard.cardAddBtnloader();
+      });
+    });
+  }
+
+  public updateProductCards(
+    productCardId: string,
+    newVariantsInCart: { [key: string]: string }[],
+  ) {
+    const updatedCard = this.productCards.find(
+      (productCard) => productCard.id === productCardId,
+    );
+    if (updatedCard) {
+      updatedCard.variantsInCart = newVariantsInCart;
+      updatedCard.updateSizeItemClasses();
+    }
   }
 }

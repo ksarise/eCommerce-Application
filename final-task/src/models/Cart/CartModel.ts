@@ -32,7 +32,6 @@ export default class CartPageModel {
 
   public async getCartById(cartId: string) {
     this.cart = (await this.apiService.getCartById(cartId)).body;
-    console.log('Cart', this.cart);
     return this.cart;
   }
 

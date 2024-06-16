@@ -230,8 +230,8 @@ export default class MainModel {
     let currentCart;
     if (cartId) {
       currentCart = await this.cartModel.getCartById(cartId);
-      console.log('currentcart', currentCart);
     }
+    this.variantsInCart = [];
     currentCart?.lineItems.forEach((item) => {
       this.variantsInCart = [
         ...this.variantsInCart,
@@ -241,6 +241,5 @@ export default class MainModel {
         },
       ];
     });
-    console.log('variants2', this.variantsInCart);
   }
 }
