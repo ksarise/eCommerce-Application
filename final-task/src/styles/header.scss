@@ -65,40 +65,39 @@
     transition: 0.3s;
     border-radius: 5px;
 
-    .img_profile {
+    .img_registration,
+    .img_login,
+    .img_logout,
+    .img_profile,
+    .img_about {
       width: 25px;
       height: 25px;
-      background-image: url('/svg/snowboarder.svg');
-      background-size: 50px 50px;
       background-repeat: no-repeat;
       background-position: center;
+    }
+
+    .img_profile {
+      background-image: url('/svg/snowboarder.svg');
+      background-size: 50px 50px;
+    }
+
+    .img_about {
+      width: 50px;
+      height: 30px;
+      background-size: 50px 30px;
+      background-image: url('/svg/about_us.svg');
     }
 
     .img_logout {
-      width: 25px;
-      height: 25px;
       background-image: url('/svg/logout.svg');
-      background-size: contain;
-      background-repeat: no-repeat;
-      background-position: center;
     }
 
     .img_login {
-      width: 25px;
-      height: 25px;
       background-image: url('/svg/login.svg');
-      background-size: contain;
-      background-repeat: no-repeat;
-      background-position: center;
     }
 
     .img_registration {
-      width: 25px;
-      height: 25px;
       background-image: url('/svg/sign-up.svg');
-      background-size: contain;
-      background-repeat: no-repeat;
-      background-position: center;
     }
 
     &:hover {
@@ -108,6 +107,7 @@
     &[title]:hover:after {
       content: attr(title);
       position: absolute;
+      display: flex;
       top: 35px;
       left: -30px;
       background-color: $secondary;
