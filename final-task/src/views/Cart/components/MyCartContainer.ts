@@ -10,6 +10,16 @@ export default class MyCartContainer {
 
   public myCartHeaderContainer: BaseComponentGenerator;
 
+  public handleClickQuantity:
+    | ((productId: string, delta: number) => void)
+    | undefined;
+
+  public handleClickRemove: ((productId: string) => void) | undefined;
+
+  public handleClickClearCart: (() => void) | undefined;
+
+  public handleClickProduct: ((productId: string) => void) | undefined;
+
   constructor() {
     this.myCartContainer = tags
       .div(['cart__my-cart', 'my-cart'])
@@ -34,6 +44,11 @@ export default class MyCartContainer {
       ['my-cart__header-button'],
       'Clear Cart',
     );
+    clearCartButton.addEventListener('click', () => {
+      if (this.handleClickClearCart) {
+        this.handleClickClearCart();
+      }
+    });
     this.myCartHeaderContainer.getElement().append(header);
     this.myCartHeaderContainer.getElement().append(clearCartButton);
   }
@@ -78,6 +93,7 @@ export default class MyCartContainer {
       tag: 'tr',
       classNames: ['my-cart__table-row'],
     });
+    productRow.getElement().setAttribute('data-line-item-id', product.id);
     const productCellName = new BaseComponentGenerator({
       tag: 'td',
       classNames: ['my-cart__table-cell', 'my-cart__table-cell-product'],
@@ -85,6 +101,13 @@ export default class MyCartContainer {
     const productNameTag = tags.p(['my-cart__table-cell-product-name'], '');
     productNameTag.textContent = product.name['en-US'];
     productCellName.getElement().append(productNameTag);
+    if (this.handleClickProduct) {
+      productCellName.getElement().addEventListener('click', () => {
+        if (this.handleClickProduct) {
+          this.handleClickProduct(product.productId);
+        }
+      });
+    }
     productRow.getElement().append(productCellName.getElement());
     if (product.variant?.images && product.variant?.images.length > 0) {
       const productImage = new BaseComponentGenerator({
@@ -119,10 +142,20 @@ export default class MyCartContainer {
       ['my-cart__quantity_plus', 'my-cart__quantity_button'],
       '+',
     );
+    buttonPlus.addEventListener('click', () => {
+      if (this.handleClickQuantity) {
+        this.handleClickQuantity(product.id, 1);
+      }
+    });
     const buttonMinus = tags.button(
       ['my-cart__quantity_minus', 'my-cart__quantity_button'],
       '-',
     );
+    buttonMinus.addEventListener('click', () => {
+      if (this.handleClickQuantity) {
+        this.handleClickQuantity(product.id, -1);
+      }
+    });
     quantityCell.getElement().append(buttonMinus);
     quantityCell.getElement().append(quantityTag);
     quantityCell.getElement().append(buttonPlus);
@@ -155,8 +188,37 @@ export default class MyCartContainer {
     </svg>`;
     const svgCartElement = parseSVG(svgRemoveCode);
     svgCartElement.classList.add('img_rubbish');
+    svgCartElement.addEventListener('click', () => {
+      if (this.handleClickRemove) {
+        this.handleClickRemove(product.id);
+      }
+    });
     removeCell.getElement().append(svgCartElement);
     productRow.getElement().append(removeCell.getElement());
     this.myCartTable.getElement().append(productRow.getElement());
+  }
+
+  public changeQuantity(
+    lineItemId: string,
+    quantity: number,
+    totalCostLineItem?: number,
+  ) {
+    console.log(quantity, totalCostLineItem);
+    const row = this.myCartTable
+      .getElement()
+      .querySelector(`[data-line-item-id="${lineItemId}"]`);
+    if (row) {
+      if (quantity === 0) {
+        row.remove();
+      }
+      const quantityCell = row.querySelector(
+        '.my-cart__quantity',
+      ) as HTMLTableCellElement;
+      const totalCostCell = row.querySelector(
+        '.my-cart__table-cell-price',
+      ) as HTMLTableCellElement;
+      quantityCell.textContent = `${quantity}`;
+      totalCostCell.textContent = `$${totalCostLineItem}`;
+    }
   }
 }

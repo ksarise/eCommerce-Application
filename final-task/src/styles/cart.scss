@@ -241,6 +241,11 @@
         flex-direction: row;
         justify-content: start;
         align-items: center;
+        cursor: pointer;
+        &:hover {
+          text-decoration: underline;
+          color: $primary;
+        }
         width: 45%;
       }
       &-size {
