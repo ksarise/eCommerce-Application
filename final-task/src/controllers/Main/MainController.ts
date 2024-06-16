@@ -12,7 +12,6 @@ export default class MainController {
   }
 
   public initialize() {
-    this.renderProducts();
     this.mainView.setCategories(this.mainModel.getParsedCategories());
     this.mainView.bindOptionList(this.handleOptionList.bind(this));
     this.mainView.bindPriceFilter(this.handlePriceRangeChange.bind(this));

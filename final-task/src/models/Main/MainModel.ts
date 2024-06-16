@@ -53,6 +53,10 @@ export default class MainModel {
     this.products = products;
   }
 
+  // public addProducts(products: PagedQueryResponse) {
+  //   this.products = this.products.concat(products);
+  // }
+
   public setCategories(categories: PagedQueryResponse) {
     this.categories = categories.results as Category[];
   }

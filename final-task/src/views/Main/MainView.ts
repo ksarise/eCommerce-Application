@@ -36,7 +36,7 @@ export default class MainView {
     });
     this.catalogPanelContainer.append(filtersBtn);
     this.catalogListContainer = tags
-      .div(['catalog__list', 'container'], 'Catalog', {})
+      .div(['catalog__list', 'container'], '', {})
       .getElement() as HTMLDivElement;
     this.catalogContainer.append(
       this.catalogPanelContainer,
@@ -71,9 +71,7 @@ export default class MainView {
     products: Product[],
     variantsInCart: { [key: string]: string }[],
   ) {
-    console.log(variantsInCart, typeof variantsInCart);
-    this.catalogListContainer.innerHTML = '';
-
+    console.log('render');
     this.productCards = products.map((product: Product) => {
       const productCard = new ProductCard(
         product.name,
@@ -370,5 +368,29 @@ export default class MainView {
       updatedCard.variantsInCart = newVariantsInCart;
       updatedCard.updateSizeItemClasses();
     }
+  }
+
+  public showSkeletons(limit: number) {
+    for (let i = 0; i < limit; i += 1) {
+      const skeleton = document.createElement('div');
+      skeleton.className = 'skeleton skeleton-card';
+      skeleton.innerHTML = `
+        <div class="skeleton-image"></div>
+        <div class="skeleton-text"></div>
+        <div class="skeleton-text"></div>
+        <div class="skeleton-text"></div>
+      `;
+      this.catalogListContainer.append(skeleton);
+    }
+  }
+
+  public removeSkeletons() {
+    const skeletons = this.catalogListContainer.querySelectorAll('.skeleton');
+    skeletons.forEach((skeleton) => skeleton.remove());
+  }
+
+  public clearCatalogList() {
+    this.catalogListContainer.innerHTML = '';
+    console.log('cleared');
   }
 }
