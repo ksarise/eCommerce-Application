@@ -73,4 +73,23 @@ export default class CartView {
     this.container.getElement().append(cartEmptyImageContainer.getElement());
     this.container.getElement().append(cartButtonToCatalog);
   }
+
+  public changeQuantityTotalCost(
+    lineItemId: string,
+    quantity: number,
+    totalCost: number,
+    totalCostLineItem?: number,
+  ) {
+    if (totalCost === 0) {
+      this.renderEmptyCart();
+      return;
+    }
+    console.log(totalCostLineItem);
+    this.myCartContainer.changeQuantity(
+      lineItemId,
+      quantity,
+      totalCostLineItem,
+    );
+    this.totalCostContainer.changeTotalCost(totalCost);
+  }
 }

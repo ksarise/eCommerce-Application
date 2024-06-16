@@ -34,4 +34,95 @@ export default class CartPageModel {
     this.cart = (await this.apiService.getCartById(cartId)).body;
     return this.cart;
   }
+
+  public async updateProductQuantity(
+    lineItemId: string,
+    quantity: number,
+    _changeQuantityTotalCost: (
+      lineItemId: string,
+      quantity: number,
+      totalCost: number,
+      totalCostLineItem?: number,
+    ) => void,
+  ) {
+    await this.getCartById(this.cart!.id);
+    const lineItem = this.cart?.lineItems.find(
+      (item) => item.id === lineItemId,
+    );
+    const nowQuantity = lineItem?.quantity || 0;
+    const newQuantity = nowQuantity + quantity;
+    try {
+      const response = await this.apiService.updateProductQuantity(
+        this.cart!.id,
+        lineItemId,
+        newQuantity,
+        this.cart!.version,
+      );
+      await this.getCartById(this.cart!.id);
+      const tmpLineItem = this.cart?.lineItems.find(
+        (item) => item.id === lineItemId,
+      );
+      let rightLineItemPrice;
+      if (tmpLineItem) {
+        rightLineItemPrice = tmpLineItem!.totalPrice.centAmount / 100;
+      }
+      _changeQuantityTotalCost(
+        lineItemId,
+        newQuantity,
+        this.cart!.totalPrice.centAmount / 100,
+        rightLineItemPrice,
+      );
+      return response;
+    } catch (error) {
+      return error;
+    }
+  }
+
+  public async removeFromCart(
+    lineItemId: string,
+    _changeQuantityTotalCost: (
+      lineItemId: string,
+      quantity: number,
+      totalCost: number,
+      totalCostLineItem?: number,
+    ) => void,
+  ) {
+    await this.getCartById(this.cart!.id);
+    try {
+      const response = await this.apiService.removeLineItemFromCart(
+        this.cart!.id,
+        lineItemId,
+        this.cart!.version,
+      );
+      await this.getCartById(this.cart!.id);
+      const tmpLineItem = this.cart?.lineItems.find(
+        (item) => item.id === lineItemId,
+      );
+      let rightLineItemPrice;
+      if (tmpLineItem) {
+        rightLineItemPrice = tmpLineItem!.totalPrice.centAmount / 100;
+      }
+      _changeQuantityTotalCost(
+        lineItemId,
+        0,
+        this.cart!.totalPrice.centAmount / 100,
+        rightLineItemPrice,
+      );
+      return response;
+    } catch (error) {
+      return error;
+    }
+  }
+
+  public async clearCart(
+    _render: (products: LineItem[], totalCost: number) => void,
+  ) {
+    await this.createCart();
+    await this.requestGetProductsFromCart(_render);
+  }
+
+  public async createCart() {
+    this.cart = (await this.apiService.createCartRequest()).body;
+    localStorage.setItem('cartId', this.cart.id);
+  }
 }

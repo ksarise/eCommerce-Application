@@ -90,4 +90,9 @@ export default class TotalCostContainer {
   public getContent(): HTMLElement {
     return this.costContainer;
   }
+
+  public changeTotalCost(totalCost: number) {
+    this.subtotalPrice.innerHTML = `$${totalCost}`;
+    this.totalPrice.innerHTML = `$${totalCost}`;
+  }
 }

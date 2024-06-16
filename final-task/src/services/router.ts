@@ -76,12 +76,16 @@ class Router {
 
   public goToPage(page: string) {
     this.router.navigate(page);
+    if (page.includes('product')) {
+      this.fecthProductById?.(page.split('/product/')[1]);
+    }
   }
 
   public handleLocation() {
     const path = window.location.pathname;
     if (path.includes('product')) {
-      this.fecthProductById?.(path.split('/product/')[1]);
+      this.goToPage(path);
+      // this.fecthProductById?.(path.split('/product/')[1]);
     } else if (path.includes('categories')) {
       this.fetchProductsByCategory?.(
         path.split('/').filter((segment) => segment),

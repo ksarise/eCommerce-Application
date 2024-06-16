@@ -379,4 +379,29 @@ export default class API {
       .execute();
     return response;
   }
+
+  public async updateProductQuantity(
+    cartId: string,
+    lineItemId: string,
+    quantity: number,
+    cartVersion?: number,
+  ): Promise<ClientResponse<Cart>> {
+    const response = await this.apiRoot
+      .carts()
+      .withId({ ID: cartId })
+      .post({
+        body: {
+          version: cartVersion || 1,
+          actions: [
+            {
+              action: 'changeLineItemQuantity',
+              lineItemId,
+              quantity,
+            },
+          ],
+        },
+      })
+      .execute();
+    return response;
+  }
 }
