@@ -41,6 +41,6 @@ export default class MainController {
 
   public renderProducts() {
     const products = this.mainModel.getProducts();
-    this.mainView.renderProducts(products);
+    this.mainView.renderProducts(products, this.mainModel.variantsInCart);
   }
 }

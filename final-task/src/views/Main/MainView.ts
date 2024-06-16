@@ -65,7 +65,11 @@ export default class MainView {
     return this.mainContainer;
   }
 
-  public renderProducts(products: Product[]) {
+  public renderProducts(
+    products: Product[],
+    variantsInCart: { [key: string]: string }[],
+  ) {
+    console.log(variantsInCart, typeof variantsInCart);
     this.catalogListContainer.innerHTML = '';
 
     products.forEach((product: Product) => {
@@ -76,6 +80,8 @@ export default class MainView {
         product.id,
         product.price,
         product.discount,
+        product.sizesList,
+        variantsInCart,
       );
       this.catalogListContainer.append(productCard.renderCard());
     });

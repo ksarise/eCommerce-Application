@@ -7,6 +7,7 @@ import {
   Product as ProductCard,
   ParsedCategory,
 } from '../../global/interfaces/products';
+import CartPageModel from '../Cart/CartModel';
 
 export default class MainModel {
   private products: PagedQueryResponse = {
@@ -33,7 +34,15 @@ export default class MainModel {
     priceRange: { min: number; max: number };
   };
 
-  constructor() {
+  public variantsInCart: { [key: string]: string }[] = [];
+
+  public cartProducts = [];
+
+  private cartModel: CartPageModel;
+
+  constructor(cartModel: CartPageModel) {
+    this.cartModel = cartModel;
+    this.getVariantsFromCart();
     this.selectedFilters = {
       attributes: [],
       priceRange: { min: 0, max: 1000 },
@@ -57,6 +66,14 @@ export default class MainModel {
           ?.value?.centAmount
           ? product.masterVariant.prices[0].discounted.value.centAmount / 100
           : 0;
+        const sizes = product.variants
+          ?.map((variant) => {
+            return (
+              variant.attributes?.find((attribute) => attribute.name === 'Size')
+                ?.value || ''
+            );
+          })
+          .filter((size) => size !== '');
         const productdata: ProductCard = {
           name: product.name['en-US'],
           desc: product.description!['en-US'],
@@ -64,6 +81,7 @@ export default class MainModel {
           id: product.id,
           price: price.toFixed(2),
           discount: discountPrice.toFixed(2),
+          sizesList: sizes,
         };
         newProducts.push(productdata);
       },
@@ -205,5 +223,24 @@ export default class MainModel {
 
   public handleSearch(value: string) {
     this.textSearch = value;
+  }
+
+  public async getVariantsFromCart() {
+    const cartId = localStorage.getItem('cartId');
+    let currentCart;
+    if (cartId) {
+      currentCart = await this.cartModel.getCartById(cartId);
+      console.log('currentcart', currentCart);
+    }
+    currentCart?.lineItems.forEach((item) => {
+      this.variantsInCart = [
+        ...this.variantsInCart,
+        {
+          productId: item.productId,
+          variantId: item.variant.id.toString(),
+        },
+      ];
+    });
+    console.log('variants2', this.variantsInCart);
   }
 }

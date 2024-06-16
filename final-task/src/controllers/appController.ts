@@ -39,10 +39,7 @@ export default class AppController {
       this.appView.registrationView,
       this.appModel.registrationModel,
     );
-    this.mainController = new MainController(
-      this.appModel.mainModel,
-      this.appView.mainView,
-    );
+
     this.profileController = new ProfileController(
       this.appView.profileView,
       this.appModel,
@@ -55,6 +52,10 @@ export default class AppController {
       this.appView.cartView,
       this.appModel.cartPageModel,
       routerController,
+    );
+    this.mainController = new MainController(
+      this.appModel.mainModel,
+      this.appView.mainView,
     );
   }
 

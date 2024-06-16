@@ -14,7 +14,7 @@ export default class AppModel {
 
   public registrationModel: RegistrationPageModel;
 
-  public mainModel: MainModel = new MainModel();
+  public mainModel: MainModel;
 
   public productPageModel: ProductPageModel;
 
@@ -25,12 +25,12 @@ export default class AppModel {
   constructor() {
     this.apiService = new API();
     this.registrationModel = new RegistrationPageModel();
-    this.mainModel = new MainModel();
     this.cartPageModel = new CartPageModel(this.apiService);
     this.productPageModel = new ProductPageModel(
       this.apiService,
       this.cartPageModel,
     );
+    this.mainModel = new MainModel(this.cartPageModel);
     if (localStorage.getItem('userCreds')) {
       this.isLogined = true;
     } else {
