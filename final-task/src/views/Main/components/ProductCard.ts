@@ -22,6 +22,11 @@ export default class ProductCard {
     public discount: string,
     public sizes: string[],
     public variantsInCart: { [key: string]: string }[],
+    bindClickCallback: (
+      isAdd: boolean,
+      parentId: string,
+      variantId: number,
+    ) => void,
   ) {
     this.card = tags.div(['product-card'], '', { id: `${id}` }).getElement();
     const cardInner = tags.div(['product-card__inner'], '').getElement();
@@ -58,6 +63,14 @@ export default class ProductCard {
         'data-id': `${id}`,
       },
     );
+    this.cardAddBtn.addEventListener('click', () => {
+      bindClickCallback(
+        this.cardAddBtn.textContent === 'Add to cart',
+        this.id,
+        this.chosenSize,
+      );
+      this.cardAddBtnloader();
+    });
     this.sizesList = tags.div(['product-card__inner__sizes-list']).getElement();
     this.initializeSizeItems();
     if (discount !== '0.00') {

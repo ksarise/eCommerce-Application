@@ -86,12 +86,11 @@ export default class MainView {
         product.discount,
         product.sizesList,
         variantsInCart,
+        bindClickCallback,
       );
       this.catalogListContainer.append(productCard.renderCard());
       return productCard;
     });
-
-    this.bindClick(bindClickCallback);
   }
 
   public setCategories(categories: Map<string, ParsedCategory>) {
@@ -346,21 +345,6 @@ export default class MainView {
     const breadcrumbHomeItem = tags.a(['breadcrumb-item'], '/', 'Home >');
     const breadcrumbCatalogItem = tags.a(['breadcrumb-item'], '/', 'Catalog >');
     this.breadcrumbContainer.prepend(breadcrumbHomeItem, breadcrumbCatalogItem);
-  }
-
-  public bindClick(
-    callback: (isAdd: boolean, parentId: string, variantId: number) => void,
-  ): void {
-    this.productCards.forEach((productCard) => {
-      productCard.cardAddBtn.addEventListener('click', () => {
-        callback(
-          productCard.cardAddBtn.textContent === 'Add to cart',
-          productCard.id,
-          productCard.chosenSize,
-        );
-        productCard.cardAddBtnloader();
-      });
-    });
   }
 
   public updateProductCards(
