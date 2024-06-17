@@ -1,8 +1,10 @@
+import { DiscountCode } from '@commercetools/platform-sdk';
 import tags from '../../tags/tags';
 import ProductCard from './components/ProductCard';
 import FilterSideBar from './components/FilterSideBar';
 import { Product, ParsedCategory } from '../../global/interfaces/products';
 import BaseComponentGenerator from '../../tags/base-component';
+import DiscountBanner from './components/DiscountBanner';
 
 export default class MainView {
   private mainContainer: HTMLDivElement;
@@ -19,8 +21,11 @@ export default class MainView {
 
   private breadcrumbContainer: HTMLDivElement;
 
+  private catalogPromoCodes: HTMLElement;
+
   constructor() {
     this.mainContainer = tags.div(['main']).getElement() as HTMLDivElement;
+    this.catalogPromoCodes = tags.div(['promocode']).getElement();
     this.filterContainer = new FilterSideBar();
     this.catalogContainer = tags
       .div(['catalog'])
@@ -56,6 +61,7 @@ export default class MainView {
     this.createTextSearch();
     this.createSortDropdown();
     this.mainContainer.append(
+      this.catalogPromoCodes,
       this.breadcrumbContainer,
       this.catalogWrapContainer,
     );
@@ -333,5 +339,17 @@ export default class MainView {
     const breadcrumbHomeItem = tags.a(['breadcrumb-item'], '/', 'Home >');
     const breadcrumbCatalogItem = tags.a(['breadcrumb-item'], '/', 'Catalog >');
     this.breadcrumbContainer.prepend(breadcrumbHomeItem, breadcrumbCatalogItem);
+  }
+
+  public createPromoCodes(codes: DiscountCode[]) {
+    codes.forEach((code) => {
+      const banner = new DiscountBanner(
+        code.name?.['en-US'],
+        code.description?.['en-US'],
+        code.code,
+      );
+      const block = banner.getBanner();
+      this.catalogPromoCodes.append(block);
+    });
   }
 }

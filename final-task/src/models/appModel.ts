@@ -187,4 +187,9 @@ export default class AppModel {
     const response = this.apiService.getProductById(id);
     return response;
   }
+
+  public async getDiscountsCode() {
+    const response = (await this.apiService.getDiscountCodes()).body.results;
+    return response;
+  }
 }
