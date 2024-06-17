@@ -84,9 +84,9 @@ export default class AppController {
     await this.appView.mainView.bindCategoryList(
       this.handleCategoryNavigation.bind(this),
     );
-    this.appView.mainView.bindClick(
-      this.handleClickProductCartButton.bind(this),
-    );
+    // this.appView.mainView.bindClick(
+    //   this.handleClickProductCartButton.bind(this),
+    // );
     window.addEventListener('scroll', () => this.onScroll());
   }
 
@@ -273,8 +273,7 @@ export default class AppController {
     texts?: string,
   ) {
     try {
-      console.log('fetch filters', filters);
-      console.log('offset', offset);
+      this.appView.mainView.showSkeletons(limit);
       const products = await this.appModel.requestGetProducts(
         limit,
         offset,
@@ -289,7 +288,10 @@ export default class AppController {
         this.hasMoreProducts = true;
       }
       this.appModel.mainModel.setProducts(products);
-      this.mainController.renderProducts();
+      this.appView.mainView.removeSkeletons();
+      this.mainController.renderProducts(
+        this.handleClickProductCartButton.bind(this),
+      );
     } catch (error) {
       this.appView.mainView.removeSkeletons();
       const errmessage = (error as ErrorResponse).message;
@@ -379,7 +381,9 @@ export default class AppController {
     this.appView.mainView.clearCatalogList();
     this.routerController.goToPage('/');
     await this.fetchAndLogProducts();
-    this.mainController.handleResetFilters();
+    this.mainController.handleResetFilters(
+      this.handleClickProductCartButton.bind(this),
+    );
   }
 
   private async handleSortChange(value: string) {
@@ -498,7 +502,9 @@ export default class AppController {
       if (subCategoryOrigName) {
         breadcrumb.push(subCategoryOrigName);
       }
-      this.mainController.renderProducts();
+      this.mainController.renderProducts(
+        this.handleClickProductCartButton.bind(this),
+      );
       this.appView.mainView.updateBreadcrumb(breadcrumb);
     });
   }

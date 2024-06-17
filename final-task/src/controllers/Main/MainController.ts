@@ -32,14 +32,30 @@ export default class MainController {
     this.mainModel.createFilterResponse();
   }
 
-  public handleResetFilters() {
+  public handleResetFilters(
+    bindClickCallback: (
+      isAdd: boolean,
+      parentId: string,
+      variantId: number,
+    ) => void,
+  ) {
     this.mainModel.resetFilters();
     this.mainView.clearFilters();
-    this.renderProducts();
+    this.renderProducts(bindClickCallback);
   }
 
-  public renderProducts() {
+  public renderProducts(
+    bindClickCallback: (
+      isAdd: boolean,
+      parentId: string,
+      variantId: number,
+    ) => void,
+  ) {
     const products = this.mainModel.getProducts();
-    this.mainView.renderProducts(products, this.mainModel.variantsInCart);
+    this.mainView.renderProducts(
+      products,
+      this.mainModel.variantsInCart,
+      bindClickCallback,
+    );
   }
 }

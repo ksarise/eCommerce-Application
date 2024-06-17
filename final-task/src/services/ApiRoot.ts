@@ -73,7 +73,6 @@ export default class API {
     sort?: string;
     text?: string;
   }) {
-    console.log('queryArgs', queryArgs);
     const queryParams: { [key: string]: QueryParam } = {
       sort: queryArgs.sort || 'name.en-US asc',
       limit: queryArgs.limit || 10,

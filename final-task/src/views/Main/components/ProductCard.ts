@@ -112,7 +112,7 @@ export default class ProductCard {
         }
 
         sizeItem.addEventListener('click', () => {
-          const active = document.querySelector(
+          const active = this.sizesList.querySelector(
             '.product-card__inner__size-item--active',
           );
           const currentIsInCart = this.variantsInCart.some(
@@ -129,7 +129,6 @@ export default class ProductCard {
           }
           if (currentIsInCart) {
             this.cardAddBtn.textContent = 'Remove from cart';
-            console.log('initremoveBtn', this.cardAddBtn.textContent);
           }
 
           this.chosenSize = index + 2;

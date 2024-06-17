@@ -70,8 +70,12 @@ export default class MainView {
   public async renderProducts(
     products: Product[],
     variantsInCart: { [key: string]: string }[],
+    bindClickCallback: (
+      isAdd: boolean,
+      parentId: string,
+      variantId: number,
+    ) => void,
   ) {
-    console.log('render');
     this.productCards = products.map((product: Product) => {
       const productCard = new ProductCard(
         product.name,
@@ -86,6 +90,8 @@ export default class MainView {
       this.catalogListContainer.append(productCard.renderCard());
       return productCard;
     });
+
+    this.bindClick(bindClickCallback);
   }
 
   public setCategories(categories: Map<string, ParsedCategory>) {
@@ -391,6 +397,5 @@ export default class MainView {
 
   public clearCatalogList() {
     this.catalogListContainer.innerHTML = '';
-    console.log('cleared');
   }
 }
