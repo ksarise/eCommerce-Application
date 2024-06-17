@@ -1,3 +1,6 @@
+// * {
+//   outline: 1px green solid;
+// }
 .product-card {
   background-color: #fff;
   position: relative;
@@ -42,6 +45,7 @@
       -webkit-line-clamp: 2;
       -webkit-box-orient: vertical;
       overflow: hidden;
+
       &-link {
         color: #1d1b1b;
         text-decoration: none;
@@ -118,40 +122,31 @@
         background-color: $primary;
         color: #fff;
       }
+
       &--loader {
         display: flex;
         width: 25px;
         aspect-ratio: 1;
         --c: no-repeat linear-gradient(#000 0 0);
         background: var(--c), var(--c), var(--c);
-        animation:
-          l18-1 1s infinite,
-          l18-2 1s infinite;
+        animation: l18-1 1s infinite, l18-2 1s infinite;
       }
+
       @keyframes l18-1 {
-        0%,
-        100% {
+        0%, 100% {
           background-size: 20% 100%;
         }
-        33%,
-        66% {
+        33%, 66% {
           background-size: 20% 20%;
         }
       }
+
       @keyframes l18-2 {
-        0%,
-        33% {
-          background-position:
-            0 0,
-            50% 50%,
-            100% 100%;
+        0%, 33% {
+          background-position: 0 0, 50% 50%, 100% 100%;
         }
-        66%,
-        100% {
-          background-position:
-            100% 0,
-            50% 50%,
-            0 100%;
+        66%, 100% {
+          background-position: 100% 0, 50% 50%, 0 100%;
         }
       }
     }
@@ -192,6 +187,7 @@
         color: $secondary;
         background-color: $primary;
       }
+
       &--incart {
         color: red !important;
         background-color: $primary;
@@ -228,11 +224,61 @@
   }
 
   @media screen and (max-width: 900px) {
-    &__name {
-      font-size: 1rem;
-      height: auto;
+      display: flex;
+      overflow: hidden;
+      justify-content: center;
+    &__inner, &__inner__image ,&__image-container, &__inner__footer {
+      width: 100%;
     }
-    width: 100%;
+    &__inner__sizes-list {
+      padding: 10px;
+      justify-content: flex-start;
+      overflow-x: auto;
+    }
+    &__inner__size-item {
+      flex-shrink: 0;
+      min-width: 50px;
+    }
+    .product-card__inner__footer {
+      display: flex;
+    }
+
+    &:hover {
+      border-color: initial;
+      transform: none;
+      z-index: 0;
+      transition: none;
+
+      .product-card__inner {
+        position: initial;
+        top: initial;
+        left: initial;
+        box-shadow: none;
+        transform: none;
+        z-index: 0;
+        transition: none;
+      }
+    }
+
+    .product-card__inner__name-link {
+      &:hover {
+        color: initial;
+      }
+    }
+
+    .product-card__inner__size-item {
+      &:hover {
+        color: initial;
+        background-color: initial;
+      }
+    }
+
+    .product-card__inner__add-button {
+      &:hover {
+        background-color: initial;
+        color: initial;
+      }
+    }
   }
 
   @media screen and (max-width: 600px) {
@@ -243,17 +289,17 @@
     border-radius: 10px;
     padding: 5px;
 
-    &__name {
+    .product-card__inner__name {
       font-size: 0.7rem;
       height: auto;
     }
 
-    &__description {
+    .product-card__inner__description {
       font-size: 0.8rem;
       -webkit-line-clamp: 2;
     }
 
-    &__price {
+    .product-card__inner__price {
       font-size: 0.9rem;
     }
   }
