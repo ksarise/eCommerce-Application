@@ -7,6 +7,7 @@ import ProductPageView from './ProductPage/ProductPageView';
 import Profile from './myProfile/myProfileView';
 import AboutView from './AboutUs/aboutUsView';
 import CartView from './Cart/CartView';
+import HomeView from './Home/HomeView';
 
 const appViewHeader = `<div id="content" class="view container"></div>`;
 
@@ -31,10 +32,13 @@ export default class AppView {
 
   public cartView: CartView;
 
+  public homeView: HomeView;
+
   public constructor() {
     this.loginView = new LoginView();
     this.innerHTML = appViewHeader;
     this.headerView = new HeaderView();
+    this.homeView = new HomeView();
     this.mainView = new MainView();
     this.notFoundView = new NotFoundView();
     this.registrationView = new RegistrationView();
@@ -55,6 +59,13 @@ export default class AppView {
     document.querySelector('.body')!.prepend(this.headerView.getContent());
     const content = document.getElementById('content');
     switch (page) {
+      case 'home':
+        document.getElementById('content')!.innerHTML = '';
+        document
+          .getElementById('content')!
+          .appendChild(this.homeView.getContent());
+        this.loginView.addClassToLogin(false);
+        break;
       case 'main':
         document.getElementById('content')!.innerHTML = '';
         document
