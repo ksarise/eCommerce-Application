@@ -9,9 +9,9 @@
   justify-content: center;
 }
 .promocode {
-   &__banner {
+  &__banner {
     position: relative;
-    padding: .3em;
+    padding: 0.3em;
     padding-right: 2em;
     display: flex;
     flex-direction: row;
@@ -38,16 +38,14 @@
         transform: rotate(720deg);
       }
     }
-   }
+  }
 
-   &__hidden {
+  &__hidden {
     position: fixed;
     top: -100px;
     opacity: 0;
     transition: 0.9s;
-   }
-
-
+  }
 }
 .filter-side-bar {
   width: 350px;

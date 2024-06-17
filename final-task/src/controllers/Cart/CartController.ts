@@ -1,3 +1,4 @@
+import { Cart, ClientResponse } from '@commercetools/platform-sdk';
 import CartPageView from '../../views/Cart/CartView';
 import CartPageModel from '../../models/Cart/CartModel';
 import routerController from '../../services/router';
@@ -37,6 +38,8 @@ export default class CartPageController {
       this.handleClickClearCart.bind(this);
     this.cartPageView.myCartContainer.handleClickProduct =
       this.handleClickProduct.bind(this);
+    this.cartPageView.totalCostContainer.handleClickPromoCode =
+      this.handleClickPromoCode.bind(this);
   }
 
   public handleClickGoToCatalog() {
@@ -79,5 +82,27 @@ export default class CartPageController {
 
   private async handleClickProduct(productId: string) {
     this.routerControllerInstance.goToPage(`/product/${productId}`);
+  }
+
+  private async handleClickPromoCode() {
+    try {
+      const code = (document.getElementById('promoCode') as HTMLInputElement)
+        .value;
+      const result: Cart = (
+        (await this.cartPageModel.createDiscountById(
+          code,
+        )) as ClientResponse<Cart>
+      ).body;
+      showToast({ text: 'Promo code Active', type: 'positive' });
+      const discount =
+        result.discountOnTotalPrice?.discountedAmount.centAmount || 0;
+      const price = result.totalPrice.centAmount;
+      this.cartPageView.totalCostContainer.renderTotalCost(
+        price / 100,
+        discount / 100,
+      );
+    } catch (error) {
+      showToast({ text: (error as Error).message, type: 'negative' });
+    }
   }
 }

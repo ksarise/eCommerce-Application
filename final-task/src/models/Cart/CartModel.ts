@@ -17,15 +17,26 @@ export default class CartPageModel {
   public async requestGetProductsFromCart(
     // _renderProducts: (products: LineItem[]) => void,
     // _renderTotalCost: (totalCost: number) => void,
-    _render: (products: LineItem[], totalCost: number) => void,
+    _render: (
+      products: LineItem[],
+      totalCost: number,
+      discount: number,
+    ) => void,
   ) {
     if (this.cart) {
       await this.getCartById(this.cart.id);
-      _render(this.cart.lineItems, this.cart.totalPrice.centAmount / 100);
+      const discount = this.cart.discountOnTotalPrice
+        ? this.cart.discountOnTotalPrice?.discountedAmount.centAmount
+        : 0;
+      _render(
+        this.cart.lineItems,
+        this.cart.totalPrice.centAmount / 100,
+        discount / 100,
+      );
       // _renderProducts(this.cart.lineItems);
       // _renderTotalCost(this.cart.totalPrice.centAmount / 100);
     } else {
-      _render([], 0);
+      _render([], 0, 0);
       // _renderProducts([]);
     }
   }
@@ -42,6 +53,7 @@ export default class CartPageModel {
       lineItemId: string,
       quantity: number,
       totalCost: number,
+      totalDiscount: number,
       totalCostLineItem?: number,
     ) => void,
   ) {
@@ -66,10 +78,14 @@ export default class CartPageModel {
       if (tmpLineItem) {
         rightLineItemPrice = tmpLineItem!.totalPrice.centAmount / 100;
       }
+      const discount = this.cart!.discountOnTotalPrice
+        ? this.cart!.discountOnTotalPrice?.discountedAmount.centAmount
+        : 0;
       _changeQuantityTotalCost(
         lineItemId,
         newQuantity,
         this.cart!.totalPrice.centAmount / 100,
+        discount / 100,
         rightLineItemPrice,
       );
       return response;
@@ -84,6 +100,7 @@ export default class CartPageModel {
       lineItemId: string,
       quantity: number,
       totalCost: number,
+      totalDiscount: number,
       totalCostLineItem?: number,
     ) => void,
   ) {
@@ -102,10 +119,14 @@ export default class CartPageModel {
       if (tmpLineItem) {
         rightLineItemPrice = tmpLineItem!.totalPrice.centAmount / 100;
       }
+      const discount = this.cart?.discountOnTotalPrice
+        ? this.cart?.discountOnTotalPrice.discountedAmount.centAmount
+        : 0;
       _changeQuantityTotalCost(
         lineItemId,
         0,
         this.cart!.totalPrice.centAmount / 100,
+        discount / 100,
         rightLineItemPrice,
       );
       return response;
@@ -124,5 +145,20 @@ export default class CartPageModel {
   public async createCart() {
     this.cart = (await this.apiService.createCartRequest()).body;
     localStorage.setItem('cartId', this.cart.id);
+  }
+
+  public async createDiscountById(code: string) {
+    try {
+      await this.getCartById(this.cart!.id);
+      const res = await this.apiService.createDiscountById(
+        this.cart!.id,
+        code,
+        this.cart!.version,
+      );
+      console.log(res);
+      return res;
+    } catch (error) {
+      return error;
+    }
   }
 }

@@ -7,9 +7,12 @@ export default class TotalCostContainer {
     | HTMLSpanElement
     | (() => void)
     | ((nameContainer: string) => void)
-    | ((totalCost: number) => void);
+    | ((totalCost: number) => void)
+    | undefined;
 
   public costContainer: HTMLDivElement;
+
+  public handleClickPromoCode: (() => void) | undefined;
 
   private subtotalContainer: HTMLDivElement;
 
@@ -72,27 +75,31 @@ export default class TotalCostContainer {
   private createPromocodeContainer() {
     const inputPromocodeTag = tags.input(['cart__cost_promocode-input'], {
       placeholder: 'Add Promo Code',
+      id: 'promoCode',
     });
     const promocodeButton = tags.button(
       ['cart__cost_promocode-button'],
       'Apply',
+      {},
+      'click',
+      this!.handleClickPromoCode,
     );
     this.promocodeContainer.append(inputPromocodeTag);
     this.promocodeContainer.append(promocodeButton);
   }
 
-  public renderTotalCost(totalCost: number) {
+  public renderTotalCost(totalCost: number, discount: number = 0) {
     this.subtotalPrice.innerHTML = `$${totalCost}`;
     this.totalPrice.innerHTML = `$${totalCost}`;
-    this.discountPrice.innerHTML = `$0`;
+    this.discountPrice.innerHTML = `$${discount}`;
   }
 
   public getContent(): HTMLElement {
     return this.costContainer;
   }
 
-  public changeTotalCost(totalCost: number) {
-    this.subtotalPrice.innerHTML = `$${totalCost}`;
-    this.totalPrice.innerHTML = `$${totalCost}`;
-  }
+  // public changeTotalCost(totalCost: number) {
+  //   this.subtotalPrice.innerHTML = `$${totalCost}`;
+  //   this.totalPrice.innerHTML = `$${totalCost}`;
+  // }
 }

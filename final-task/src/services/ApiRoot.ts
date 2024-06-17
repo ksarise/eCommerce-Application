@@ -334,6 +334,29 @@ export default class API {
     return response;
   }
 
+  public async createDiscountById(
+    cartId: string,
+    code: string,
+    version: number,
+  ) {
+    const response = await this.apiRoot
+      .carts()
+      .withId({ ID: cartId })
+      .post({
+        body: {
+          version,
+          actions: [
+            {
+              action: 'addDiscountCode',
+              code,
+            },
+          ],
+        },
+      })
+      .execute();
+    return response;
+  }
+
   public async getDiscountCodes() {
     const response = await this.apiRoot.discountCodes().get().execute();
     return response;

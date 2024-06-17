@@ -41,13 +41,13 @@ export default class CartView {
     return this.container.getElement();
   }
 
-  public render(products: LineItem[], totalCost: number) {
+  public render(products: LineItem[], totalCost: number, discount: number = 0) {
     if (products.length === 0) {
       this.renderEmptyCart();
       return;
     }
     this.myCartContainer.renderProducts(products);
-    this.totalCostContainer.renderTotalCost(totalCost);
+    this.totalCostContainer.renderTotalCost(totalCost, discount);
   }
 
   private renderEmptyCart() {
@@ -78,6 +78,7 @@ export default class CartView {
     lineItemId: string,
     quantity: number,
     totalCost: number,
+    totalDiscount: number,
     totalCostLineItem?: number,
   ) {
     if (totalCost === 0) {
@@ -90,6 +91,6 @@ export default class CartView {
       quantity,
       totalCostLineItem,
     );
-    this.totalCostContainer.changeTotalCost(totalCost);
+    this.totalCostContainer.renderTotalCost(totalCost, totalDiscount);
   }
 }
