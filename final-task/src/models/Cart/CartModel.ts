@@ -54,6 +54,7 @@ export default class CartPageModel {
       quantity: number,
       totalCost: number,
       totalDiscount: number,
+      cart: Cart,
       totalCostLineItem?: number,
     ) => void,
   ) {
@@ -86,6 +87,7 @@ export default class CartPageModel {
         newQuantity,
         this.cart!.totalPrice.centAmount / 100,
         discount / 100,
+        this.cart!,
         rightLineItemPrice,
       );
       return response;
@@ -101,6 +103,7 @@ export default class CartPageModel {
       quantity: number,
       totalCost: number,
       totalDiscount: number,
+      cart: Cart,
       totalCostLineItem?: number,
     ) => void,
   ) {
@@ -127,6 +130,7 @@ export default class CartPageModel {
         0,
         this.cart!.totalPrice.centAmount / 100,
         discount / 100,
+        this.cart!,
         rightLineItemPrice,
       );
       return response;

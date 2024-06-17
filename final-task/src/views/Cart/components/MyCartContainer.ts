@@ -1,4 +1,4 @@
-import { LineItem } from '@commercetools/platform-sdk';
+import { Cart, LineItem } from '@commercetools/platform-sdk';
 import BaseComponentGenerator from '../../../tags/base-component';
 import tags from '../../../tags/tags';
 import parseSVG from '../../../services/svgParser';
@@ -165,6 +165,19 @@ export default class MyCartContainer {
       classNames: ['my-cart__table-cell', 'my-cart__table-cell-price'],
       content: `$${product.totalPrice.centAmount / 100}`,
     });
+    if (
+      product.price.value.centAmount * product.quantity >
+      product.totalPrice.centAmount
+    ) {
+      const realPrice = tags.div(
+        ['my-cart__table-cell', 'my-cart__table-cell-realprice'],
+        `$${(product.price.value.centAmount / 100) * product.quantity}`,
+      );
+      priceCell.appendChild(realPrice);
+      priceCell
+        .getElement()
+        .classList.toggle('my-cart__table-cell-discount', true);
+    }
     productRow.getElement().append(priceCell.getElement());
     const removeCell = new BaseComponentGenerator({
       tag: 'td',
@@ -201,9 +214,15 @@ export default class MyCartContainer {
   public changeQuantity(
     lineItemId: string,
     quantity: number,
+    cart: Cart,
     totalCostLineItem?: number,
   ) {
-    console.log(quantity, totalCostLineItem);
+    const tmpLineItem = cart.lineItems.find((item) => item.id === lineItemId);
+    console.log(
+      quantity,
+      totalCostLineItem,
+      tmpLineItem!.price.value.centAmount / 100,
+    );
     const row = this.myCartTable
       .getElement()
       .querySelector(`[data-line-item-id="${lineItemId}"]`);
@@ -219,6 +238,21 @@ export default class MyCartContainer {
       ) as HTMLTableCellElement;
       quantityCell.textContent = `${quantity}`;
       totalCostCell.textContent = `$${totalCostLineItem}`;
+      if (
+        (tmpLineItem!.price.value.centAmount / 100) * tmpLineItem!.quantity >
+        totalCostLineItem!
+      ) {
+        const realPrice = tags
+          .div(
+            ['my-cart__table-cell', 'my-cart__table-cell-realprice'],
+            `$${(tmpLineItem!.price.value.centAmount / 100) * tmpLineItem!.quantity}`,
+          )
+          .getElement();
+        totalCostCell.appendChild(realPrice);
+        totalCostCell.classList.toggle('my-cart__table-cell-discount', true);
+      } else {
+        totalCostCell.classList.toggle('my-cart__table-cell-discount', false);
+      }
     }
   }
 }

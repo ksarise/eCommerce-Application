@@ -1,4 +1,4 @@
-import { LineItem } from '@commercetools/platform-sdk';
+import { Cart, LineItem } from '@commercetools/platform-sdk';
 import BaseComponentGenerator from '../../tags/base-component';
 import MyCartContainer from './components/MyCartContainer';
 import TotalCostContainer from './components/TotalCostContainer';
@@ -79,6 +79,7 @@ export default class CartView {
     quantity: number,
     totalCost: number,
     totalDiscount: number,
+    cart: Cart,
     totalCostLineItem?: number,
   ) {
     if (totalCost === 0) {
@@ -89,6 +90,7 @@ export default class CartView {
     this.myCartContainer.changeQuantity(
       lineItemId,
       quantity,
+      cart,
       totalCostLineItem,
     );
     this.totalCostContainer.renderTotalCost(totalCost, totalDiscount);
