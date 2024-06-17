@@ -79,14 +79,12 @@ export default class AppController {
     await this.fetchAndLogProducts();
     await this.fetchCategories();
     this.mainController.initialize();
+
     routerController.handleLocation();
     this.handleVisiblityButtons();
     await this.appView.mainView.bindCategoryList(
       this.handleCategoryNavigation.bind(this),
     );
-    // this.appView.mainView.bindClick(
-    //   this.handleClickProductCartButton.bind(this),
-    // );
     window.addEventListener('scroll', () => this.onScroll());
   }
 
@@ -532,7 +530,7 @@ export default class AppController {
         variantId,
       );
     }
-    await this.appModel.mainModel.getVariantsFromCart();
+    await this.storeVariantsFromCarttoModel();
     this.appView.mainView.updateProductCards(
       parentId,
       this.appModel.mainModel.variantsInCart,
@@ -572,5 +570,14 @@ export default class AppController {
 
   private handleClickAboutUsButton() {
     this.routerController.goToPage('/about_us');
+  }
+
+  public async storeVariantsFromCarttoModel() {
+    if (localStorage.getItem('cartId')) {
+      const currentCart = await this.appModel.cartPageModel.getCartById(
+        localStorage.getItem('cartId')!,
+      );
+      await this.appModel.mainModel.getVariantsFromCart(currentCart);
+    }
   }
 }

@@ -30,7 +30,7 @@ export default class AppModel {
       this.apiService,
       this.cartPageModel,
     );
-    this.mainModel = new MainModel(this.cartPageModel);
+    this.mainModel = new MainModel();
     if (localStorage.getItem('userCreds')) {
       this.isLogined = true;
     } else {

@@ -2,12 +2,12 @@ import {
   PagedQueryResponse,
   Category,
   ProductProjection,
+  Cart,
 } from '@commercetools/platform-sdk';
 import {
   Product as ProductCard,
   ParsedCategory,
 } from '../../global/interfaces/products';
-import CartPageModel from '../Cart/CartModel';
 
 export default class MainModel {
   private products: PagedQueryResponse = {
@@ -38,11 +38,7 @@ export default class MainModel {
 
   public cartProducts = [];
 
-  private cartModel: CartPageModel;
-
-  constructor(cartModel: CartPageModel) {
-    this.cartModel = cartModel;
-    this.getVariantsFromCart();
+  constructor() {
     this.selectedFilters = {
       attributes: [],
       priceRange: { min: 0, max: 1000 },
@@ -229,13 +225,9 @@ export default class MainModel {
     this.textSearch = value;
   }
 
-  public async getVariantsFromCart() {
-    const cartId = localStorage.getItem('cartId');
-    let currentCart;
-    if (cartId) {
-      currentCart = await this.cartModel.getCartById(cartId);
-    }
+  public async getVariantsFromCart(currentCart: Cart) {
     this.variantsInCart = [];
+    if (!currentCart) return;
     currentCart?.lineItems.forEach((item) => {
       this.variantsInCart = [
         ...this.variantsInCart,
