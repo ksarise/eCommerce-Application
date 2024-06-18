@@ -82,6 +82,11 @@ export default class HeaderView {
         'data-navigo': 'true',
       },
     );
+    const linkCatalog = tags.a(
+      ['header__navigation_link', 'header__navigation_login'],
+      '/catalog',
+      'Catalog',
+    );
     const linkRegistration = tags.a(
       ['header__navigation_link', 'header__navigation_register'],
       '/registration',
@@ -91,8 +96,7 @@ export default class HeaderView {
         'data-navigo': 'true',
       },
     );
-    this.linkContainer.appendChild(linkHome);
-    this.linkContainer.appendChild(linkRegistration);
+    this.linkContainer.append(linkHome, linkCatalog, linkRegistration);
     return this.linkContainer;
   }
 

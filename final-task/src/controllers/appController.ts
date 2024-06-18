@@ -32,7 +32,7 @@ export default class AppController {
 
   private cartPageController: CartController;
 
-  private currentOffset: number = 10;
+  private currentOffset: number = 0;
 
   private limit: number = 10;
 
@@ -83,10 +83,13 @@ export default class AppController {
 
     routerController.handleLocation();
     this.handleVisiblityButtons();
-    await this.appView.mainView.bindCategoryList(
+    this.appView.mainView.bindCategoryList(
       this.handleCategoryNavigation.bind(this),
     );
     window.addEventListener('scroll', () => this.onScroll());
+    this.appView.homeView.handleClickButtons(
+      this.handleCategoryNavigation.bind(this),
+    );
   }
 
   public initializeListeners() {
@@ -119,6 +122,8 @@ export default class AppController {
     this.appView.registrationView.bindFormSubmit(
       this.handleRegistrationFormSubmit.bind(this),
     );
+    this.appView.homeView.buttonToCatalogCallback =
+      this.handleClickGoCatalogButton.bind(this);
     this.appView.mainView.bindApplyFilters(this.handleApplyFilters.bind(this));
     this.appView.mainView.bindResetFilters(this.handleResetFilters.bind(this));
     this.appView.mainView.bindSortDropdown(this.handleSortChange.bind(this));
@@ -355,6 +360,10 @@ export default class AppController {
     checked: boolean,
     main?: string,
   ) {
+    const currentPath = window.location.pathname;
+    if (!currentPath.includes('catalog')) {
+      this.routerController.changeContent?.('main');
+    }
     if (name !== this.appModel.mainModel.currentCategory?.name) {
       this.appModel.mainModel.handleOptionListCheck(
         option,
@@ -365,6 +374,7 @@ export default class AppController {
       );
       this.appModel.mainModel.createFilterResponse();
     }
+    this.appView.mainView.clearCatalogList();
     await this.fetchAndLogProducts(
       this.limit,
       this.currentOffset,
@@ -372,6 +382,9 @@ export default class AppController {
       this.appModel.mainModel.sort,
       this.appModel.mainModel.textSearch,
     );
+    if (main) {
+      this.appView.mainView.updateBreadcrumb([main, name]);
+    }
   }
 
   private async handleResetFilters() {
@@ -435,15 +448,17 @@ export default class AppController {
     await this.fetchCategories();
     const cats: Map<string, ParsedCategory> =
       this.appModel.mainModel.getParsedCategories();
+
     if (
-      pathSegments.length < 2 ||
-      pathSegments[0].toLowerCase() !== 'categories'
+      pathSegments.length < 3 ||
+      pathSegments[0].toLowerCase() !== 'catalog' ||
+      pathSegments[1].toLowerCase() !== 'categories'
     ) {
       this.changeContent?.('404');
       return;
     }
 
-    const categoryNames = pathSegments.slice(1);
+    const categoryNames = pathSegments.slice(2);
     let mainCategoryFound = false;
     let subCategoryFound = false;
     let mainCategoryId = '';
@@ -490,20 +505,18 @@ export default class AppController {
     }
 
     this.changeContent?.('main');
+    this.appView.mainView.clearCatalogList();
     await this.fetchAndLogProducts(
       this.limit,
       this.currentOffset,
       filters,
       'name.en-US asc',
       '',
-    ).finally(() => {
+    ).then(() => {
       const breadcrumb = [mainCategoryOrigName];
       if (subCategoryOrigName) {
         breadcrumb.push(subCategoryOrigName);
       }
-      this.mainController.renderProducts(
-        this.handleClickProductCartButton.bind(this),
-      );
       this.appView.mainView.updateBreadcrumb(breadcrumb);
     });
   }
@@ -585,5 +598,9 @@ export default class AppController {
       );
       await this.appModel.mainModel.getVariantsFromCart(currentCart);
     }
+  }
+
+  private handleClickGoCatalogButton() {
+    this.routerController.goToPage('/catalog');
   }
 }

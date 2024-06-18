@@ -22,6 +22,10 @@ class Router {
 
   public routerListeners() {
     this.router.on('/', () => {
+      this.changeContent?.('home');
+      this.router.resolve();
+    });
+    this.router.on('/catalog', () => {
       this.changeContent?.('main');
       this.router.resolve();
     });

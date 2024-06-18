@@ -102,7 +102,14 @@ export default class API {
   }
 
   public getCategories() {
-    return this.apiRoot.categories().get().execute();
+    return this.apiRoot
+      .categories()
+      .get({
+        queryArgs: {
+          limit: 100,
+        },
+      })
+      .execute();
   }
 
   public getMyCustomerDraft() {

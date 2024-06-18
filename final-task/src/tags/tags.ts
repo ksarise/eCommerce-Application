@@ -199,6 +199,19 @@ const option = (
   }).getElement();
 };
 
+const section = (
+  classNames: string[],
+  content?: string,
+  attributes: { [key: string]: string } = {},
+): HTMLElement => {
+  return new BaseComponentGenerator({
+    tag: 'section',
+    classNames,
+    content,
+    attributes,
+  }).getElement();
+};
+
 const tags = {
   div,
   h1,
@@ -216,6 +229,7 @@ const tags = {
   span,
   select,
   option,
+  section,
 };
 
 export default tags;

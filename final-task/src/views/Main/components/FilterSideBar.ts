@@ -52,7 +52,7 @@ export default class FilterSideBar {
         const listItem = tags.li(['option-list__item']);
         const link = tags.a(
           ['option-list__link'],
-          `${mainCategoryName.toLowerCase()}/${name.toLowerCase()}`,
+          `/catalog/categories/${mainCategoryName.toLowerCase()}/${name.toLowerCase()}`,
           name,
           {
             'data-optiontype': 'category',
