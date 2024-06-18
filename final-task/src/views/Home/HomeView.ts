@@ -220,10 +220,8 @@ export default class HomeView {
         button.addEventListener('click', (event: Event) => {
           event.preventDefault();
           const target = event.target as HTMLElement;
-          console.log(target);
           const { optiontype, optionname, id, main } = target.dataset;
           const checked = true;
-          console.log(optiontype, optionname, id, main);
           if (optiontype && optionname && id && main) {
             callback(optiontype, optionname, id, checked, main);
           }

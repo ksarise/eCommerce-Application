@@ -32,7 +32,7 @@ export default class AppController {
 
   private cartPageController: CartController;
 
-  private currentOffset: number = 10;
+  private currentOffset: number = 0;
 
   private limit: number = 10;
 
@@ -374,6 +374,7 @@ export default class AppController {
       );
       this.appModel.mainModel.createFilterResponse();
     }
+    this.appView.mainView.clearCatalogList();
     await this.fetchAndLogProducts(
       this.limit,
       this.currentOffset,
@@ -444,7 +445,6 @@ export default class AppController {
   }
 
   public async handleCategoryLink(pathSegments: string[]) {
-    console.log('pathSegments', pathSegments);
     await this.fetchCategories();
     const cats: Map<string, ParsedCategory> =
       this.appModel.mainModel.getParsedCategories();
@@ -505,20 +505,18 @@ export default class AppController {
     }
 
     this.changeContent?.('main');
+    this.appView.mainView.clearCatalogList();
     await this.fetchAndLogProducts(
       this.limit,
       this.currentOffset,
       filters,
       'name.en-US asc',
       '',
-    ).finally(() => {
+    ).then(() => {
       const breadcrumb = [mainCategoryOrigName];
       if (subCategoryOrigName) {
         breadcrumb.push(subCategoryOrigName);
       }
-      this.mainController.renderProducts(
-        this.handleClickProductCartButton.bind(this),
-      );
       this.appView.mainView.updateBreadcrumb(breadcrumb);
     });
   }
