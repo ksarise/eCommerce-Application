@@ -5,6 +5,7 @@ import {
   ClientResponse,
   Cart,
   LineItemDraft,
+  QueryParam,
 } from '@commercetools/platform-sdk';
 import {
   createPasswordClient,
@@ -66,30 +67,37 @@ export default class API {
   }
 
   public getProducts(queryArgs: {
+    limit?: number;
+    offset?: number;
     filter?: string[];
     sort?: string;
     text?: string;
   }) {
-    if (queryArgs.filter) {
+    const queryParams: { [key: string]: QueryParam } = {
+      sort: queryArgs.sort || 'name.en-US asc',
+      limit: queryArgs.limit || 10,
+      offset: queryArgs.offset || 0,
+    };
+    if (queryArgs.filter && queryArgs.filter.length > 0) {
+      queryParams['filter.query'] = queryArgs.filter;
+    }
+    if (queryArgs.text) {
+      queryParams['text.en-US'] = queryArgs.text;
+    }
+    if (
+      queryParams['filter.query'] ||
+      queryParams['text.en-US'] ||
+      queryParams.sort
+    ) {
       return this.apiRoot
         .productProjections()
         .search()
-        .get({
-          queryArgs: {
-            'filter.query': queryArgs.filter,
-            sort: queryArgs.sort,
-            'text.en-US': queryArgs.text,
-          },
-        })
+        .get({ queryArgs: queryParams })
         .execute();
     }
     return this.apiRoot
       .productProjections()
-      .get({
-        queryArgs: {
-          sort: 'name.en-US asc',
-        },
-      })
+      .get({ queryArgs: queryParams })
       .execute();
   }
 

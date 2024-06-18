@@ -52,7 +52,10 @@
   border: 1px solid #dddddd77;
 }
 .catalog {
+  display: flex;
+  flex-direction: column;
   width: 75% !important;
+  gap: 30px;
 }
 .catalog__panel {
   display: flex;
@@ -129,120 +132,18 @@
 .catalog__list {
   display: grid;
   border: 1px solid #dddddd77;
-  grid-template-columns: repeat(4, 1fr);
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  grid-auto-rows: minmax(0, 1fr);
   gap: 20px;
   justify-items: center;
   margin-bottom: 40px;
 
-  @media screen and (max-width: 1200px) {
-    grid-template-columns: repeat(3, 1fr);
-  }
-
-  @media screen and (max-width: 900px) {
+  @media screen and (max-width: 1150px) {
     grid-template-columns: repeat(2, 1fr);
   }
 
-  @media screen and (max-width: 600px) {
-    grid-template-columns: 1fr;
-  }
-}
-.product-card {
-  background-color: #fff;
-  border: 2px solid #dddddd77;
-  border-radius: 15px;
-  padding: 10px;
-  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-  text-align: center;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  overflow: hidden;
-  width: 90%;
-  transition: 0.3s ease-in-out;
-
-  &__link {
-    color: #1d1b1b;
-    text-decoration: none;
-  }
-  &__image {
-    max-width: 100%;
-    max-height: 70%;
-    object-fit: contain;
-    flex: 0 0 70%;
-  }
-  &__name {
-    font-size: 1.2rem;
-    font-style: italic;
-    display: -webkit-box;
-    -webkit-line-clamp: 2;
-    -webkit-box-orient: vertical;
-    overflow: hidden;
-  }
-  &__desc {
-    font-size: 1rem;
-    display: -webkit-box;
-    -webkit-line-clamp: 1;
-    -webkit-box-orient: vertical;
-    overflow: hidden;
-  }
-  &__price {
-    font-size: 1rem;
-    font-weight: 600;
-    color: $primary;
-    &.discounted {
-      font-size: 0.8rem;
-      color: rgb(99, 97, 97);
-      text-decoration: line-through;
-    }
-  }
-  &__discount {
-    display: none;
-    font-weight: 600;
-    font-size: 1rem;
-    color: rgb(250, 6, 6);
-    &.discounted {
-      display: block;
-    }
-  }
-  &:hover {
-    border-color: $primary;
-    transform: scale(102%);
-    transition: 0.3s ease-in-out;
-    color: $primary;
-
-    .product-card__name {
-      color: $primary;
-    }
-  }
   @media screen and (max-width: 900px) {
-    &__name {
-      font-size: 1rem;
-      height: auto;
-    }
-    width: 100%;
-  }
-
-  @media screen and (max-width: 600px) {
-    padding: 10px;
-  }
-
-  @media screen and (max-width: 350px) {
-    border-radius: 10px;
-    padding: 5px;
-
-    &__name {
-      font-size: 0.7rem;
-      height: auto;
-    }
-
-    &__desc {
-      font-size: 0.8rem;
-      -webkit-line-clamp: 2;
-    }
-
-    &__price {
-      font-size: 0.9rem;
-    }
+    grid-template-columns: 1fr;
   }
 }
 .breadcrumb-container {
@@ -278,5 +179,56 @@
   border-radius: 5px;
   @media screen and (max-width: 1150px) {
     display: block;
+  }
+}
+.skeleton {
+  background-color: #e0e0e0;
+  border-radius: 15px;
+  margin: 10px 0;
+  width: 100%;
+}
+
+.skeleton-card {
+  display: flex;
+  background-color: #fffdfd;
+  flex-direction: column;
+  justify-content: space-between;
+  align-items: center;
+  min-height: 600px;
+  padding: 10px;
+}
+
+.skeleton-image {
+  width: 70%;
+  height: 70%;
+  background-color: #ccc;
+  margin-bottom: 10px;
+}
+
+.skeleton-text {
+  width: 70%;
+  height: 20px;
+  background-color: #ddd;
+  margin-bottom: 10px;
+}
+.skeleton-image,
+.skeleton-text {
+  border-radius: 15px;
+  background-color: #ededed;
+  background: linear-gradient(
+      100deg,
+      rgba(255, 255, 255, 0) 40%,
+      rgba(255, 255, 255, 0.5) 50%,
+      rgba(255, 255, 255, 0) 60%
+    )
+    #ededed;
+  background-size: 200% 100%;
+  background-position-x: 180%;
+  animation: 1s loading ease-in-out infinite;
+  animation-delay: 0.05s;
+}
+@keyframes loading {
+  to {
+    background-position-x: -20%;
   }
 }

@@ -14,7 +14,7 @@ export default class AppModel {
 
   public registrationModel: RegistrationPageModel;
 
-  public mainModel: MainModel = new MainModel();
+  public mainModel: MainModel;
 
   public productPageModel: ProductPageModel;
 
@@ -25,12 +25,12 @@ export default class AppModel {
   constructor() {
     this.apiService = new API();
     this.registrationModel = new RegistrationPageModel();
-    this.mainModel = new MainModel();
     this.cartPageModel = new CartPageModel(this.apiService);
     this.productPageModel = new ProductPageModel(
       this.apiService,
       this.cartPageModel,
     );
+    this.mainModel = new MainModel();
     if (localStorage.getItem('userCreds')) {
       this.isLogined = true;
     } else {
@@ -153,20 +153,19 @@ export default class AppModel {
   }
 
   public async requestGetProducts(
-    filters?: string[],
-    sorts?: string,
-    texts?: string,
+    limit: number,
+    offset: number,
+    filter?: string[],
+    sort?: string,
+    text?: string,
   ) {
-    let response;
-    if (filters) {
-      response = await this.apiService.getProducts({
-        filter: filters,
-        sort: sorts,
-        text: texts,
-      });
-    } else {
-      response = await this.apiService.getProducts({});
-    }
+    const response = await this.apiService.getProducts({
+      limit,
+      offset,
+      filter,
+      sort,
+      text,
+    });
     return response.body;
   }
 

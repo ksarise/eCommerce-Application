@@ -23,6 +23,8 @@ export default class MainView {
 
   private catalogPromoCodes: HTMLElement;
 
+  public productCards: ProductCard[] = [];
+
   constructor() {
     this.mainContainer = tags.div(['main']).getElement() as HTMLDivElement;
     this.catalogPromoCodes = tags.div(['promocode']).getElement();
@@ -39,7 +41,7 @@ export default class MainView {
     });
     this.catalogPanelContainer.append(filtersBtn);
     this.catalogListContainer = tags
-      .div(['catalog__list', 'container'], 'Catalog', {})
+      .div(['catalog__list', 'container'], '', {})
       .getElement() as HTMLDivElement;
     this.catalogContainer.append(
       this.catalogPanelContainer,
@@ -71,10 +73,16 @@ export default class MainView {
     return this.mainContainer;
   }
 
-  public renderProducts(products: Product[]) {
-    this.catalogListContainer.innerHTML = '';
-
-    products.forEach((product: Product) => {
+  public async renderProducts(
+    products: Product[],
+    variantsInCart: { [key: string]: string }[],
+    bindClickCallback: (
+      isAdd: boolean,
+      parentId: string,
+      variantId: number,
+    ) => void,
+  ) {
+    this.productCards = products.map((product: Product) => {
       const productCard = new ProductCard(
         product.name,
         product.desc,
@@ -82,8 +90,12 @@ export default class MainView {
         product.id,
         product.price,
         product.discount,
+        product.sizesList,
+        variantsInCart,
+        bindClickCallback,
       );
       this.catalogListContainer.append(productCard.renderCard());
+      return productCard;
     });
   }
 
@@ -351,5 +363,41 @@ export default class MainView {
       const block = banner.getBanner();
       this.catalogPromoCodes.append(block);
     });
+  }
+
+  public updateProductCards(
+    productCardId: string,
+    newVariantsInCart: { [key: string]: string }[],
+  ) {
+    const updatedCard = this.productCards.find(
+      (productCard) => productCard.id === productCardId,
+    );
+    if (updatedCard) {
+      updatedCard.variantsInCart = newVariantsInCart;
+      updatedCard.updateSizeItemClasses();
+    }
+  }
+
+  public showSkeletons(limit: number) {
+    for (let i = 0; i < limit; i += 1) {
+      const skeleton = document.createElement('div');
+      skeleton.className = 'skeleton skeleton-card';
+      skeleton.innerHTML = `
+        <div class="skeleton-image"></div>
+        <div class="skeleton-text"></div>
+        <div class="skeleton-text"></div>
+        <div class="skeleton-text"></div>
+      `;
+      this.catalogListContainer.append(skeleton);
+    }
+  }
+
+  public removeSkeletons() {
+    const skeletons = this.catalogListContainer.querySelectorAll('.skeleton');
+    skeletons.forEach((skeleton) => skeleton.remove());
+  }
+
+  public clearCatalogList() {
+    this.catalogListContainer.innerHTML = '';
   }
 }
