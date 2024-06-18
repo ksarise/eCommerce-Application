@@ -83,10 +83,13 @@ export default class AppController {
 
     routerController.handleLocation();
     this.handleVisiblityButtons();
-    await this.appView.mainView.bindCategoryList(
+    this.appView.mainView.bindCategoryList(
       this.handleCategoryNavigation.bind(this),
     );
     window.addEventListener('scroll', () => this.onScroll());
+    this.appView.homeView.handleClickButtons(
+      this.handleCategoryNavigation.bind(this),
+    );
   }
 
   public initializeListeners() {
@@ -355,6 +358,10 @@ export default class AppController {
     checked: boolean,
     main?: string,
   ) {
+    const currentPath = window.location.pathname;
+    if (!currentPath.includes('catalog')) {
+      this.routerController.changeContent?.('main');
+    }
     if (name !== this.appModel.mainModel.currentCategory?.name) {
       this.appModel.mainModel.handleOptionListCheck(
         option,
@@ -372,6 +379,9 @@ export default class AppController {
       this.appModel.mainModel.sort,
       this.appModel.mainModel.textSearch,
     );
+    if (main) {
+      this.appView.mainView.updateBreadcrumb([main, name]);
+    }
   }
 
   private async handleResetFilters() {
@@ -482,6 +492,7 @@ export default class AppController {
       `categories.id:"${mainCategoryId}"`,
       'variants.price.centAmount:range (0 to 100000)',
     ];
+    console.log(filters);
 
     if (categoryNames.length === 1) {
       filters[0] = `categories.id: subtree("${mainCategoryId}")`;

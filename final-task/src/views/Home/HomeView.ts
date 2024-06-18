@@ -22,7 +22,7 @@ export default class HomeView {
       'Save 30% on any board!',
     );
     const descriptionButton = tags.button(
-      ['home__description__button'],
+      ['home__description__button', 'home__button'],
       'Shop Sale',
     );
     descriptionContainer.append(
@@ -37,30 +37,41 @@ export default class HomeView {
     );
     terrainSection.append(midTitle);
 
-    const categories = ['Freeride', 'Freestyle', 'All-Mountain', 'Powder'];
+    const categories = [
+      {
+        title: 'Freeride',
+        text: 'For the adventurer seeking untouched snow.',
+        id: 'ab20b56d-b8db-4822-b439-21707a5ebc6f',
+        main: 'Terrain',
+        buttonText: 'Explore Now',
+      },
+      {
+        title: 'Freestyle',
+        text: 'For the trickster mastering the park.',
+        id: '62afad2d-349f-4bc6-b33d-d69294521a9b',
+        main: 'Terrain',
+        buttonText: 'Trick Now',
+      },
+      {
+        title: 'All-Mountain',
+        text: 'For the rider who is brave enough',
+        id: '441d95e2-71c7-4508-ae11-cc9593f4cb0c',
+        main: 'Terrain',
+        buttonText: 'Conquer Now',
+      },
+      {
+        title: 'Powder',
+        text: 'For the enthusiast who loves deep snow.',
+        id: 'c26ae1c9-ac8c-4ebb-b65c-97fd3a198e05',
+        main: 'Terrain',
+        buttonText: 'Enjoy Now',
+      },
+    ];
     const categoriesContainer = tags
       .div(['home__terrain__categories'])
       .getElement() as HTMLDivElement;
-    categories.forEach((category, index) => {
-      const terrainCategory = tags
-        .div(['home__mid__category'])
-        .getElement() as HTMLDivElement;
-      const terrainImage = tags.img(['home__mid__category__image'], {
-        src: `../../public/images/homepage/terrain/terrain-${index + 1}.png`,
-      });
-      const terrainInfo = tags
-        .div(['home__mid__category__info'])
-        .getElement() as HTMLDivElement;
-      const terrainTitle = tags.h2(['home__mid__category__title'], category);
-      const terrainText = tags.p(['home__mid__category__text'], 'text');
-      const terrainButton = tags.button(
-        ['home__mid__category__button'],
-        'Shop Now',
-      );
-      terrainInfo.append(terrainTitle, terrainText, terrainButton);
-      terrainCategory.append(terrainImage, terrainInfo);
-      categoriesContainer.append(terrainCategory);
-    });
+
+    HomeView.renderBlocks('terrain', categories, categoriesContainer);
     terrainSection.append(categoriesContainer);
 
     const specialOffersContainer = tags
@@ -95,7 +106,7 @@ export default class HomeView {
       const offerDiscount = tags.h2(['home__special-offers__item__discount']);
       offerDiscount.innerHTML = offer.discount;
       const offerButton = tags.button(
-        ['home__special-offers__item__button'],
+        ['home__special-offers__item__button', 'home__button'],
         offer.button,
       );
       offerItem.append(offerDiscount, offerTitle, offerButton);
@@ -154,20 +165,39 @@ export default class HomeView {
     const brandsContainer = tags
       .div(['home__brands__container'])
       .getElement() as HTMLDivElement;
-    const brands = ['Lib-Tech', 'Capita', 'Ride', 'Burton'];
-    brands.forEach((brand) => {
-      const brandsItem = tags
-        .div(['home__brands__container__item'])
-        .getElement() as HTMLDivElement;
-      const brandLink = tags.a(['home__brands__container__item__link'], '');
-      const brandImage = tags.img(['home__brands__container__item__image'], {
-        src: `../../public/images/homepage/brands/${brand.toLowerCase()}.png`,
-      });
-      brandLink.append(brandImage);
-      const brandText = tags.h2(['home__brands__container__item__text'], brand);
-      brandsItem.append(brandLink, brandText);
-      brandsContainer.append(brandsItem);
-    });
+
+    const brands = [
+      {
+        title: 'Lib-Tech',
+        text: 'The belief that anything is possible',
+        id: '9c393b21-2d93-4895-848c-02117bc26b3e',
+        main: 'Brand',
+        buttonText: 'Shop Now',
+      },
+      {
+        title: 'Capita',
+        text: 'Hand-crafted - with 100% clean energy',
+        id: 'bc4912ad-fd98-4287-bcb7-8e11e4efbe42',
+        main: 'Brand',
+        buttonText: 'Shop Now',
+      },
+      {
+        title: 'Ride',
+        text: 'For the People',
+        id: '3daa511b-ecc5-433d-8661-27f8565d81ce',
+        main: 'Brand',
+        buttonText: 'Shop Now',
+      },
+      {
+        title: 'Burton',
+        text: 'We Are Riders',
+        id: 'c26ae1c9-ac8c-4ebb-b65c-97fd3a198e05',
+        main: 'Brand',
+        buttonText: 'Shop Now',
+      },
+    ];
+    HomeView.renderBlocks('brand', brands, brandsContainer);
+
     brandSection.append(brandsTitle, brandsContainer);
     const reviewsSection = tags.section(['home__reviews', 'section']);
     const reviewsTitle = tags.h2(
@@ -230,6 +260,135 @@ export default class HomeView {
       midSection,
       reviewsSection,
     );
+  }
+
+  public handleClickButtons(
+    callback: (
+      option: string,
+      name: string,
+      id: string,
+      checked: boolean,
+      main?: string,
+    ) => void,
+  ): void {
+    this.container
+      .querySelectorAll('.home__category__link')
+      .forEach((button) => {
+        button.addEventListener('click', (event: Event) => {
+          event.preventDefault();
+          const target = event.target as HTMLElement;
+          console.log(target);
+          const { optiontype, optionname, id, main } = target.dataset;
+          const checked = true;
+          console.log(optiontype, optionname, id, main);
+          if (optiontype && optionname && id && main) {
+            callback(optiontype, optionname, id, checked, main);
+          }
+        });
+      });
+  }
+
+  static toggleHoverEffect(
+    targetElement: HTMLElement,
+    infoElement: HTMLElement,
+    type: 'brand' | 'terrain',
+  ): void {
+    const transformEffect =
+      type === 'brand'
+        ? { over: 'translateY(0px)', out: 'translateY(30px)' }
+        : { over: 'translateY(0px)', out: 'translateY(30px)' };
+    const styles: Partial<CSSStyleDeclaration> = {};
+    const handleMouseOver = () => {
+      if (window.innerWidth > 1150) {
+        styles.opacity = '1';
+        styles.transform = transformEffect.over;
+        Object.assign(infoElement.style, styles);
+      }
+    };
+    const handleMouseOut = () => {
+      styles.opacity = '0';
+      styles.transform = transformEffect.out;
+      Object.assign(infoElement.style, styles);
+    };
+    targetElement.addEventListener('mouseover', handleMouseOver);
+    targetElement.addEventListener('mouseout', handleMouseOut);
+  }
+
+  static createBlock(
+    type: 'brand' | 'terrain',
+    data: {
+      title: string;
+      text: string;
+      id: string;
+      main: string;
+      buttonText: string;
+    },
+    index: number,
+  ): HTMLDivElement {
+    const containerClass =
+      type === 'brand'
+        ? 'home__brands__container__item'
+        : 'home__mid__category';
+    const linkClass =
+      type === 'brand'
+        ? ['home__brands__container__item__link', 'home__category__link']
+        : ['home__mid__category__link', 'home__category__link'];
+    const imageSrc =
+      type === 'brand'
+        ? `../../public/images/homepage/brands/${data.title.toLowerCase()}.png`
+        : `../../public/images/homepage/terrain/terrain-${index + 1}.png`;
+    const blockElement = tags
+      .div([containerClass])
+      .getElement() as HTMLDivElement;
+    const imageElement = tags.img([`${containerClass}__image`], {
+      src: imageSrc,
+    });
+    const infoElement = tags
+      .div([`${containerClass}__info`])
+      .getElement() as HTMLDivElement;
+    const titleElement = tags.h2([`${containerClass}__title`], data.title);
+    const textElement = tags.p([`${containerClass}__text`], data.text);
+    const buttonLinkElement = tags.a(
+      linkClass,
+      type === 'brand'
+        ? `/brands/${data.title.toLowerCase()}`
+        : `terrain/${data.title.toLowerCase()}`,
+      '',
+    );
+    const buttonElement = tags.button(
+      [`${containerClass}__button`, 'home__button'],
+      data.buttonText,
+      {
+        'data-optiontype': 'category',
+        'data-optionname': data.title,
+        'data-id': data.id,
+        'data-main': data.main,
+        href: `terrain/${data.title.toLowerCase()}`,
+      },
+    );
+    buttonLinkElement.append(buttonElement);
+    infoElement.append(titleElement, textElement, buttonLinkElement);
+    blockElement.append(imageElement, infoElement);
+    HomeView.toggleHoverEffect(blockElement, infoElement, type);
+    console.log(blockElement, infoElement);
+    return blockElement;
+  }
+
+  static renderBlocks(
+    type: 'brand' | 'terrain',
+    data: {
+      title: string;
+      text: string;
+      id: string;
+      main: string;
+      buttonText: string;
+    }[],
+    containerElement: HTMLElement,
+  ) {
+    data.forEach((item, index) => {
+      const blockElement = HomeView.createBlock(type, item, index);
+      containerElement.append(blockElement);
+    });
   }
 
   public getContent(): HTMLElement {

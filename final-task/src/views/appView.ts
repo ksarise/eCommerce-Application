@@ -71,6 +71,7 @@ export default class AppView {
         document
           .getElementById('content')!
           .appendChild(this.mainView.getContent());
+        globalThis.scrollTo({ top: 0, left: 0, behavior: 'smooth' });
         this.loginView.addClassToLogin(false);
         break;
       case 'login':
