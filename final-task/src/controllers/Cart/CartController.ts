@@ -109,8 +109,14 @@ export default class CartPageController {
         discount / 100,
       );
       showToast({ text: 'Promo code Active', type: 'positive' });
+      (document.getElementById('promoCode') as HTMLInputElement).value = '';
     } catch (error) {
-      showToast({ text: (error as Error).message, type: 'negative' });
+      showToast({
+        text: `There is no promo code ${
+          (document.getElementById('promoCode') as HTMLInputElement).value
+        }`,
+        type: 'negative',
+      });
     }
   }
 }
