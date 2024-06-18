@@ -77,6 +77,7 @@ export default class AppController {
     document.querySelector<HTMLDivElement>('.body')!.innerHTML =
       this.appView.innerHTML;
     await this.fetchAndLogProducts();
+    await this.getDiscountsCodes();
     await this.fetchCategories();
     this.mainController.initialize();
 
@@ -505,6 +506,11 @@ export default class AppController {
       );
       this.appView.mainView.updateBreadcrumb(breadcrumb);
     });
+  }
+
+  private async getDiscountsCodes() {
+    const codes = await this.appModel.getDiscountsCode();
+    this.appView.mainView.createPromoCodes(codes);
   }
 
   private handleClickCartButton() {

@@ -1,4 +1,4 @@
-import { LineItem } from '@commercetools/platform-sdk';
+import { Cart, LineItem } from '@commercetools/platform-sdk';
 import BaseComponentGenerator from '../../tags/base-component';
 import MyCartContainer from './components/MyCartContainer';
 import TotalCostContainer from './components/TotalCostContainer';
@@ -41,13 +41,13 @@ export default class CartView {
     return this.container.getElement();
   }
 
-  public render(products: LineItem[], totalCost: number) {
+  public render(products: LineItem[], totalCost: number, discount: number = 0) {
     if (products.length === 0) {
       this.renderEmptyCart();
       return;
     }
     this.myCartContainer.renderProducts(products);
-    this.totalCostContainer.renderTotalCost(totalCost);
+    this.totalCostContainer.renderTotalCost(totalCost, discount);
   }
 
   private renderEmptyCart() {
@@ -78,18 +78,24 @@ export default class CartView {
     lineItemId: string,
     quantity: number,
     totalCost: number,
-    totalCostLineItem?: number,
+    totalDiscount: number,
+    cart: Cart,
+    totalCostLineItem: number = 0,
   ) {
     if (totalCost === 0) {
       this.renderEmptyCart();
       return;
     }
-    console.log(totalCostLineItem);
+    if (totalCostLineItem === 0) {
+      document.querySelector(`[data-line-item-id="${lineItemId}"]`)?.remove();
+      this.totalCostContainer.renderTotalCost(totalCost, totalDiscount);
+    }
     this.myCartContainer.changeQuantity(
       lineItemId,
       quantity,
+      cart,
       totalCostLineItem,
     );
-    this.totalCostContainer.changeTotalCost(totalCost);
+    this.totalCostContainer.renderTotalCost(totalCost, totalDiscount);
   }
 }

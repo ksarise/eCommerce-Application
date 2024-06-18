@@ -55,6 +55,7 @@
       flex-direction: row;
       justify-content: space-between;
       width: 100%;
+      color: $light-red;
     }
     &_promocode {
       display: flex;
@@ -265,6 +266,19 @@
         justify-content: center;
         align-items: center;
         width: 10%;
+      }
+
+      &-discount {
+        position: relative;
+        top: 16px;
+        color: $light-red;
+
+        .my-cart__table-cell-realprice {
+          position: absolute;
+          top: 16px;
+          text-decoration: line-through;
+          color: $text;
+        }
       }
     }
   }

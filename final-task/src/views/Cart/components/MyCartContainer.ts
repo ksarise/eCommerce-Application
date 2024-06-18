@@ -1,4 +1,4 @@
-import { LineItem } from '@commercetools/platform-sdk';
+import { Cart, LineItem } from '@commercetools/platform-sdk';
 import BaseComponentGenerator from '../../../tags/base-component';
 import tags from '../../../tags/tags';
 import parseSVG from '../../../services/svgParser';
@@ -165,6 +165,20 @@ export default class MyCartContainer {
       classNames: ['my-cart__table-cell', 'my-cart__table-cell-price'],
       content: `$${product.totalPrice.centAmount / 100}`,
     });
+    if (
+      product.price.discounted?.value.centAmount ||
+      Math.ceil(product?.price.value.centAmount || 0) * product!.quantity >
+        Math.ceil(product!.totalPrice.centAmount)
+    ) {
+      const realPrice = tags.div(
+        ['my-cart__table-cell', 'my-cart__table-cell-realprice'],
+        `$${((product.price.value.centAmount / 100) * product.quantity).toFixed(2)}`,
+      );
+      priceCell.appendChild(realPrice);
+      priceCell
+        .getElement()
+        .classList.toggle('my-cart__table-cell-discount', true);
+    }
     productRow.getElement().append(priceCell.getElement());
     const removeCell = new BaseComponentGenerator({
       tag: 'td',
@@ -201,14 +215,15 @@ export default class MyCartContainer {
   public changeQuantity(
     lineItemId: string,
     quantity: number,
+    cart: Cart,
     totalCostLineItem?: number,
   ) {
-    console.log(quantity, totalCostLineItem);
+    const tmpLineItem = cart.lineItems.find((item) => item.id === lineItemId);
     const row = this.myCartTable
       .getElement()
       .querySelector(`[data-line-item-id="${lineItemId}"]`);
     if (row) {
-      if (quantity === 0) {
+      if (quantity === 0 || totalCostLineItem === 0) {
         row.remove();
       }
       const quantityCell = row.querySelector(
@@ -219,6 +234,23 @@ export default class MyCartContainer {
       ) as HTMLTableCellElement;
       quantityCell.textContent = `${quantity}`;
       totalCostCell.textContent = `$${totalCostLineItem}`;
+      if (
+        tmpLineItem!.price.discounted?.value.centAmount ||
+        Math.ceil(tmpLineItem?.price.value.centAmount || 0) *
+          tmpLineItem!.quantity >
+          Math.ceil(tmpLineItem!.totalPrice.centAmount)
+      ) {
+        const realPrice = tags
+          .div(
+            ['my-cart__table-cell', 'my-cart__table-cell-realprice'],
+            `$${((tmpLineItem!.price.value.centAmount / 100) * tmpLineItem!.quantity).toFixed(2)}`,
+          )
+          .getElement();
+        totalCostCell.appendChild(realPrice);
+        totalCostCell.classList.toggle('my-cart__table-cell-discount', true);
+      } else {
+        totalCostCell.classList.toggle('my-cart__table-cell-discount', false);
+      }
     }
   }
 }
