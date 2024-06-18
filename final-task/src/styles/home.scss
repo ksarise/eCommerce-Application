@@ -396,6 +396,11 @@
 
       &:hover {
         transform: scale(1.03);
+        -webkit-animation: Pulse 5s infinite ease-in-out;
+        -o-animation: Pulse 5s infinite ease-in-out;
+        -ms-animation: Pulse 5s infinite ease-in-out;
+        -moz-animation: Pulse 5s infinite ease-in-out;
+        animation: Pulse 5s infinite ease-in-out;
       }
 
       &__image {
