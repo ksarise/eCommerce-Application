@@ -80,7 +80,7 @@ export default class HomeView {
       const offerItem = tags
         .div(['home__mid__special-offers__item'])
         .getElement() as HTMLDivElement;
-      offerItem.style.backgroundImage = `url(../../public/images/homepage/offers/offer${index + 1}.jpg)`;
+      offerItem.style.backgroundImage = `url(/images/homepage/offers/offer${index + 1}.jpg)`;
       const offerTitle = tags.h3(
         ['home__mid__special-offers__item__title'],
         offer.title,
@@ -122,7 +122,7 @@ export default class HomeView {
       const productImage = tags.img(
         ['home__mid__featured-products__item__image'],
         {
-          src: `../../public/images/homepage/products/product-${index}.jpg`,
+          src: `/images/homepage/products/product-${index}.jpg`,
         },
       );
       const productTitle = tags.p(
@@ -188,7 +188,7 @@ export default class HomeView {
       );
       const guideAuthorImage = tags.img(
         ['home__reviews__item__bio__author__image'],
-        { src: `../../public/images/homepage/authors/author-${index + 1}.jpg` },
+        { src: `/images/homepage/authors/author-${index + 1}.jpg` },
       );
       guideBio.append(guideAuthor, guideAuthorImage);
       guideItem.append(guideTitle, guideDescription, guideBio);
@@ -278,8 +278,8 @@ export default class HomeView {
         : ['home__terrain__category__link', 'home__category__link'];
     const imageSrc =
       type === 'brand'
-        ? `../../public/images/homepage/brands/${data.title.toLowerCase()}.png`
-        : `../../public/images/homepage/terrain/terrain-${index + 1}.png`;
+        ? `/images/homepage/brands/${data.title.toLowerCase()}.png`
+        : `/images/homepage/terrain/terrain-${index + 1}.png`;
     const blockElement = tags
       .div([containerClass])
       .getElement() as HTMLDivElement;
