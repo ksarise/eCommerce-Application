@@ -154,14 +154,14 @@ export default class CartPageModel {
   public async createDiscountById(code: string) {
     try {
       await this.getCartById(this.cart!.id);
-      const res = await this.apiService.createDiscountById(
+      const result = await this.apiService.createDiscountById(
         this.cart!.id,
         code,
         this.cart!.version,
       );
-      console.log(res);
-      return res;
+      return result;
     } catch (error) {
+      console.log(error);
       return error;
     }
   }

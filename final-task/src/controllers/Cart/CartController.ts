@@ -93,14 +93,22 @@ export default class CartPageController {
           code,
         )) as ClientResponse<Cart>
       ).body;
-      showToast({ text: 'Promo code Active', type: 'positive' });
       const discount =
         result.discountOnTotalPrice?.discountedAmount.centAmount || 0;
       const price = result.totalPrice.centAmount;
-      this.cartPageView.totalCostContainer.renderTotalCost(
+      await result.lineItems.forEach((item) => {
+        this.cartPageView.myCartContainer.changeQuantity(
+          item.id,
+          item.quantity,
+          result,
+          item.totalPrice.centAmount / 100,
+        );
+      });
+      await this.cartPageView.totalCostContainer.renderTotalCost(
         price / 100,
         discount / 100,
       );
+      showToast({ text: 'Promo code Active', type: 'positive' });
     } catch (error) {
       showToast({ text: (error as Error).message, type: 'negative' });
     }

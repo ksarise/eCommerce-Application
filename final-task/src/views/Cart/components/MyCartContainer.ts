@@ -166,12 +166,13 @@ export default class MyCartContainer {
       content: `$${product.totalPrice.centAmount / 100}`,
     });
     if (
-      product.price.value.centAmount * product.quantity >
-      product.totalPrice.centAmount
+      product.price.discounted?.value.centAmount ||
+      Math.ceil(product?.price.value.centAmount || 0) * product!.quantity >
+        Math.ceil(product!.totalPrice.centAmount)
     ) {
       const realPrice = tags.div(
         ['my-cart__table-cell', 'my-cart__table-cell-realprice'],
-        `$${(product.price.value.centAmount / 100) * product.quantity}`,
+        `$${((product.price.value.centAmount / 100) * product.quantity).toFixed(2)}`,
       );
       priceCell.appendChild(realPrice);
       priceCell
@@ -218,16 +219,11 @@ export default class MyCartContainer {
     totalCostLineItem?: number,
   ) {
     const tmpLineItem = cart.lineItems.find((item) => item.id === lineItemId);
-    console.log(
-      quantity,
-      totalCostLineItem,
-      tmpLineItem!.price.value.centAmount / 100,
-    );
     const row = this.myCartTable
       .getElement()
       .querySelector(`[data-line-item-id="${lineItemId}"]`);
     if (row) {
-      if (quantity === 0) {
+      if (quantity === 0 || totalCostLineItem === 0) {
         row.remove();
       }
       const quantityCell = row.querySelector(
@@ -239,13 +235,15 @@ export default class MyCartContainer {
       quantityCell.textContent = `${quantity}`;
       totalCostCell.textContent = `$${totalCostLineItem}`;
       if (
-        (tmpLineItem!.price.value.centAmount / 100) * tmpLineItem!.quantity >
-        totalCostLineItem!
+        tmpLineItem!.price.discounted?.value.centAmount ||
+        Math.ceil(tmpLineItem?.price.value.centAmount || 0) *
+          tmpLineItem!.quantity >
+          Math.ceil(tmpLineItem!.totalPrice.centAmount)
       ) {
         const realPrice = tags
           .div(
             ['my-cart__table-cell', 'my-cart__table-cell-realprice'],
-            `$${(tmpLineItem!.price.value.centAmount / 100) * tmpLineItem!.quantity}`,
+            `$${((tmpLineItem!.price.value.centAmount / 100) * tmpLineItem!.quantity).toFixed(2)}`,
           )
           .getElement();
         totalCostCell.appendChild(realPrice);

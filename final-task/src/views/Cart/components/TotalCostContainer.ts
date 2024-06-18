@@ -89,7 +89,7 @@ export default class TotalCostContainer {
   }
 
   public renderTotalCost(totalCost: number, discount: number = 0) {
-    this.subtotalPrice.innerHTML = `$${totalCost}`;
+    this.subtotalPrice.innerHTML = `$${(totalCost + discount).toFixed(2)}`;
     this.totalPrice.innerHTML = `$${totalCost}`;
     this.discountPrice.innerHTML = `$${discount}`;
   }
@@ -97,9 +97,4 @@ export default class TotalCostContainer {
   public getContent(): HTMLElement {
     return this.costContainer;
   }
-
-  // public changeTotalCost(totalCost: number) {
-  //   this.subtotalPrice.innerHTML = `$${totalCost}`;
-  //   this.totalPrice.innerHTML = `$${totalCost}`;
-  // }
 }

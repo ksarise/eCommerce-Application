@@ -80,13 +80,16 @@ export default class CartView {
     totalCost: number,
     totalDiscount: number,
     cart: Cart,
-    totalCostLineItem?: number,
+    totalCostLineItem: number = 0,
   ) {
     if (totalCost === 0) {
       this.renderEmptyCart();
       return;
     }
-    console.log(totalCostLineItem);
+    if (totalCostLineItem === 0) {
+      document.querySelector(`[data-line-item-id="${lineItemId}"]`)?.remove();
+      this.totalCostContainer.renderTotalCost(totalCost, totalDiscount);
+    }
     this.myCartContainer.changeQuantity(
       lineItemId,
       quantity,
