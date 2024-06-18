@@ -53,8 +53,12 @@ export default class MainView {
     this.breadcrumbContainer = tags
       .div(['breadcrumb-container'])
       .getElement() as HTMLDivElement;
-    const breadcrumbHomeItem = tags.span(['breadcrumb-item'], 'Home >');
-    const breadcrumbCatalogItem = tags.a(['breadcrumb-item'], '/', 'Catalog >');
+    const breadcrumbHomeItem = tags.a(['breadcrumb-item'], '/', 'Home >');
+    const breadcrumbCatalogItem = tags.a(
+      ['breadcrumb-item'],
+      '/catalog',
+      'Catalog >',
+    );
     this.breadcrumbContainer.append(breadcrumbHomeItem, breadcrumbCatalogItem);
     this.catalogWrapContainer.append(
       this.filterContainer.getContent(),
@@ -334,7 +338,7 @@ export default class MainView {
 
   public updateBreadcrumb(categoryNames: string[]) {
     this.clearBreadcrumb();
-    let pathname = '/categories';
+    let pathname = '/catalog/categories';
     categoryNames.forEach((categoryName) => {
       pathname += `/${categoryName.toLowerCase()}`;
       const breadcrumbItem = tags.a(
@@ -349,7 +353,11 @@ export default class MainView {
   private clearBreadcrumb() {
     this.breadcrumbContainer.innerHTML = '';
     const breadcrumbHomeItem = tags.a(['breadcrumb-item'], '/', 'Home >');
-    const breadcrumbCatalogItem = tags.a(['breadcrumb-item'], '/', 'Catalog >');
+    const breadcrumbCatalogItem = tags.a(
+      ['breadcrumb-item'],
+      '/catalog',
+      'Catalog >',
+    );
     this.breadcrumbContainer.prepend(breadcrumbHomeItem, breadcrumbCatalogItem);
   }
 

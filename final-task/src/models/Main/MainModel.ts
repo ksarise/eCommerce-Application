@@ -19,7 +19,7 @@ export default class MainModel {
 
   private categories: Category[] = [];
 
-  private parsedCategories: Map<string, ParsedCategory> = new Map();
+  public parsedCategories: Map<string, ParsedCategory> = new Map();
 
   public searchQuery: string[] = [];
 
@@ -192,12 +192,14 @@ export default class MainModel {
   }
 
   static updateURLWithCategory(name: string, main: string) {
+    console.log(name, main);
     const currentURL = new URL(window.location.href);
     if (main) {
-      currentURL.pathname = `categories/${main.toLowerCase()}/${name.toLowerCase()}`;
+      currentURL.pathname = `catalog/categories/${main.toLowerCase()}/${name.toLowerCase()}`;
     } else {
-      currentURL.pathname = `categories/${name.toLowerCase()}`;
+      currentURL.pathname = `catalog/categories/${name.toLowerCase()}`;
     }
+    console.log(currentURL.toString());
     window.history.pushState({}, '', currentURL.toString());
   }
 

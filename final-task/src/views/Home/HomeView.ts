@@ -1,4 +1,5 @@
 import tags from '../../tags/tags';
+import homeData from './components/homeData.json';
 
 export default class HomeView {
   private container: HTMLDivElement;
@@ -7,24 +8,21 @@ export default class HomeView {
 
   constructor() {
     this.container = tags.div(['home']).getElement() as HTMLDivElement;
-
+    // top
     const topSection = tags.section(['home__top', 'section']);
-    const terrainSection = tags.section(['home__terrain', 'section']);
-    const brandSection = tags.section(['home__brands', 'section']);
-    const midSection = tags.section(['home__mid', 'section']);
     const descriptionContainer = tags
-      .div(['home__description'])
+      .div(['home__top__container'])
       .getElement() as HTMLDivElement;
     const descriptionTitle = tags.h1(
-      ['home__description__title'],
+      ['home__top__title'],
       `Celebrate the 40th anniversary of the GNU Project! `,
     );
     const descriptionText = tags.p(
-      ['home__description__text'],
+      ['home__top__text'],
       'Save 30% on any board!',
     );
     const descriptionButton = tags.button(
-      ['home__description__button', 'home__button', 'home__category__link'],
+      ['home__top__button', 'home__button', 'home__category__link'],
       'Shop Sale',
       {
         'data-optiontype': 'category',
@@ -40,48 +38,33 @@ export default class HomeView {
       descriptionButton,
     );
     topSection.append(descriptionContainer);
+
+    // terrain
+    const terrainSection = tags.section(['home__terrain', 'section']);
     const midTitle = tags.h1(
-      ['home__mid__title'],
+      ['home__terrain__title'],
       'You can find board for every terrain!',
     );
     terrainSection.append(midTitle);
-    const categories = [
-      {
-        title: 'Freeride',
-        text: 'For the adventurer seeking untouched snow.',
-        id: 'ab20b56d-b8db-4822-b439-21707a5ebc6f',
-        main: 'Terrain',
-        buttonText: 'Explore Now',
-      },
-      {
-        title: 'Freestyle',
-        text: 'For the trickster mastering the park.',
-        id: '62afad2d-349f-4bc6-b33d-d69294521a9b',
-        main: 'Terrain',
-        buttonText: 'Trick Now',
-      },
-      {
-        title: 'All-Mountain',
-        text: 'For the rider who is brave enough',
-        id: '441d95e2-71c7-4508-ae11-cc9593f4cb0c',
-        main: 'Terrain',
-        buttonText: 'Conquer Now',
-      },
-      {
-        title: 'Powder',
-        text: 'For the enthusiast who loves deep snow.',
-        id: 'c26ae1c9-ac8c-4ebb-b65c-97fd3a198e05',
-        main: 'Terrain',
-        buttonText: 'Enjoy Now',
-      },
-    ];
     const categoriesContainer = tags
       .div(['home__terrain__categories'])
       .getElement() as HTMLDivElement;
 
-    HomeView.renderBlocks('terrain', categories, categoriesContainer);
+    HomeView.renderBlocks('terrain', homeData.terrains, categoriesContainer);
     terrainSection.append(categoriesContainer);
 
+    // brand
+    const brandSection = tags.section(['home__brands', 'section']);
+    const brandsTitle = tags.h2(['home__brands__title'], 'Our Brands');
+    const brandsContainer = tags
+      .div(['home__brands__container'])
+      .getElement() as HTMLDivElement;
+    HomeView.renderBlocks('brand', homeData.brands, brandsContainer);
+    brandSection.append(brandsTitle, brandsContainer);
+    // mid
+    const midSection = tags.section(['home__mid', 'section']);
+
+    // specoffers
     const specialOffersContainer = tags
       .div(['home__special-offers'])
       .getElement() as HTMLDivElement;
@@ -90,19 +73,7 @@ export default class HomeView {
       'Special Offers',
     );
     specialOffersContainer.append(specialOffersTitle);
-    const offerItems = [
-      {
-        title: 'Better Together!',
-        discount: `SS798<br>20% OFF`,
-        button: 'Shop Now',
-      },
-      {
-        title: 'Summer Sale',
-        discount: `FA345 <br>30% OFF`,
-        button: 'Shop Now',
-      },
-    ];
-    offerItems.forEach((offer, index) => {
+    homeData.offerItems.forEach((offer, index) => {
       const offerItem = tags
         .div(['home__special-offers__item'])
         .getElement() as HTMLDivElement;
@@ -125,6 +96,8 @@ export default class HomeView {
       offerItem.append(offerDiscount, offerTitle, offerButton);
       specialOffersContainer.append(offerItem);
     });
+
+    // featured products
     const featuredProductsContainer = tags
       .div(['home__featured-products'])
       .getElement() as HTMLDivElement;
@@ -133,43 +106,10 @@ export default class HomeView {
       'Featured Products',
     );
     featuredProductsContainer.append(featuredProductsTitle);
-
-    const products = [
-      {
-        title: 'Lib Tech T.Rice Pro HP C2',
-        price: '$ 367.49',
-        id: 'a0d2261b-28f1-4487-bc49-cf92dd2f2fc2',
-      },
-      {
-        title: 'CAPiTA Mega Mercury',
-        price: '$ 559.96',
-        id: '20aa903b-231e-4cc4-9c72-0b4e28598081',
-      },
-      {
-        title: 'Burton Feelgood Flying V',
-        price: '$ 433.96',
-        id: 'c013ed35-f8ba-483a-a2ad-015cc435695b',
-      },
-      {
-        title: 'GNU Asym Velvet C2',
-        price: '$ 384.99',
-        id: '8bdece6b-970a-4387-82e4-6875ce726b4b',
-      },
-      {
-        title: 'K2 Dreamsicle',
-        price: '$ 269.97',
-        id: '768bbfa7-4a08-4726-a0e8-db1d38e78522',
-      },
-      {
-        title: 'Rossignol Myth',
-        price: '$ 259.97',
-        id: 'a2a60562-66ec-4d2a-816c-76dd4c560b2d',
-      },
-    ];
     const featuredProductsList = tags
       .div(['home__featured-products__list'])
       .getElement() as HTMLDivElement;
-    products.forEach((product, index) => {
+    homeData.products.forEach((product, index) => {
       const productItem = tags
         .div(['home__featured-products__item'])
         .getElement() as HTMLDivElement;
@@ -211,44 +151,8 @@ export default class HomeView {
     });
     featuredProductsContainer.append(featuredProductsList);
     midSection.append(specialOffersContainer, featuredProductsContainer);
-    const brandsTitle = tags.h2(['home__brands__title'], 'Our Brands');
-    const brandsContainer = tags
-      .div(['home__brands__container'])
-      .getElement() as HTMLDivElement;
 
-    const brands = [
-      {
-        title: 'Lib-Tech',
-        text: 'The belief that anything is possible',
-        id: '9c393b21-2d93-4895-848c-02117bc26b3e',
-        main: 'Brand',
-        buttonText: 'Shop Now',
-      },
-      {
-        title: 'Capita',
-        text: 'Hand-crafted - with 100% clean energy',
-        id: 'bc4912ad-fd98-4287-bcb7-8e11e4efbe42',
-        main: 'Brand',
-        buttonText: 'Shop Now',
-      },
-      {
-        title: 'Ride',
-        text: 'For the People',
-        id: '3daa511b-ecc5-433d-8661-27f8565d81ce',
-        main: 'Brand',
-        buttonText: 'Shop Now',
-      },
-      {
-        title: 'Burton',
-        text: 'We Are Riders',
-        id: '9369379d-b02f-46c7-abc8-a875223d2312',
-        main: 'Brand',
-        buttonText: 'Shop Now',
-      },
-    ];
-    HomeView.renderBlocks('brand', brands, brandsContainer);
-
-    brandSection.append(brandsTitle, brandsContainer);
+    // reviews
     const reviewsSection = tags.section(['home__reviews', 'section']);
     const reviewsTitle = tags.h2(
       ['home__reviews__title'],
@@ -256,30 +160,10 @@ export default class HomeView {
     );
     reviewsSection.append(reviewsTitle);
 
-    const guides = [
-      {
-        title: 'Awfull place!',
-        description:
-          'Back in my day, we rode down hills in plastic bags, not on those frivolous, brightly colored boards.',
-        author: 'Merl',
-      },
-      {
-        title: 'Resilient Revelations',
-        description:
-          'When I fell off the lift into the snowdrift, I realized how durable these boards are - not at all like my broken dreams and more stylish.',
-        author: 'Harold',
-      },
-      {
-        title: 'Pleasant prices!',
-        description:
-          'Great sale prices saved me money on post-season treatments.',
-        author: 'John',
-      },
-    ];
     const reviewsContainer = tags
       .div(['home__reviews__container'])
       .getElement() as HTMLDivElement;
-    guides.forEach((guide, index) => {
+    homeData.reviews.forEach((guide, index) => {
       const guideItem = tags
         .div(['home__reviews__item'])
         .getElement() as HTMLDivElement;
@@ -290,11 +174,11 @@ export default class HomeView {
       );
       const guideBio = tags.span(['home__reviews__item__bio']);
       const guideAuthor = tags.p(
-        ['home__reviews__item__author'],
+        ['home__reviews__item__bio__author'],
         `By ${guide.author}`,
       );
       const guideAuthorImage = tags.img(
-        ['home__reviews__item__author__image'],
+        ['home__reviews__item__bio__author__image'],
         { src: `../../public/images/homepage/authors/author-${index + 1}.jpg` },
       );
       guideBio.append(guideAuthor, guideAuthorImage);
@@ -378,11 +262,11 @@ export default class HomeView {
     const containerClass =
       type === 'brand'
         ? 'home__brands__container__item'
-        : 'home__mid__category';
+        : 'home__terrain__category';
     const linkClass =
       type === 'brand'
         ? ['home__brands__container__item__link', 'home__category__link']
-        : ['home__mid__category__link', 'home__category__link'];
+        : ['home__terrain__category__link', 'home__category__link'];
     const imageSrc =
       type === 'brand'
         ? `../../public/images/homepage/brands/${data.title.toLowerCase()}.png`
@@ -420,7 +304,6 @@ export default class HomeView {
     infoElement.append(titleElement, textElement, buttonLinkElement);
     blockElement.append(imageElement, infoElement);
     HomeView.toggleHoverEffect(blockElement, infoElement, type);
-    console.log(blockElement, infoElement);
     return blockElement;
   }
 

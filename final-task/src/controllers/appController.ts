@@ -444,18 +444,21 @@ export default class AppController {
   }
 
   public async handleCategoryLink(pathSegments: string[]) {
+    console.log('pathSegments', pathSegments);
     await this.fetchCategories();
     const cats: Map<string, ParsedCategory> =
       this.appModel.mainModel.getParsedCategories();
+
     if (
-      pathSegments.length < 2 ||
-      pathSegments[0].toLowerCase() !== 'categories'
+      pathSegments.length < 3 ||
+      pathSegments[0].toLowerCase() !== 'catalog' ||
+      pathSegments[1].toLowerCase() !== 'categories'
     ) {
       this.changeContent?.('404');
       return;
     }
 
-    const categoryNames = pathSegments.slice(1);
+    const categoryNames = pathSegments.slice(2);
     let mainCategoryFound = false;
     let subCategoryFound = false;
     let mainCategoryId = '';
@@ -494,7 +497,6 @@ export default class AppController {
       `categories.id:"${mainCategoryId}"`,
       'variants.price.centAmount:range (0 to 100000)',
     ];
-    console.log(filters);
 
     if (categoryNames.length === 1) {
       filters[0] = `categories.id: subtree("${mainCategoryId}")`;
