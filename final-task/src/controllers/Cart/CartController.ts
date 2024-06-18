@@ -43,7 +43,7 @@ export default class CartPageController {
   }
 
   public handleClickGoToCatalog() {
-    this.routerControllerInstance.goToPage('/');
+    this.routerControllerInstance.goToPage('/catalog');
   }
 
   private async handleClickQuantity(productId: string, delta: number) {

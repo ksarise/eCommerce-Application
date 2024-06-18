@@ -102,6 +102,8 @@ export default class ProductCard {
       {
         id: `${this.id}`,
         'data-id': this.id,
+        title: 'Link',
+        'data-navigo': 'true',
       },
     );
     link.append(element);

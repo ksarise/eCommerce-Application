@@ -111,6 +111,7 @@ export default class AppView {
         break;
       case 'cart':
         document.getElementById('content')!.innerHTML = '';
+        console.log(this.cartView.myCartContainer.getContent());
         document
           .getElementById('content')!
           .appendChild(this.cartView.getContent());
