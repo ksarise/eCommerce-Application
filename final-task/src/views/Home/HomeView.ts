@@ -66,26 +66,31 @@ export default class HomeView {
 
     // specoffers
     const specialOffersContainer = tags
-      .div(['home__special-offers'])
+      .div(['home__mid__special-offers'])
       .getElement() as HTMLDivElement;
     const specialOffersTitle = tags.h2(
-      ['home__special-offers__title'],
+      ['home__mid__special-offers__title'],
       'Special Offers',
     );
+    const specialOffersList = tags
+      .div(['home__mid__special-offers__list'])
+      .getElement() as HTMLDivElement;
     specialOffersContainer.append(specialOffersTitle);
     homeData.offerItems.forEach((offer, index) => {
       const offerItem = tags
-        .div(['home__special-offers__item'])
+        .div(['home__mid__special-offers__item'])
         .getElement() as HTMLDivElement;
       offerItem.style.backgroundImage = `url(../../public/images/homepage/offers/offer${index + 1}.jpg)`;
       const offerTitle = tags.h3(
-        ['home__special-offers__item__title'],
+        ['home__mid__special-offers__item__title'],
         offer.title,
       );
-      const offerDiscount = tags.h2(['home__special-offers__item__discount']);
+      const offerDiscount = tags.h2([
+        'home__mid__special-offers__item__discount',
+      ]);
       offerDiscount.innerHTML = offer.discount;
       const offerButton = tags.button(
-        ['home__special-offers__item__button', 'home__button'],
+        ['home__mid__special-offers__item__button', 'home__button'],
         offer.button,
       );
       offerButton.addEventListener('click', () => {
@@ -94,42 +99,46 @@ export default class HomeView {
         }
       });
       offerItem.append(offerDiscount, offerTitle, offerButton);
-      specialOffersContainer.append(offerItem);
+      specialOffersList.append(offerItem);
+      specialOffersContainer.append(specialOffersList);
     });
 
     // featured products
     const featuredProductsContainer = tags
-      .div(['home__featured-products'])
+      .div(['home__mid__featured-products'])
       .getElement() as HTMLDivElement;
     const featuredProductsTitle = tags.h2(
-      ['home__featured-products__title'],
+      ['home__mid__featured-products__title'],
       'Featured Products',
     );
     featuredProductsContainer.append(featuredProductsTitle);
     const featuredProductsList = tags
-      .div(['home__featured-products__list'])
+      .div(['home__mid__featured-products__list'])
       .getElement() as HTMLDivElement;
     homeData.products.forEach((product, index) => {
       const productItem = tags
-        .div(['home__featured-products__item'])
+        .div(['home__mid__featured-products__item'])
         .getElement() as HTMLDivElement;
-      const productImage = tags.img(['home__featured-products__item__image'], {
-        src: `../../public/images/homepage/products/product-${index}.jpg`,
-      });
+      const productImage = tags.img(
+        ['home__mid__featured-products__item__image'],
+        {
+          src: `../../public/images/homepage/products/product-${index}.jpg`,
+        },
+      );
       const productTitle = tags.p(
-        ['home__featured-products__item__title'],
+        ['home__mid__featured-products__item__title'],
         product.title,
       );
       const productPrice = tags.span(
-        ['home__featured-products__item__price'],
+        ['home__mid__featured-products__item__price'],
         product.price,
       );
       const productButtonLink = tags.a(
-        ['home__featured-products__item__button__link'],
+        ['home__mid__featured-products__item__button__link'],
         `/product/${product.id}`,
       );
       const productButton = tags.button(
-        ['home__featured-products__item__button'],
+        ['home__mid__featured-products__item__button'],
         'Look Closer',
         {
           href: `/product/${product.id}`,
