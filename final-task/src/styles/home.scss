@@ -1,6 +1,4 @@
-body {
-  background-color: #ffdbdb;
-}
+
 .section {
   display: flex;
   align-items: center;
@@ -23,6 +21,9 @@ body {
 }
 .home__brands {
   flex-direction: column;
+  &__title {
+    font-size: 2rem;
+  }
   &__container {
     display: flex;
     justify-content: center;
@@ -486,6 +487,7 @@ body {
   display: flex;
   align-items: center;
   justify-content: space-between;
+  gap: 40px;
 }
 .home__reviews__item__author {
   font-weight: bold;

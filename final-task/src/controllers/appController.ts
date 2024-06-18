@@ -122,6 +122,8 @@ export default class AppController {
     this.appView.registrationView.bindFormSubmit(
       this.handleRegistrationFormSubmit.bind(this),
     );
+    this.appView.homeView.buttonToCatalogCallback =
+    this.handleClickGoCatalogButton.bind(this);
     this.appView.mainView.bindApplyFilters(this.handleApplyFilters.bind(this));
     this.appView.mainView.bindResetFilters(this.handleResetFilters.bind(this));
     this.appView.mainView.bindSortDropdown(this.handleSortChange.bind(this));
@@ -596,5 +598,8 @@ export default class AppController {
       );
       await this.appModel.mainModel.getVariantsFromCart(currentCart);
     }
+  }
+  private handleClickGoCatalogButton() {
+    this.routerController.goToPage('/catalog');
   }
 }

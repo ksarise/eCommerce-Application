@@ -3,6 +3,8 @@ import tags from '../../tags/tags';
 export default class HomeView {
   private container: HTMLDivElement;
 
+  public buttonToCatalogCallback: ((event?: Event) => void) | undefined;
+
   constructor() {
     this.container = tags.div(['home']).getElement() as HTMLDivElement;
 
@@ -22,8 +24,15 @@ export default class HomeView {
       'Save 30% on any board!',
     );
     const descriptionButton = tags.button(
-      ['home__description__button', 'home__button'],
+      ['home__description__button', 'home__button', 'home__category__link'],
       'Shop Sale',
+      {
+        'data-optiontype': 'category',
+        'data-optionname': 'GNU',
+        'data-id': '796a4ef4-83a6-491b-bd69-4b047da6ad62',
+        'data-main': 'Brand',
+        href: `brand/gnu`,
+      },
     );
     descriptionContainer.append(
       descriptionTitle,
@@ -36,7 +45,6 @@ export default class HomeView {
       'You can find board for every terrain!',
     );
     terrainSection.append(midTitle);
-
     const categories = [
       {
         title: 'Freeride',
@@ -109,6 +117,11 @@ export default class HomeView {
         ['home__special-offers__item__button', 'home__button'],
         offer.button,
       );
+      offerButton.addEventListener('click', () => {
+        if (this.buttonToCatalogCallback) {
+          this.buttonToCatalogCallback();
+        }
+      });
       offerItem.append(offerDiscount, offerTitle, offerButton);
       specialOffersContainer.append(offerItem);
     });
@@ -122,12 +135,36 @@ export default class HomeView {
     featuredProductsContainer.append(featuredProductsTitle);
 
     const products = [
-      { title: 'Lib Tech T.Rice Pro HP C2', price: '$ 367.49' },
-      { title: 'CAPiTA Mega Mercury', price: '$ 559.96' },
-      { title: 'Burton Feelgood Flying V', price: '$ 433.96' },
-      { title: 'GNU Asym Velvet C2', price: '$ 384.99' },
-      { title: 'K2 Dreamsicle', price: '$ 269.97' },
-      { title: 'Rossignol Myth', price: '$ 259.97' },
+      {
+        title: 'Lib Tech T.Rice Pro HP C2',
+        price: '$ 367.49',
+        id: 'a0d2261b-28f1-4487-bc49-cf92dd2f2fc2',
+      },
+      {
+        title: 'CAPiTA Mega Mercury',
+        price: '$ 559.96',
+        id: '20aa903b-231e-4cc4-9c72-0b4e28598081',
+      },
+      {
+        title: 'Burton Feelgood Flying V',
+        price: '$ 433.96',
+        id: 'c013ed35-f8ba-483a-a2ad-015cc435695b',
+      },
+      {
+        title: 'GNU Asym Velvet C2',
+        price: '$ 384.99',
+        id: '8bdece6b-970a-4387-82e4-6875ce726b4b',
+      },
+      {
+        title: 'K2 Dreamsicle',
+        price: '$ 269.97',
+        id: '768bbfa7-4a08-4726-a0e8-db1d38e78522',
+      },
+      {
+        title: 'Rossignol Myth',
+        price: '$ 259.97',
+        id: 'a2a60562-66ec-4d2a-816c-76dd4c560b2d',
+      },
     ];
     const featuredProductsList = tags
       .div(['home__featured-products__list'])
@@ -147,15 +184,28 @@ export default class HomeView {
         ['home__featured-products__item__price'],
         product.price,
       );
+      const productButtonLink = tags.a(
+        ['home__featured-products__item__button__link'],
+        `/product/${product.id}`,
+      );
       const productButton = tags.button(
         ['home__featured-products__item__button'],
         'Look Closer',
+        {
+          href: `/product/${product.id}`,
+        },
       );
+      productButton.addEventListener('click', () => {
+        if (this.buttonToCatalogCallback) {
+          this.buttonToCatalogCallback();
+        }
+      });
+      productButtonLink.append(productButton);
       productItem.append(
         productImage,
         productTitle,
         productPrice,
-        productButton,
+        productButtonLink,
       );
       featuredProductsList.append(productItem);
     });
@@ -191,7 +241,7 @@ export default class HomeView {
       {
         title: 'Burton',
         text: 'We Are Riders',
-        id: 'c26ae1c9-ac8c-4ebb-b65c-97fd3a198e05',
+        id: '9369379d-b02f-46c7-abc8-a875223d2312',
         main: 'Brand',
         buttonText: 'Shop Now',
       },
@@ -208,22 +258,22 @@ export default class HomeView {
 
     const guides = [
       {
-        title: 'Snowboard Gear Guide',
+        title: 'Awfull place!',
         description:
-          'In this guide we will help you choose the best gear for your snowboarding adventures',
-        author: 'Dr.',
+          'Back in my day, we rode down hills in plastic bags, not on those frivolous, brightly colored boards.',
+        author: 'Merl',
       },
       {
-        title: 'Snowboard Gear Guide',
+        title: 'Resilient Revelations',
         description:
-          'In this guide we will help you choose the best gear for your snowboarding adventures',
-        author: 'Dr.',
+          'When I fell off the lift into the snowdrift, I realized how durable these boards are - not at all like my broken dreams and more stylish.',
+        author: 'Harold',
       },
       {
-        title: 'Snowboard Gear Guide',
+        title: 'Pleasant prices!',
         description:
-          'In this guide we will help you choose the best gear for your snowboarding adventures',
-        author: 'Dr.',
+          'Great sale prices saved me money on post-season treatments.',
+        author: 'John',
       },
     ];
     const reviewsContainer = tags
