@@ -32,6 +32,14 @@ export default class AppController {
 
   private cartPageController: CartController;
 
+  private currentOffset: number = 10;
+
+  private limit: number = 10;
+
+  private isLoading: boolean = false;
+
+  private hasMoreProducts: boolean = true;
+
   constructor() {
     this.appView = new AppView();
     this.appModel = new AppModel();
@@ -39,10 +47,7 @@ export default class AppController {
       this.appView.registrationView,
       this.appModel.registrationModel,
     );
-    this.mainController = new MainController(
-      this.appModel.mainModel,
-      this.appView.mainView,
-    );
+
     this.profileController = new ProfileController(
       this.appView.profileView,
       this.appModel,
@@ -55,6 +60,10 @@ export default class AppController {
       this.appView.cartView,
       this.appModel.cartPageModel,
       routerController,
+    );
+    this.mainController = new MainController(
+      this.appModel.mainModel,
+      this.appView.mainView,
     );
   }
 
@@ -69,16 +78,14 @@ export default class AppController {
       this.appView.innerHTML;
     await this.fetchAndLogProducts();
     await this.fetchCategories();
-    await this.fetchCategories();
     this.mainController.initialize();
+
     routerController.handleLocation();
     this.handleVisiblityButtons();
     await this.appView.mainView.bindCategoryList(
       this.handleCategoryNavigation.bind(this),
     );
-    await this.appView.mainView.bindCategoryList(
-      this.handleCategoryNavigation.bind(this),
-    );
+    window.addEventListener('scroll', () => this.onScroll());
   }
 
   public initializeListeners() {
@@ -111,10 +118,6 @@ export default class AppController {
     this.appView.registrationView.bindFormSubmit(
       this.handleRegistrationFormSubmit.bind(this),
     );
-    this.appView.mainView.bindApplyFilters(this.handleApplyFilters.bind(this));
-    this.appView.mainView.bindResetFilters(this.handleResetFilters.bind(this));
-    this.appView.mainView.bindSortDropdown(this.handleSortChange.bind(this));
-    this.appView.mainView.bindTextSearch(this.handleSearch.bind(this));
     this.appView.mainView.bindApplyFilters(this.handleApplyFilters.bind(this));
     this.appView.mainView.bindResetFilters(this.handleResetFilters.bind(this));
     this.appView.mainView.bindSortDropdown(this.handleSortChange.bind(this));
@@ -261,28 +264,37 @@ export default class AppController {
   }
 
   public async fetchAndLogProducts(
+    limit: number = 10,
+    offset: number = 0,
     filters?: string[],
     sorts?: string,
     texts?: string,
   ) {
     try {
-      console.log('fetch filters', filters);
-      if (filters) {
-        const products = await this.appModel.requestGetProducts(
-          filters,
-          sorts,
-          texts,
-        );
-        this.appModel.mainModel.setProducts(products);
-        this.mainController.renderProducts();
+      this.appView.mainView.showSkeletons(limit);
+      const products = await this.appModel.requestGetProducts(
+        limit,
+        offset,
+        filters,
+        sorts,
+        texts,
+      );
+      if (products.results.length < limit) {
+        this.hasMoreProducts = false;
+        console.log('enough products');
       } else {
-        const products = await this.appModel.requestGetProducts();
-        this.appModel.mainModel.setProducts(products);
+        this.hasMoreProducts = true;
       }
+      this.appModel.mainModel.setProducts(products);
+      this.appView.mainView.removeSkeletons();
+      this.mainController.renderProducts(
+        this.handleClickProductCartButton.bind(this),
+      );
     } catch (error) {
+      this.appView.mainView.removeSkeletons();
       const errmessage = (error as ErrorResponse).message;
       showToast({
-        text: `Fetch Products error${errmessage}`,
+        text: `Fetch Products error ${errmessage}`,
         type: 'negative',
       });
     }
@@ -322,12 +334,17 @@ export default class AppController {
   }
 
   private async handleApplyFilters() {
+    this.currentOffset = 0;
     const { searchQuery } = this.appModel.mainModel;
+    this.appView.mainView.clearCatalogList();
     await this.fetchAndLogProducts(
+      this.limit,
+      this.currentOffset,
       searchQuery,
       this.appModel.mainModel.sort,
       this.appModel.mainModel.textSearch,
     );
+    this.currentOffset += this.limit;
   }
 
   private async handleCategoryNavigation(
@@ -348,40 +365,56 @@ export default class AppController {
       this.appModel.mainModel.createFilterResponse();
     }
     await this.fetchAndLogProducts(
+      this.limit,
+      this.currentOffset,
       this.appModel.mainModel.searchQuery,
       this.appModel.mainModel.sort,
       this.appModel.mainModel.textSearch,
     );
-    this.mainController.renderProducts();
   }
 
   private async handleResetFilters() {
+    this.currentOffset = 0;
     this.appModel.mainModel.resetFilters();
+    this.appView.mainView.clearCatalogList();
     this.routerController.goToPage('/');
     await this.fetchAndLogProducts();
-    this.mainController.handleResetFilters();
+    this.mainController.handleResetFilters(
+      this.handleClickProductCartButton.bind(this),
+    );
   }
 
   private async handleSortChange(value: string) {
     if (value !== this.appModel.mainModel.sort) {
       this.appModel.mainModel.handleSort(value);
+      this.currentOffset = 0;
+      this.appView.mainView.clearCatalogList();
       await this.fetchAndLogProducts(
+        this.limit,
+        this.currentOffset,
         this.appModel.mainModel.searchQuery || [],
         this.appModel.mainModel.sort,
         this.appModel.mainModel.textSearch,
       );
-      this.mainController.renderProducts();
+      this.currentOffset += this.limit;
     }
   }
 
   private async handleSearch(value: string) {
-    this.appModel.mainModel.handleSearch(value);
-    await this.fetchAndLogProducts(
-      this.appModel.mainModel.searchQuery,
-      this.appModel.mainModel.sort,
-      value,
-    );
-    this.mainController.renderProducts();
+    if (value !== this.appModel.mainModel.textSearch) {
+      this.appView.mainView.clearCatalogList();
+      if (this.appModel.mainModel.textSearch !== value) {
+        this.currentOffset = 0;
+      }
+      this.appModel.mainModel.handleSearch(value);
+      await this.fetchAndLogProducts(
+        this.limit,
+        this.currentOffset,
+        this.appModel.mainModel.searchQuery,
+        this.appModel.mainModel.sort,
+        value,
+      );
+    }
   }
 
   public async fetchCategories() {
@@ -456,16 +489,22 @@ export default class AppController {
     }
 
     this.changeContent?.('main');
-    await this.fetchAndLogProducts(filters, 'name.en-US asc', '').finally(
-      () => {
-        const breadcrumb = [mainCategoryOrigName];
-        if (subCategoryOrigName) {
-          breadcrumb.push(subCategoryOrigName);
-        }
-        this.mainController.renderProducts();
-        this.appView.mainView.updateBreadcrumb(breadcrumb);
-      },
-    );
+    await this.fetchAndLogProducts(
+      this.limit,
+      this.currentOffset,
+      filters,
+      'name.en-US asc',
+      '',
+    ).finally(() => {
+      const breadcrumb = [mainCategoryOrigName];
+      if (subCategoryOrigName) {
+        breadcrumb.push(subCategoryOrigName);
+      }
+      this.mainController.renderProducts(
+        this.handleClickProductCartButton.bind(this),
+      );
+      this.appView.mainView.updateBreadcrumb(breadcrumb);
+    });
   }
 
   private handleClickCartButton() {
@@ -473,7 +512,72 @@ export default class AppController {
     this.cartPageController.requestGetProductsFromCart();
   }
 
+  public async handleClickProductCartButton(
+    isAdd: boolean,
+    parentId: string,
+    variantId: number,
+  ) {
+    if (isAdd) {
+      await this.appModel.productPageModel.addToCart(
+        parentId,
+        () => {},
+        variantId,
+      );
+    } else {
+      await this.appModel.productPageModel.removeFromCart(
+        parentId,
+        () => {},
+        variantId,
+      );
+    }
+    await this.storeVariantsFromCarttoModel();
+    this.appView.mainView.updateProductCards(
+      parentId,
+      this.appModel.mainModel.variantsInCart,
+    );
+  }
+
+  private async onScroll() {
+    if (
+      this.hasMoreProducts &&
+      window.innerHeight + window.scrollY >= document.body.offsetHeight - 500 &&
+      !this.isLoading
+    ) {
+      this.isLoading = true;
+      try {
+        this.appView.mainView.showSkeletons(this.limit);
+        await this.fetchAndLogProducts(
+          this.limit,
+          this.currentOffset,
+          this.appModel.mainModel.searchQuery,
+          this.appModel.mainModel.sort,
+          this.appModel.mainModel.textSearch,
+        );
+        this.appView.mainView.removeSkeletons();
+        this.currentOffset += this.limit;
+        this.isLoading = false;
+      } catch (error) {
+        this.appView.mainView.removeSkeletons();
+        this.isLoading = false;
+        const errmessage = (error as ErrorResponse).message;
+        showToast({
+          text: `Fetch Products error${errmessage}`,
+          type: 'negative',
+        });
+      }
+    }
+  }
+
   private handleClickAboutUsButton() {
     this.routerController.goToPage('/about_us');
+  }
+
+  public async storeVariantsFromCarttoModel() {
+    if (localStorage.getItem('cartId')) {
+      const currentCart = await this.appModel.cartPageModel.getCartById(
+        localStorage.getItem('cartId')!,
+      );
+      await this.appModel.mainModel.getVariantsFromCart(currentCart);
+    }
   }
 }

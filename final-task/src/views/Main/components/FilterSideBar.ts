@@ -170,7 +170,6 @@ export default class FilterSideBar {
   }
 
   public toggleSideBar() {
-    console.log('toogle');
     if (this.filterSideBar.classList.contains('visible')) {
       this.filterSideBar.classList.remove('visible');
     } else if (window.innerWidth < 1150) {
