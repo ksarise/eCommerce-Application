@@ -91,7 +91,7 @@ export default class TotalCostContainer {
   public renderTotalCost(totalCost: number, discount: number = 0) {
     this.subtotalPrice.innerHTML = `$${(totalCost + discount).toFixed(2)}`;
     this.totalPrice.innerHTML = `$${totalCost}`;
-    this.discountPrice.innerHTML = `$${discount}`;
+    this.discountPrice.innerHTML = `- $${discount}`;
   }
 
   public getContent(): HTMLElement {
