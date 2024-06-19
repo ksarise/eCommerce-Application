@@ -21,60 +21,81 @@ export default class CartPageController {
     this.routerControllerInstance = routerControllerMain;
   }
 
-  public requestGetProductsFromCart() {
+  public requestGetProductsFromCart(
+    quantityUpdateCallback: (quantity: number) => void,
+  ) {
     this.cartPageModel.requestGetProductsFromCart(
       this.cartPageView.render.bind(this.cartPageView),
+      quantityUpdateCallback,
     );
   }
 
-  public initializeListeners() {
+  public initializeListeners(
+    quantityUpdateCallback: (quantity: number) => void,
+  ) {
     this.cartPageView.handleClickGoToCatalog =
       this.handleClickGoToCatalog.bind(this);
     this.cartPageView.myCartContainer.handleClickQuantity =
-      this.handleClickQuantity.bind(this);
+      this.handleClickQuantity.bind(this, quantityUpdateCallback);
     this.cartPageView.myCartContainer.handleClickRemove =
-      this.handleClickRemove.bind(this);
+      this.handleClickRemove.bind(this, quantityUpdateCallback);
     this.cartPageView.myCartContainer.handleClickClearCart =
-      this.handleClickClearCart.bind(this);
+      this.handleClickClearCart.bind(this, quantityUpdateCallback);
     this.cartPageView.myCartContainer.handleClickProduct =
       this.handleClickProduct.bind(this);
     this.cartPageView.totalCostContainer.handleClickPromoCode =
-      this.handleClickPromoCode.bind(this);
+      this.handleClickPromoCode.bind(this, quantityUpdateCallback);
   }
 
   public handleClickGoToCatalog() {
     this.routerControllerInstance.goToPage('/catalog');
   }
 
-  private async handleClickQuantity(productId: string, delta: number) {
+  private async handleClickQuantity(
+    quantityUpdateCallback: (quantity: number) => void,
+    productId: string,
+    delta: number,
+  ) {
     console.log('here', productId, delta);
     try {
       await this.cartPageModel.updateProductQuantity(
         productId,
         delta,
         this.cartPageView.changeQuantityTotalCost.bind(this.cartPageView),
+        quantityUpdateCallback,
       );
     } catch (error) {
       showToast({ text: (error as Error).message, type: 'negative' });
     }
   }
 
-  private async handleClickRemove(productId: string) {
+  private async handleClickRemove(
+    quantityUpdateCallback: (quantity: number) => void,
+    productId: string,
+  ) {
     try {
       await this.cartPageModel.removeFromCart(
         productId,
         this.cartPageView.changeQuantityTotalCost.bind(this.cartPageView),
+        quantityUpdateCallback,
+      );
+      quantityUpdateCallback(
+        this.cartPageModel.cart!.totalLineItemQuantity || 0,
       );
     } catch (error) {
       showToast({ text: (error as Error).message, type: 'negative' });
     }
   }
 
-  private async handleClickClearCart() {
+  private async handleClickClearCart(
+    quantityUpdateCallback: (quantity: number) => void,
+  ) {
     try {
       await this.cartPageModel.clearCart(
         this.cartPageView.render.bind(this.cartPageView),
+        quantityUpdateCallback,
       );
+      quantityUpdateCallback(0);
     } catch (error) {
       showToast({ text: (error as Error).message, type: 'negative' });
     }
@@ -84,7 +105,9 @@ export default class CartPageController {
     this.routerControllerInstance.goToPage(`/product/${productId}`);
   }
 
-  private async handleClickPromoCode() {
+  private async handleClickPromoCode(
+    quantityUpdateCallback: (quantity: number) => void,
+  ) {
     try {
       const code = (document.getElementById('promoCode') as HTMLInputElement)
         .value;
@@ -110,6 +133,7 @@ export default class CartPageController {
       );
       showToast({ text: 'Promo code Active', type: 'positive' });
       (document.getElementById('promoCode') as HTMLInputElement).value = '';
+      quantityUpdateCallback(result.totalLineItemQuantity || 0);
     } catch (error) {
       showToast({
         text: `There is no promo code ${

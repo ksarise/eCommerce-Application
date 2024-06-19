@@ -94,7 +94,9 @@ export default class AppController {
 
   public initializeListeners() {
     this.productPageController.initializeListeners();
-    this.cartPageController.initializeListeners();
+    this.cartPageController.initializeListeners(
+      this.appView.headerView.updateQuantity.bind(this.appView.headerView),
+    );
     this.routerController.changeContent = this.changeContent.bind(this);
     this.routerController.fecthProductById = this.fecthProductById.bind(this);
     this.routerController.fetchProductsByCategory =
@@ -104,6 +106,7 @@ export default class AppController {
     this.routerController.fetchProductsFromCart =
       this.cartPageController.requestGetProductsFromCart.bind(
         this.cartPageController,
+        this.appView.headerView.updateQuantity.bind(this.appView.headerView),
       );
     this.appView.headerView.handleClickLoginButton =
       this.handleClickLoginButton.bind(this);
@@ -528,7 +531,9 @@ export default class AppController {
 
   private handleClickCartButton() {
     this.routerController.goToPage('/cart');
-    this.cartPageController.requestGetProductsFromCart();
+    this.cartPageController.requestGetProductsFromCart(
+      this.appView.headerView.updateQuantity.bind(this.appView.headerView),
+    );
   }
 
   public async handleClickProductCartButton(

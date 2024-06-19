@@ -22,6 +22,7 @@ export default class CartPageModel {
       totalCost: number,
       discount: number,
     ) => void,
+    quantityCallback: (quantity: number) => void,
   ) {
     if (this.cart) {
       await this.getCartById(this.cart.id);
@@ -39,10 +40,12 @@ export default class CartPageModel {
       _render([], 0, 0);
       // _renderProducts([]);
     }
+    this.updateCartQuantity(quantityCallback);
   }
 
   public async getCartById(cartId: string) {
     this.cart = (await this.apiService.getCartById(cartId)).body;
+    console.log(this.cart.totalLineItemQuantity);
     return this.cart;
   }
 
@@ -57,6 +60,7 @@ export default class CartPageModel {
       cart: Cart,
       totalCostLineItem?: number,
     ) => void,
+    quantityCallback: (quantity: number) => void,
   ) {
     await this.getCartById(this.cart!.id);
     const lineItem = this.cart?.lineItems.find(
@@ -90,6 +94,7 @@ export default class CartPageModel {
         this.cart!,
         rightLineItemPrice,
       );
+      this.updateCartQuantity(quantityCallback);
       return response;
     } catch (error) {
       return error;
@@ -106,6 +111,7 @@ export default class CartPageModel {
       cart: Cart,
       totalCostLineItem?: number,
     ) => void,
+    quantityCallback: (quantity: number) => void,
   ) {
     await this.getCartById(this.cart!.id);
     try {
@@ -133,6 +139,7 @@ export default class CartPageModel {
         this.cart!,
         rightLineItemPrice,
       );
+      this.updateCartQuantity(quantityCallback);
       return response;
     } catch (error) {
       return error;
@@ -141,9 +148,10 @@ export default class CartPageModel {
 
   public async clearCart(
     _render: (products: LineItem[], totalCost: number) => void,
+    quantityCallback: (quantity: number) => void,
   ) {
     await this.createCart();
-    await this.requestGetProductsFromCart(_render);
+    await this.requestGetProductsFromCart(_render, quantityCallback);
   }
 
   public async createCart() {
@@ -163,6 +171,14 @@ export default class CartPageModel {
     } catch (error) {
       console.log(error);
       return error;
+    }
+  }
+
+  private updateCartQuantity(callback: (quantity: number) => void) {
+    if (this.cart) {
+      callback(this.cart.totalLineItemQuantity || 0);
+    } else {
+      callback(0);
     }
   }
 }

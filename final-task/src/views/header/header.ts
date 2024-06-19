@@ -23,6 +23,8 @@ export default class HeaderView {
 
   public handleClickAboutUsButton: (() => void) | undefined;
 
+  public cartProductsQuantity: number = 0;
+
   constructor() {
     this.header = new BaseComponentGenerator({
       tag: 'header',
@@ -168,7 +170,10 @@ export default class HeaderView {
     const buttonCartBlock = tags
       .div(['header__button', 'header__button_cart'])
       .getElement() as HTMLDivElement;
-    const buttonCartQuantity = tags.span(['header__button_cart_quantity'], '1');
+    const buttonCartQuantity = tags.span(
+      ['header__button_cart_quantity'],
+      this.cartProductsQuantity.toString(),
+    );
     buttonCartBlock.append(buttonCart, buttonCartQuantity);
     buttonCartBlock.addEventListener('click', () => {
       this.handleClickCartButton!();
@@ -196,6 +201,28 @@ export default class HeaderView {
     } else {
       this.linkContainer.classList.remove('loginned');
       this.buttonContainer.classList.remove('loginned');
+    }
+  }
+
+  public updateQuantity(quantity: number) {
+    this.cartProductsQuantity = quantity;
+    const buttonCartCount = document.querySelector(
+      '.header__button_cart_quantity',
+    ) as HTMLDivElement;
+    if (buttonCartCount && this.cartProductsQuantity !== 0) {
+      if (
+        buttonCartCount.classList.contains(
+          'header__button_cart_quantity--hidden',
+        )
+      ) {
+        buttonCartCount.classList.remove(
+          'header__button_cart_quantity--hidden',
+        );
+      }
+      buttonCartCount.textContent = String(this.cartProductsQuantity);
+    } else if (buttonCartCount && this.cartProductsQuantity === 0) {
+      buttonCartCount.textContent = '';
+      buttonCartCount.classList.add('header__button_cart_quantity--hidden');
     }
   }
 }
