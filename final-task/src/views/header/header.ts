@@ -164,8 +164,13 @@ export default class HeaderView {
     </g>
     </svg>`;
     const buttonCart = parseSVG(svgCartCode);
-    buttonCart.classList.add('img_cart');
-    buttonCart.addEventListener('click', () => {
+    buttonCart.classList.add('header__button_cart_img_cart');
+    const buttonCartBlock = tags
+      .div(['header__button', 'header__button_cart'])
+      .getElement() as HTMLDivElement;
+    const buttonCartQuantity = tags.span(['header__button_cart_quantity'], '1');
+    buttonCartBlock.append(buttonCart, buttonCartQuantity);
+    buttonCartBlock.addEventListener('click', () => {
       this.handleClickCartButton!();
     });
     buttonMyProfile.addEventListener('click', async () => {
@@ -175,7 +180,7 @@ export default class HeaderView {
     buttonMyProfile.prepend(imgProfile);
     this.buttonContainer.append(
       buttonAboutUs,
-      buttonCart,
+      buttonCartBlock,
       buttonLogin,
       buttonRegistration,
       buttonMyProfile,
