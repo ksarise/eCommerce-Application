@@ -42,12 +42,15 @@ export default class CartView {
   }
 
   public render(products: LineItem[], totalCost: number, discount: number = 0) {
+    this.container.getElement().innerHTML = '';
     if (products.length === 0) {
       this.renderEmptyCart();
       return;
     }
     this.myCartContainer.renderProducts(products);
     this.totalCostContainer.renderTotalCost(totalCost, discount);
+    this.container.getElement().append(this.myCartContainer.getContent());
+    this.container.getElement().append(this.totalCostContainer.getContent());
   }
 
   private renderEmptyCart() {

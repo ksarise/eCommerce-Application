@@ -48,7 +48,8 @@ class Router {
       this.router.resolve();
     });
 
-    this.router.on('/product/:productId', () => {
+    this.router.on('/product/:productId', (data) => {
+      this.fecthProductById?.(data!.data!.productId);
       this.changeContent?.('product');
       this.router.resolve();
     });

@@ -86,6 +86,10 @@ export default class HeaderView {
       ['header__navigation_link', 'header__navigation_login'],
       '/catalog',
       'Catalog',
+      {
+        title: 'Link',
+        'data-navigo': 'true',
+      },
     );
     const linkRegistration = tags.a(
       ['header__navigation_link', 'header__navigation_register'],
