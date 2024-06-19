@@ -171,7 +171,7 @@ export default class HeaderView {
       .div(['header__button', 'header__button_cart'])
       .getElement() as HTMLDivElement;
     const buttonCartQuantity = tags.span(
-      ['header__button_cart_quantity'],
+      ['header__button_cart_quantity', 'header__button_cart_quantity--hidden'],
       this.cartProductsQuantity.toString(),
     );
     buttonCartBlock.append(buttonCart, buttonCartQuantity);
@@ -210,19 +210,19 @@ export default class HeaderView {
       '.header__button_cart_quantity',
     ) as HTMLDivElement;
     if (buttonCartCount && this.cartProductsQuantity !== 0) {
-      if (
-        buttonCartCount.classList.contains(
-          'header__button_cart_quantity--hidden',
-        )
-      ) {
-        buttonCartCount.classList.remove(
-          'header__button_cart_quantity--hidden',
-        );
-      }
+      // if (
+      //   buttonCartCount.classList.contains(
+      //     'header__button_cart_quantity--hidden',
+      //   )
+      // ) {
+      //   buttonCartCount.classList.remove(
+      //     'header__button_cart_quantity--hidden',
+      //   );
+      // }
       buttonCartCount.textContent = String(this.cartProductsQuantity);
     } else if (buttonCartCount && this.cartProductsQuantity === 0) {
       buttonCartCount.textContent = '';
-      buttonCartCount.classList.add('header__button_cart_quantity--hidden');
+      // buttonCartCount.classList.add('header__button_cart_quantity--hidden');
     }
   }
 }
