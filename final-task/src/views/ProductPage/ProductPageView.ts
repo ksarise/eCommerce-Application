@@ -326,12 +326,14 @@ export default class ProductPageView {
       .getElement();
     variants.forEach((variant, idx) => {
       if (variant.attributes) {
-        const size = variant.attributes.find(
-          (attribute) => attribute.name === 'Size',
-        ) || { value: '' };
+        const sizeAttribute = variant.attributes.find(
+          (attribute) => attribute.name === 'SpecsTable_Size',
+        ) || { value: { key: '', label: '' } };
+        console.log(sizeAttribute, sizeAttribute.value.key);
+        const sizeValue = sizeAttribute.value.key || '';
         const nameTag = tags.button(
           ['product__variants_button'],
-          String(size.value),
+          String(sizeValue),
         );
         if (idx === 0) {
           nameTag.classList.add('product__variants_button-active');

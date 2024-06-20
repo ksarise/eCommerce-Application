@@ -25,6 +25,8 @@ export default class MainView {
 
   public productCards: ProductCard[] = [];
 
+  public catalogUtilityPanelCount: HTMLElement;
+
   constructor() {
     this.mainContainer = tags.div(['main']).getElement() as HTMLDivElement;
     this.catalogPromoCodes = tags.div(['promocode']).getElement();
@@ -35,6 +37,7 @@ export default class MainView {
     this.catalogPanelContainer = tags
       .div(['catalog__panel', 'container'])
       .getElement() as HTMLDivElement;
+
     const filtersBtn = tags.button(['catalog__filters__btn'], 'Open Filters');
     filtersBtn.addEventListener('click', () => {
       this.filterContainer.toggleSideBar();
@@ -65,7 +68,21 @@ export default class MainView {
       this.catalogContainer,
     );
     this.createTextSearch();
-    this.createSortDropdown();
+    const catalogUtilityPanelContainer = tags
+      .div(['catalog__utility-panel'])
+      .getElement() as HTMLDivElement;
+    const catalogUtilityPanelCountContainer = tags
+      .div(['catalog__utility-panel__count-container'])
+      .getElement() as HTMLDivElement;
+    this.catalogUtilityPanelCount = tags.span(
+      ['catalog__utility-panel__count'],
+      '249 Results',
+    );
+    catalogUtilityPanelCountContainer.append(this.catalogUtilityPanelCount);
+    catalogUtilityPanelContainer.append(catalogUtilityPanelCountContainer);
+
+    this.catalogPanelContainer.append(catalogUtilityPanelContainer);
+    MainView.createSortDropdown(catalogUtilityPanelContainer);
     this.mainContainer.append(
       this.catalogPromoCodes,
       this.breadcrumbContainer,
@@ -261,7 +278,7 @@ export default class MainView {
     this.catalogPanelContainer.append(textSearchContainer);
   }
 
-  public createSortDropdown() {
+  static createSortDropdown(parent: HTMLElement) {
     const sortDropdownContainer = tags
       .div(['sort-dropdown-container'])
       .getElement();
@@ -295,7 +312,7 @@ export default class MainView {
       sortDropdown.appendChild(option);
     });
     sortDropdownContainer.append(sortDropdownLabel, sortDropdown.getElement());
-    this.catalogPanelContainer.append(sortDropdownContainer);
+    parent.append(sortDropdownContainer);
   }
 
   public bindSortDropdown(callback: (value: string) => void): void {
@@ -407,5 +424,9 @@ export default class MainView {
 
   public clearCatalogList() {
     this.catalogListContainer.innerHTML = '';
+  }
+
+  public updateCatalogResultsCount(count: number) {
+    this.catalogUtilityPanelCount.innerHTML = `${count} Results`;
   }
 }
