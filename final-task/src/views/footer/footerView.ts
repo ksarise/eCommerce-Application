@@ -3,8 +3,18 @@ import tags from '../../tags/tags';
 export default class FooterView {
   private footer: HTMLElement;
 
+  private contactUs: HTMLElement;
+
+  private mainContent: HTMLElement;
+
+  private command: HTMLElement;
+
   constructor() {
     this.footer = tags.div(['footer']).getElement();
+    this.contactUs = tags.div(['footer__content']).getElement();
+    this.mainContent = tags.div(['footer__content']).getElement();
+    this.command = tags.div(['footer__content']).getElement();
+    this.footer.append(this.mainContent, this.contactUs, this.command);
     this.createFooterBlock();
   }
 
@@ -14,16 +24,18 @@ export default class FooterView {
 
   private createFooterBlock() {
     this.createHeading();
+    this.createInformation();
     this.createFollowUs();
     this.createContactUs();
-    this.createInformation();
     this.createPayment();
-    // this.createMembership();
+    this.createEndFooter();
+    this.createTeam();
+    this.createEmailBlock();
   }
 
   private createHeading() {
     const heading = tags.h1(['footer__h1'], 'Frost glide');
-    this.footer.append(heading);
+    this.mainContent.append(heading);
   }
 
   private createFollowUs() {
@@ -31,18 +43,29 @@ export default class FooterView {
       .div(['footer__block'], '', { id: 'follow-us' })
       .getElement();
     const heading = tags.h2(['footer__h2'], 'Follow Us');
-    const list = tags.div(['footer__list']).getElement();
+    const list = tags.div(['footer__list', 'footer__follow']).getElement();
     const listItems = [
-      'footer__facebook',
-      'footer__instagram',
-      'footer__twitter',
+      {
+        class: 'footer__facebook',
+        href: 'https://www.facebook.com/',
+      },
+      {
+        class: 'footer__instagram',
+        href: 'https://www.instagram.com/',
+      },
+      {
+        class: 'footer__twitter',
+        href: 'https://twitter.com/',
+      },
     ];
     listItems.forEach((item) => {
-      const listItem = tags.div(['footer__svg', item]).getElement();
+      const listItem = tags.a(['footer__svg', item.class], item.href, '', {
+        target: '_blank',
+      });
       list.append(listItem);
     });
     blockFollowUs.append(heading, list);
-    this.footer.append(blockFollowUs);
+    this.contactUs.append(blockFollowUs);
   }
 
   private createContactUs() {
@@ -77,7 +100,7 @@ export default class FooterView {
       list.append(listItem);
     });
     blockContactUs.append(heading, list);
-    this.footer.append(blockContactUs);
+    this.contactUs.append(blockContactUs);
   }
 
   private createInformation() {
@@ -86,37 +109,37 @@ export default class FooterView {
     const list = tags.div(['footer__list']).getElement();
     const listItems = [
       {
-        class: 'footer__link',
+        class: 'footer__contact',
         text: 'About Us',
         data: '/about_us',
       },
       {
-        class: 'footer__link',
+        class: 'footer__contact',
         text: 'Catalog',
         data: '/catalog',
       },
       {
-        class: 'footer__link',
+        class: 'footer__contact',
         text: 'Home',
-        data: '/home',
+        data: '/',
       },
       {
-        class: 'footer__link',
+        class: 'footer__contact',
         text: 'Cart',
         data: '/cart',
       },
       {
-        class: 'footer__link',
+        class: 'footer__contact',
         text: 'Contact Us',
         data: '#contact-us',
       },
       {
-        class: 'footer__link',
+        class: 'footer__contact',
         text: 'Follow Us',
         data: '#follow-us',
       },
       {
-        class: 'footer__link',
+        class: 'footer__contact',
         text: 'Payment',
         data: '#payment',
       },
@@ -130,7 +153,7 @@ export default class FooterView {
       list.append(listItem);
     });
     blockInformation.append(heading, list);
-    this.footer.append(blockInformation);
+    this.mainContent.append(blockInformation);
   }
 
   private createPayment() {
@@ -138,13 +161,66 @@ export default class FooterView {
       .div(['footer__block'], '', { id: 'payment' })
       .getElement();
     const heading = tags.h2(['footer__h2'], 'Payment');
-    const list = tags.div(['footer__list']).getElement();
+    const list = tags
+      .div(['footer__list', 'footer__payment-items'])
+      .getElement();
     const listItems = ['footer__visa', 'footer__mastercard', 'footer__paypal'];
     listItems.forEach((item) => {
-      const listItem = tags.div(['footer__svg', item]).getElement();
+      const listItem = tags.div(['footer__payment', item]).getElement();
       list.append(listItem);
     });
     blockPayment.append(heading, list);
-    this.footer.append(blockPayment);
+    this.command.append(blockPayment);
+  }
+
+  private createEndFooter() {
+    const endFooter = tags.div(['footer__end']).getElement();
+    const text = tags.div(['footer__end-link'], '© 2024').getElement();
+    const link = tags.a(['footer__end-link'], '/', 'Frost glide');
+    endFooter.append(link, text);
+    this.footer.append(endFooter);
+  }
+
+  private createTeam() {
+    const heading = tags.h2(['footer__h2'], 'Our Team');
+    const list = tags.div(['footer__list']).getElement();
+    const listItems = [
+      {
+        github: 'https://github.com/ksarise',
+        name: 'Sergey',
+      },
+      {
+        github: 'https://github.com/kitakiv',
+        name: 'Victoria',
+      },
+      {
+        github: 'https://github.com/andrey257686',
+        name: 'Andrey',
+      },
+    ];
+    listItems.forEach((item) => {
+      const link = tags.a(['footer__list-item'], item.github);
+      const listItem = tags.div(['footer__text'], item.name).getElement();
+      const svg = tags.div(['footer__svg', 'footer__github']).getElement();
+      link.append(svg, listItem);
+      list.append(link);
+    });
+    this.command.append(heading, list);
+  }
+
+  private createEmailBlock() {
+    const heading = tags.h2(['footer__h2'], 'Write your feedback');
+    const form = tags.form(['footer__form'], { type: 'submit' });
+    const input = tags.input(['footer__input', 'input'], {
+      type: 'text',
+      placeholder: 'Feedback',
+    });
+    this.contactUs.append(form);
+    const label = tags.label(['footer__label', 'label'], 'Feedback');
+    const button = tags.button(['footer__button'], 'Submit', {
+      type: 'submit',
+    });
+    form.append(heading, label, input, button);
+    this.contactUs.append(form);
   }
 }
