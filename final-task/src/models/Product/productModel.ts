@@ -39,6 +39,9 @@ export default class ProductPageModel {
       lineItemDraft,
       currentCart.version,
     );
+    this.cartPageModel.updateHeaderCartQuantity?.(
+      response.body.totalLineItemQuantity || 0,
+    );
     if (response.statusCode === 200 || response.statusCode === 201) {
       _changeButtonCart(true);
     } else {
@@ -69,6 +72,9 @@ export default class ProductPageModel {
         this.cartPageModel.cart.id,
         lineItemId,
         currentCart.version,
+      );
+      this.cartPageModel.updateHeaderCartQuantity?.(
+        response.body.totalLineItemQuantity || 0,
       );
       if (response.statusCode === 200 || response.statusCode === 201) {
         _changeButtonCart(false);
