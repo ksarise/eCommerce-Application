@@ -394,7 +394,7 @@ export default class AppController {
     this.currentOffset = 0;
     this.appModel.mainModel.resetFilters();
     this.appView.mainView.clearCatalogList();
-    this.routerController.goToPage('/');
+    this.routerController.goToPage('/catalog');
     await this.fetchAndLogProducts();
     this.mainController.handleResetFilters(
       this.handleClickProductCartButton.bind(this),
@@ -509,6 +509,8 @@ export default class AppController {
 
     this.changeContent?.('main');
     this.appView.mainView.clearCatalogList();
+    this.currentOffset = 0;
+    this.appModel.mainModel.searchQuery = filters;
     await this.fetchAndLogProducts(
       this.limit,
       this.currentOffset,
@@ -568,6 +570,11 @@ export default class AppController {
       this.isLoading = true;
       try {
         this.appView.mainView.showSkeletons(this.limit);
+        console.log(
+          this.appModel.mainModel.searchQuery,
+          this.appModel.mainModel.sort,
+          this.appModel.mainModel.textSearch,
+        );
         await this.fetchAndLogProducts(
           this.limit,
           this.currentOffset,

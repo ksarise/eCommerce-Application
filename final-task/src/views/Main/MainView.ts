@@ -76,7 +76,7 @@ export default class MainView {
       .getElement() as HTMLDivElement;
     this.catalogUtilityPanelCount = tags.span(
       ['catalog__utility-panel__count'],
-      '19 Results',
+      '249 Results',
     );
     catalogUtilityPanelCountContainer.append(this.catalogUtilityPanelCount);
     catalogUtilityPanelContainer.append(catalogUtilityPanelCountContainer);

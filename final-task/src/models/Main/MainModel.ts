@@ -69,8 +69,9 @@ export default class MainModel {
         const sizes = product.variants
           ?.map((variant) => {
             return (
-              variant.attributes?.find((attribute) => attribute.name === 'Size')
-                ?.value || ''
+              variant.attributes?.find(
+                (attribute) => attribute.name === 'SpecsTable_Size',
+              )?.value.key || ''
             );
           })
           .filter((size) => size !== '');

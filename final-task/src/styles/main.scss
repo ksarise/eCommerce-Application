@@ -62,11 +62,11 @@
     justify-content: space-between;
     gap: 10px;
     margin-bottom: 20px;
-  
+
     @media screen and (max-width: 820px) {
       flex-direction: column;
     }
-  
+
     .text-search-container {
       display: flex;
       width: 100%;
@@ -76,7 +76,7 @@
       padding: 1px;
       border-radius: 5px;
       background-color: white;
-  
+
       input[type='text'] {
         flex-grow: 1;
         border: none;
@@ -84,7 +84,7 @@
         border-radius: 5px 0 0 5px;
         outline: none;
       }
-  
+
       button {
         background: none;
         border: none;
@@ -92,12 +92,12 @@
         cursor: pointer;
         outline: none;
       }
-  
+
       @media screen and (max-width: 820px) {
         width: 100%;
       }
     }
-  
+
     .sort-dropdown-container {
       display: flex;
       flex-direction: row;
@@ -108,7 +108,7 @@
       background-color: white;
       justify-content: space-between;
       padding: 5px;
-  
+
       select {
         border: 1px solid #1d1b1b;
         padding: 10px;
@@ -121,7 +121,7 @@
           background-color: $primary;
         }
       }
-  
+
       @media screen and (max-width: 820px) {
       }
     }
@@ -148,7 +148,6 @@
     }
   }
 }
-
 
 .catalog__list {
   display: grid;

@@ -121,7 +121,7 @@ export default class MyCartContainer {
     }
     if (product.variant?.attributes) {
       const size = product.variant?.attributes.find(
-        (attr) => attr.name === 'Size',
+        (attr) => attr.name === 'SpecsTable_Size',
       );
       if (size) {
         const productCellSize = new BaseComponentGenerator({
