@@ -290,9 +290,11 @@ export default class AppController {
         console.log('enough products');
       } else {
         this.hasMoreProducts = true;
+        this.currentOffset += limit;
       }
       this.appModel.mainModel.setProducts(products);
       this.appView.mainView.removeSkeletons();
+      this.appView.mainView.updateCatalogResultsCount(products.total!);
       this.mainController.renderProducts(
         this.handleClickProductCartButton.bind(this),
       );
@@ -375,6 +377,7 @@ export default class AppController {
       this.appModel.mainModel.createFilterResponse();
     }
     this.appView.mainView.clearCatalogList();
+    this.currentOffset = 0;
     await this.fetchAndLogProducts(
       this.limit,
       this.currentOffset,
