@@ -79,6 +79,7 @@ export default class AppController {
     await this.fetchAndLogProducts();
     await this.getDiscountsCodes();
     await this.fetchCategories();
+    await this.fetchLineItemsFromCart();
     this.mainController.initialize();
 
     routerController.handleLocation();
@@ -612,5 +613,16 @@ export default class AppController {
 
   private handleClickGoCatalogButton() {
     this.routerController.goToPage('/catalog');
+  }
+
+  private async fetchLineItemsFromCart() {
+    if (localStorage.getItem('cartId')) {
+      const currentCart = await this.appModel.cartPageModel.getCartById(
+        localStorage.getItem('cartId')!,
+      );
+      this.appView.headerView.updateCartCount(
+        currentCart.totalLineItemQuantity || 0,
+      );
+    }
   }
 }

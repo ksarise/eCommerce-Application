@@ -6,6 +6,10 @@ export default class CartPageModel {
 
   public cart: Cart | undefined;
 
+  public updateHeaderCartQuantity:
+    | ((totalLineItemQuantity: number) => void)
+    | undefined;
+
   constructor(apiService: API) {
     this.apiService = apiService;
     const cartId = localStorage.getItem('cartId');
@@ -15,11 +19,10 @@ export default class CartPageModel {
   }
 
   public async requestGetProductsFromCart(
-    // _renderProducts: (products: LineItem[]) => void,
-    // _renderTotalCost: (totalCost: number) => void,
     _render: (
       products: LineItem[],
       totalCost: number,
+      totalLineItemQuantity: number,
       discount: number,
     ) => void,
   ) {
@@ -31,13 +34,11 @@ export default class CartPageModel {
       _render(
         this.cart.lineItems,
         this.cart.totalPrice.centAmount / 100,
+        this.cart.totalLineItemQuantity || 0,
         discount / 100,
       );
-      // _renderProducts(this.cart.lineItems);
-      // _renderTotalCost(this.cart.totalPrice.centAmount / 100);
     } else {
-      _render([], 0, 0);
-      // _renderProducts([]);
+      _render([], 0, 0, 0);
     }
   }
 
@@ -55,6 +56,7 @@ export default class CartPageModel {
       totalCost: number,
       totalDiscount: number,
       cart: Cart,
+      totalLineItemQuantity: number,
       totalCostLineItem?: number,
     ) => void,
   ) {
@@ -88,6 +90,7 @@ export default class CartPageModel {
         this.cart!.totalPrice.centAmount / 100,
         discount / 100,
         this.cart!,
+        this.cart!.totalLineItemQuantity || 0,
         rightLineItemPrice,
       );
       return response;
@@ -104,6 +107,7 @@ export default class CartPageModel {
       totalCost: number,
       totalDiscount: number,
       cart: Cart,
+      totalLineItemQuantity: number,
       totalCostLineItem?: number,
     ) => void,
   ) {
@@ -131,6 +135,7 @@ export default class CartPageModel {
         this.cart!.totalPrice.centAmount / 100,
         discount / 100,
         this.cart!,
+        this.cart!.totalLineItemQuantity || 0,
         rightLineItemPrice,
       );
       return response;
@@ -140,7 +145,12 @@ export default class CartPageModel {
   }
 
   public async clearCart(
-    _render: (products: LineItem[], totalCost: number) => void,
+    _render: (
+      products: LineItem[],
+      totalCost: number,
+      totalLineItemQuantity: number,
+      discount: number,
+    ) => void,
   ) {
     await this.createCart();
     await this.requestGetProductsFromCart(_render);
