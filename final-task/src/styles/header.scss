@@ -3,23 +3,29 @@
 .header {
   position: sticky;
   z-index: 999;
-  background-color: #fff;
-  border-bottom: 2px solid $primary;
   top: 0;
   left: 0;
-  display: flex;
-  align-items: center;
+  display: grid;
+  background-color: #ffffff00;
+  grid-template-columns: repeat(3, 1fr);
   width: 100%;
   justify-content: space-between;
-  height: 70px;
-  width: 99% !important;
+  height: 90px;
+  width: 100% !important;
+  transition: 0.3s;
+  align-items: center;
+
+  &:hover {
+    background: white;
+  }
 
   &__navigation {
+    width: 100%;
     display: flex;
     align-items: center;
     gap: 10px;
     justify-content: space-between;
-    font-size: 16px;
+    font-size: 20px;
     font-weight: 500;
     line-height: 24px;
 
@@ -57,7 +63,7 @@
     gap: 5px;
     cursor: pointer;
     border: none;
-    background: #fff;
+    background: #ffffff00;
     font-size: 16px;
     font-weight: 500;
     line-height: 150%;
@@ -75,18 +81,6 @@
       background-repeat: no-repeat;
       background-position: center;
       background-size: contain;
-    }
-
-    .img_profile {
-      background-image: url('/svg/snowboarder.svg');
-      background-size: 50px 50px;
-    }
-
-    .img_about {
-      width: 50px;
-      height: 30px;
-      background-size: 50px 30px;
-      background-image: url('/svg/about_us.svg');
     }
 
     .img_profile {
@@ -139,6 +133,7 @@
 
   &__buttons {
     display: flex;
+    justify-content: end;
     gap: 5px;
     align-items: center;
     &:not(.loginned) {
@@ -166,6 +161,122 @@
         display: flex;
       }
     }
+  }
+}
+
+.header__home {
+  .header__button {
+    .img_profile {
+      background-image: url('/svg/snowboarder-hover.svg');
+      background-size: 50px 50px;
+    }
+
+    .img_about {
+      width: 50px;
+      height: 30px;
+      background-size: 50px 30px;
+      background-image: url('/svg/about_us.svg');
+    }
+
+    .img_about {
+      width: 50px;
+      height: 30px;
+      background-size: 50px 30px;
+      background-image: url('/svg/about_us-white.svg');
+    }
+
+    .img_logout {
+      background-image: url('/svg/logout-white.svg');
+    }
+
+    .img_login {
+      background-image: url('/svg/login-white.svg');
+    }
+
+    .img_registration {
+      background-image: url('/svg/sign-up-white.svg');
+    }
+  }
+  &:hover {
+    .header__button {
+      .img_profile {
+        background-image: url('/svg/snowboarder.svg');
+        background-size: 50px 50px;
+      }
+
+      .img_about {
+        width: 50px;
+        height: 30px;
+        background-size: 50px 30px;
+        background-image: url('/svg/about_us.svg');
+      }
+
+      .img_logout {
+        background-image: url('/svg/logout.svg');
+      }
+
+      .img_login {
+        background-image: url('/svg/login.svg');
+      }
+
+      .img_registration {
+        background-image: url('/svg/sign-up.svg');
+      }
+    }
+
+    .header__navigation_link {
+      color: $text;
+    }
+  }
+
+  .header__navigation {
+    &_link {
+      color: white;
+    }
+
+    &.loginned {
+      > *:not(:last-child) {
+        display: block;
+      }
+      > *:last-child {
+        display: none;
+      }
+    }
+  }
+}
+
+.header__scroll {
+  background-color: #ffffffcb;
+  transition: 0.3s;
+
+  .header__button {
+    .img_profile {
+      background-image: url('/svg/snowboarder.svg');
+      background-size: 50px 50px;
+    }
+
+    .img_about {
+      width: 50px;
+      height: 30px;
+      background-size: 50px 30px;
+      background-image: url('/svg/about_us.svg');
+    }
+
+    .img_logout {
+      background-image: url('/svg/logout.svg');
+    }
+
+    .img_login {
+      background-image: url('/svg/login.svg');
+    }
+
+    .img_registration {
+      background-image: url('/svg/sign-up.svg');
+    }
+  }
+
+  .header__navigation_link {
+    color: $text;
   }
 }
 

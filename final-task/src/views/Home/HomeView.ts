@@ -332,6 +332,7 @@ export default class HomeView {
   }
 
   public getContent(): HTMLElement {
+    document.querySelector('.header')?.classList.toggle('header__home', true);
     return this.container;
   }
 }

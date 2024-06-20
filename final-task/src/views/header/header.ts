@@ -37,6 +37,7 @@ export default class HeaderView {
     this.buttonContainer = tags
       .div(['header__buttons'], '', {})
       .getElement() as HTMLDivElement;
+    this.addListenerScroll();
   }
 
   public getContent(): HTMLElement {
@@ -52,12 +53,12 @@ export default class HeaderView {
       title: 'Link',
       'data-navigo': 'true',
     });
-    linkHome.innerHTML = `<svg version="1.0" xmlns="http://www.w3.org/2000/svg"
+    linkHome.innerHTML = `<svg class="color-logo" version="1.0" xmlns="http://www.w3.org/2000/svg"
     width="40.000000pt" height="40.000000pt" viewBox="0 0 115.000000 134.000000"
     preserveAspectRatio="xMidYMid meet">
    
    <g transform="translate(0.000000,134.000000) scale(0.100000,-0.100000)"
-   fill="#000000" stroke="none">
+   fill="#000000" stroke="#ffffff" stroke-width="40">
    <path d="M10 1190 l0 -140 95 0 95 0 0 45 0 45 475 0 475 0 0 95 0 95 -570 0
    -570 0 0 -140z"/>
    <path d="M10 475 l0 -475 95 0 95 0 0 380 0 380 475 0 475 0 0 95 0 95 -570 0
@@ -192,5 +193,42 @@ export default class HeaderView {
       this.linkContainer.classList.remove('loginned');
       this.buttonContainer.classList.remove('loginned');
     }
+  }
+
+  private addListenerScroll(): void {
+    let lastScrollTop: number = 0;
+    window.addEventListener(
+      'scroll',
+      () => {
+        const position = window.scrollY;
+        if (position > lastScrollTop) {
+          if (
+            position >
+              window.screen.height - this.header.getElement().clientHeight &&
+            document.querySelector('.home')
+          ) {
+            this.header.getElement().classList.toggle('header__home', false);
+            this.header.getElement().classList.toggle('header__scroll', true);
+          }
+          if (!document.querySelector('.home')) {
+            this.header.getElement().classList.toggle('header__scroll', false);
+          }
+        } else if (position < lastScrollTop) {
+          if (
+            position <
+              window.screen.height - this.header.getElement().clientHeight &&
+            document.querySelector('.home')
+          ) {
+            this.header.getElement().classList.toggle('header__home', true);
+            this.header.getElement().classList.toggle('header__scroll', false);
+          }
+          if (!document.querySelector('.home')) {
+            this.header.getElement().classList.toggle('header__scroll', true);
+          }
+        }
+        lastScrollTop = position <= 0 ? 0 : position;
+      },
+      false,
+    );
   }
 }

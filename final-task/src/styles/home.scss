@@ -5,16 +5,24 @@
 }
 .home__top {
   width: 100%;
+  padding-top: 100vh;
 
   &__container {
+    position: absolute;
+    top: 0;
+    width: 100% !important;
     text-align: center;
     margin-bottom: 20px;
-    width: 1440px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
     background-image: url('/public/images/homepage/hero.jpg');
-    padding: 150px;
-    border-radius: 40px;
     background-size: cover;
+    background-position: center;
     z-index: 3;
+    height: 100vh;
+    overflow-x: hidden;
   }
 
   &__title {
