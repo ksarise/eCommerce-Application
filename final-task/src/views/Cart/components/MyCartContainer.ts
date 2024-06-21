@@ -121,13 +121,14 @@ export default class MyCartContainer {
     }
     if (product.variant?.attributes) {
       const size = product.variant?.attributes.find(
-        (attr) => attr.name === 'Size',
-      );
+        (attr) => attr.name === 'SpecsTable_Size',
+      )?.value;
+      console.log(size);
       if (size) {
         const productCellSize = new BaseComponentGenerator({
           tag: 'td',
           classNames: ['my-cart__table-cell', 'my-cart__table-cell-size'],
-          content: size.value,
+          content: size.key,
         });
         productRow.getElement().append(productCellSize.getElement());
       }

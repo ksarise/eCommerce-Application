@@ -15,7 +15,7 @@ export default class HomeView {
       .getElement() as HTMLDivElement;
     const descriptionTitle = tags.h1(
       ['home__top__title'],
-      `Celebrate the 40th anniversary of the GNU Project! `,
+      `Celebrate the 40th anniversary of the Nidecker Project! `,
     );
     const descriptionText = tags.p(
       ['home__top__text'],
@@ -26,10 +26,10 @@ export default class HomeView {
       'Shop Sale',
       {
         'data-optiontype': 'category',
-        'data-optionname': 'GNU',
-        'data-id': '796a4ef4-83a6-491b-bd69-4b047da6ad62',
+        'data-optionname': 'Nidecker',
+        'data-id': 'fe6fa1a1-d1b3-4d96-8f2e-e412a7e1dcd9',
         'data-main': 'Brand',
-        href: `brand/gnu`,
+        href: `brand/nidecker`,
       },
     );
     descriptionContainer.append(
