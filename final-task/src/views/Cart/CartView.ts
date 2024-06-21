@@ -41,8 +41,14 @@ export default class CartView {
     return this.container.getElement();
   }
 
-  public render(products: LineItem[], totalCost: number, discount: number = 0) {
+  public render(
+    products: LineItem[],
+    totalCost: number,
+    totalLineItemQuantity: number,
+    discount: number = 0,
+  ) {
     this.container.getElement().innerHTML = '';
+    this.updateHeaderCartQuantity(totalLineItemQuantity);
     if (products.length === 0) {
       this.renderEmptyCart();
       return;
@@ -83,8 +89,10 @@ export default class CartView {
     totalCost: number,
     totalDiscount: number,
     cart: Cart,
+    totalLineItemQuantity: number,
     totalCostLineItem: number = 0,
   ) {
+    this.updateHeaderCartQuantity(totalLineItemQuantity);
     if (totalCost === 0) {
       this.renderEmptyCart();
       return;
@@ -100,5 +108,22 @@ export default class CartView {
       totalCostLineItem,
     );
     this.totalCostContainer.renderTotalCost(totalCost, totalDiscount);
+  }
+
+  // eslint-disable-next-line class-methods-use-this
+  public updateHeaderCartQuantity(totalLineItemQuantity: number) {
+    const headerCartQuantity = document.querySelector(
+      '.header__button_cart_quantity',
+    );
+    if (headerCartQuantity) {
+      if (totalLineItemQuantity !== 0) {
+        headerCartQuantity.classList.remove(
+          'header__button_cart_quantity-hidden',
+        );
+        headerCartQuantity.innerHTML = totalLineItemQuantity.toString();
+      } else {
+        headerCartQuantity.classList.add('header__button_cart_quantity-hidden');
+      }
+    }
   }
 }

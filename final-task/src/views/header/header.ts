@@ -165,9 +165,17 @@ export default class HeaderView {
     </svg>`;
     const buttonCart = parseSVG(svgCartCode);
     buttonCart.classList.add('img_cart');
-    buttonCart.addEventListener('click', () => {
+    const buttonCartBlock = tags
+      .div(['header__button', 'header__button_cart'])
+      .getElement() as HTMLDivElement;
+    const buttonCartQuantity = tags.span(['header__button_cart_quantity'], '0');
+    buttonCartBlock.append(buttonCart, buttonCartQuantity);
+    buttonCartBlock.addEventListener('click', () => {
       this.handleClickCartButton!();
     });
+    // buttonCart.addEventListener('click', () => {
+    //   this.handleClickCartButton!();
+    // });
     buttonMyProfile.addEventListener('click', async () => {
       if (this.handleClickMyProfile) await this.handleClickMyProfile();
     });
@@ -175,7 +183,8 @@ export default class HeaderView {
     buttonMyProfile.prepend(imgProfile);
     this.buttonContainer.append(
       buttonAboutUs,
-      buttonCart,
+      // buttonCart,
+      buttonCartBlock,
       buttonLogin,
       buttonRegistration,
       buttonMyProfile,
@@ -191,6 +200,25 @@ export default class HeaderView {
     } else {
       this.linkContainer.classList.remove('loginned');
       this.buttonContainer.classList.remove('loginned');
+    }
+  }
+
+  public updateCartCount(value: number): void {
+    const buttonCart = this.buttonContainer.querySelector(
+      '.header__button_cart',
+    ) as HTMLDivElement;
+    const buttonCartQuantity = buttonCart.querySelector(
+      '.header__button_cart_quantity',
+    ) as HTMLSpanElement;
+    if (buttonCartQuantity) {
+      if (value !== 0) {
+        buttonCartQuantity.classList.remove(
+          'header__button_cart_quantity-hidden',
+        );
+        buttonCartQuantity.innerHTML = value.toString();
+      } else {
+        buttonCartQuantity.classList.add('header__button_cart_quantity-hidden');
+      }
     }
   }
 }

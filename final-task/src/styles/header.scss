@@ -23,6 +23,10 @@
     font-weight: 500;
     line-height: 24px;
 
+    @media (max-width: 480px) {
+      font-size: 12px;
+    }
+
     &_link {
       text-decoration: none;
       color: $text;
@@ -64,6 +68,29 @@
     color: $primary;
     transition: 0.3s;
     border-radius: 5px;
+    &_cart {
+      position: relative;
+      display: inline-block;
+      &_quantity {
+        width: 20px;
+        height: 20px;
+        top: -9px;
+        right: 5px;
+        position: absolute;
+        border: 1px solid #fff;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        border-radius: 100%;
+        background-color: $primary;
+        color: #fff;
+        z-index: 1;
+        &-hidden {
+          display: none;
+        }
+      }
+    }
+
 
     .img_registration,
     .img_login,
@@ -75,6 +102,10 @@
       background-repeat: no-repeat;
       background-position: center;
       background-size: contain;
+      @media (max-width: 480px) {
+        width: 15px;
+        height: 15px;
+      }
     }
 
     .img_profile {
@@ -87,6 +118,10 @@
       height: 30px;
       background-size: 50px 30px;
       background-image: url('/svg/about_us.svg');
+      @media (max-width: 480px) {
+        width: 30px !important;
+        height: 20px !important;
+      }
     }
 
     .img_profile {
@@ -177,5 +212,10 @@
   cursor: pointer;
   &:hover {
     transform: translateY(-3px);
+  }
+
+  @media (max-width: 480px) {
+    width: 15px;
+    height: 15px;
   }
 }
