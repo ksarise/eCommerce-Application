@@ -8,6 +8,7 @@ import Profile from './myProfile/myProfileView';
 import AboutView from './AboutUs/aboutUsView';
 import CartView from './Cart/CartView';
 import HomeView from './Home/HomeView';
+import FooterView from './footer/footerView';
 
 const appViewHeader = `<div id="content" class="view container"></div>`;
 
@@ -34,6 +35,8 @@ export default class AppView {
 
   public homeView: HomeView;
 
+  public footerView: FooterView;
+
   public constructor() {
     this.loginView = new LoginView();
     this.innerHTML = appViewHeader;
@@ -46,6 +49,7 @@ export default class AppView {
     this.profileView = new Profile();
     this.aboutView = new AboutView();
     this.cartView = new CartView();
+    this.footerView = new FooterView();
   }
 
   public create() {
@@ -120,5 +124,6 @@ export default class AppView {
       default:
         console.log('Page not found');
     }
+    document.querySelector('.body')!.append(this.footerView.getContent());
   }
 }
