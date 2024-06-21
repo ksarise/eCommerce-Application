@@ -79,6 +79,7 @@ export default class AppController {
     await this.fetchAndLogProducts();
     await this.getDiscountsCodes();
     await this.fetchCategories();
+    await this.fetchProductTypeData();
     await this.fetchLineItemsFromCart();
     this.mainController.initialize();
 
@@ -613,6 +614,22 @@ export default class AppController {
 
   private handleClickGoCatalogButton() {
     this.routerController.goToPage('/catalog');
+  }
+
+  private async fetchProductTypeData() {
+    try {
+      const productType = await this.appModel.requestProductType();
+      this.appModel.mainModel.getFullAttributesFromType(productType.body);
+      this.appView.mainView.filterContainer.createAttributeList(
+        this.appModel.mainModel.attributesGroup,
+      );
+    } catch (error) {
+      const errmessage = (error as ErrorResponse).message;
+      showToast({
+        text: `Fetch Products error${errmessage}`,
+        type: 'negative',
+      });
+    }
   }
 
   private async fetchLineItemsFromCart() {

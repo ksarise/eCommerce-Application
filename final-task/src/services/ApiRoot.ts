@@ -6,6 +6,7 @@ import {
   Cart,
   LineItemDraft,
   QueryParam,
+  ProductProjectionPagedSearchResponse,
 } from '@commercetools/platform-sdk';
 import {
   createPasswordClient,
@@ -72,11 +73,15 @@ export default class API {
     filter?: string[];
     sort?: string;
     text?: string;
-  }) {
+  }): Promise<ClientResponse<ProductProjectionPagedSearchResponse>> {
     const queryParams: { [key: string]: QueryParam } = {
       sort: queryArgs.sort || 'name.en-US asc',
       limit: queryArgs.limit || 10,
       offset: queryArgs.offset || 0,
+      facet: [
+        'variants.price.centAmount:range(0 to 100000000)',
+        'categories.id counting products',
+      ],
     };
     if (queryArgs.filter && queryArgs.filter.length > 0) {
       queryParams['filter.query'] = queryArgs.filter;
@@ -84,19 +89,9 @@ export default class API {
     if (queryArgs.text) {
       queryParams['text.en-US'] = queryArgs.text;
     }
-    if (
-      queryParams['filter.query'] ||
-      queryParams['text.en-US'] ||
-      queryParams.sort
-    ) {
-      return this.apiRoot
-        .productProjections()
-        .search()
-        .get({ queryArgs: queryParams })
-        .execute();
-    }
     return this.apiRoot
       .productProjections()
+      .search()
       .get({ queryArgs: queryParams })
       .execute();
   }
@@ -444,6 +439,15 @@ export default class API {
           ],
         },
       })
+      .execute();
+    return response;
+  }
+
+  public async getProductType(productTypeKey: string) {
+    const response = await this.apiRoot
+      .productTypes()
+      .withKey({ key: productTypeKey })
+      .get()
       .execute();
     return response;
   }

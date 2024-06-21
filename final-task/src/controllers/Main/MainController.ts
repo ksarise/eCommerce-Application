@@ -52,8 +52,13 @@ export default class MainController {
     ) => void,
   ) {
     const products = this.mainModel.getProducts();
+    this.mainView.facetsCallback(
+      products.priceRangeFacets.min,
+      products.priceRangeFacets.max,
+      products.priceRangeFacets.mean,
+    );
     this.mainView.renderProducts(
-      products,
+      products.products,
       this.mainModel.variantsInCart,
       bindClickCallback,
     );

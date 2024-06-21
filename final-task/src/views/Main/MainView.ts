@@ -17,7 +17,7 @@ export default class MainView {
 
   private catalogContainer: HTMLDivElement;
 
-  private filterContainer: FilterSideBar;
+  public filterContainer: FilterSideBar;
 
   private breadcrumbContainer: HTMLDivElement;
 
@@ -30,7 +30,6 @@ export default class MainView {
   constructor() {
     this.mainContainer = tags.div(['main']).getElement() as HTMLDivElement;
     this.catalogPromoCodes = tags.div(['promocode']).getElement();
-    this.filterContainer = new FilterSideBar();
     this.catalogContainer = tags
       .div(['catalog'])
       .getElement() as HTMLDivElement;
@@ -38,6 +37,7 @@ export default class MainView {
       .div(['catalog__panel', 'container'])
       .getElement() as HTMLDivElement;
 
+    this.filterContainer = new FilterSideBar();
     const filtersBtn = tags.button(['catalog__filters__btn'], 'Open Filters');
     filtersBtn.addEventListener('click', () => {
       this.filterContainer.toggleSideBar();
@@ -112,6 +112,7 @@ export default class MainView {
         product.price,
         product.discount,
         product.sizesList,
+        product.options,
         variantsInCart,
         bindClickCallback,
       );
@@ -171,9 +172,16 @@ export default class MainView {
       .forEach((element: Element) => {
         element.addEventListener('change', (event: Event) => {
           const target = event.target as HTMLInputElement;
-          const { optiontype, optionname } = target.dataset;
+          const { optiontype, optionname, optionattrid } = target.dataset;
           const { checked, id } = target;
-          if (optiontype && optionname) {
+          if (
+            optiontype &&
+            optionname &&
+            optionattrid &&
+            optiontype === 'attribute'
+          ) {
+            callback(optiontype, optionname, optionattrid, checked);
+          } else if (optiontype && optionname) {
             callback(optiontype, optionname, id, checked);
           }
         });
@@ -428,5 +436,9 @@ export default class MainView {
 
   public updateCatalogResultsCount(count: number) {
     this.catalogUtilityPanelCount.innerHTML = `${count} Results`;
+  }
+
+  public facetsCallback(min: number, max: number, mean: number) {
+    this.filterContainer.PriceRangeSlider.updateCurentRange(min, max, mean);
   }
 }

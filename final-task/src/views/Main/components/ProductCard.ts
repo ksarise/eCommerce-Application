@@ -21,6 +21,7 @@ export default class ProductCard {
     public price: string,
     public discount: string,
     public sizes: string[],
+    public options: { gender: string; split: string },
     public variantsInCart: { [key: string]: string }[],
     bindClickCallback: (
       isAdd: boolean,
@@ -28,18 +29,45 @@ export default class ProductCard {
       variantId: number,
     ) => void,
   ) {
-    this.card = tags.div(['product-card'], '', { id: `${id}` }).getElement();
+    this.card = tags
+      .div(['product-card'], '', {
+        id: `${id}`,
+      })
+      .getElement();
+    this.card.dataset.gender = options.gender;
+    if (options.split) this.card.dataset.split = options.split;
     const cardInner = tags.div(['product-card__inner'], '').getElement();
 
     this.link = `${id}`;
     const cardImageContainer = tags
       .div(['product-card__inner__image-container'], '')
       .getElement();
+    const splitMark = tags
+      .div(['product-card__inner__split'], options.split.toUpperCase())
+      .getElement();
+    const genderMark = tags
+      .div(
+        [
+          'product-card__inner__gender',
+          `product-card__inner__gender-${options.gender.toLowerCase()}`,
+        ],
+        options.gender.toUpperCase(),
+      )
+      .getElement();
 
     const cardImage = tags.img(['product-card__inner__image'], {
       src: `${image}`,
     });
-    cardImageContainer.append(this.makeLink('image', cardImage));
+    if (options.split) {
+      cardImageContainer.append(
+        this.makeLink('image', [cardImage, splitMark, genderMark]),
+      );
+    } else {
+      cardImageContainer.append(
+        this.makeLink('image', [cardImage, genderMark]),
+      );
+    }
+
     const cardContent = tags
       .div(['product-card__inner__content'], '')
       .getElement();
@@ -81,7 +109,7 @@ export default class ProductCard {
     cardFooter.append(this.sizesList, this.cardAddBtn);
     cardContent.append(
       cardPriceBlock.getElement(),
-      this.makeLink('name', cardName),
+      this.makeLink('name', [cardName]),
       cardDesc,
       cardFooter,
     );
@@ -94,7 +122,7 @@ export default class ProductCard {
     return this.card as HTMLElement;
   }
 
-  private makeLink(elementName: string, element: HTMLElement) {
+  private makeLink(elementName: string, elements: HTMLElement[]) {
     const link = tags.a(
       [`product-card__inner__${elementName}-link`],
       `/product/${this.link}`,
@@ -106,7 +134,9 @@ export default class ProductCard {
         'data-navigo': 'true',
       },
     );
-    link.append(element);
+    elements.forEach((element) => {
+      link.append(element);
+    });
     return link;
   }
 

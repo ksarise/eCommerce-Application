@@ -2,7 +2,10 @@ import {
   PagedQueryResponse,
   Category,
   ProductProjection,
+  ProductProjectionPagedSearchResponse,
+  RangeFacetResult,
   Cart,
+  ProductType,
 } from '@commercetools/platform-sdk';
 import {
   Product as ProductCard,
@@ -10,10 +13,11 @@ import {
 } from '../../global/interfaces/products';
 
 export default class MainModel {
-  private products: PagedQueryResponse = {
+  private products: ProductProjectionPagedSearchResponse = {
     count: 0,
     limit: 0,
     offset: 0,
+    facets: {},
     results: [],
   };
 
@@ -26,6 +30,16 @@ export default class MainModel {
   public sort: string = 'name.en-US asc';
 
   public textSearch: string = '';
+
+  public attributesGroup: {
+    specsMap: { [key: string]: { [key: string]: string } };
+    specsTableMap: { [key: string]: { [key: string]: string } };
+    detailsMap: { [key: string]: { [key: string]: string } };
+  } = {
+    specsMap: {},
+    specsTableMap: {},
+    detailsMap: {},
+  };
 
   public currentCategory: { name: string; id: string } | null = null;
 
@@ -45,13 +59,9 @@ export default class MainModel {
     };
   }
 
-  public setProducts(products: PagedQueryResponse) {
+  public setProducts(products: ProductProjectionPagedSearchResponse) {
     this.products = products;
   }
-
-  // public addProducts(products: PagedQueryResponse) {
-  //   this.products = this.products.concat(products);
-  // }
 
   public setCategories(categories: PagedQueryResponse) {
     this.categories = categories.results as Category[];
@@ -59,6 +69,7 @@ export default class MainModel {
 
   public getData() {
     const newProducts: ProductCard[] = [];
+    let priceRangeFacet = { min: 0, max: 0, mean: 0 };
     (this.products.results as ProductProjection[]).forEach(
       (product: ProductProjection) => {
         const price = product.masterVariant.prices![0].value.centAmount / 100;
@@ -75,6 +86,8 @@ export default class MainModel {
             );
           })
           .filter((size) => size !== '');
+        const gender = MainModel.markGenderCategory(product);
+        const isSplit = product.slug['en-US'].includes('Splitboard');
         const productdata: ProductCard = {
           name: product.name['en-US'],
           desc: product.description!['en-US'],
@@ -83,11 +96,29 @@ export default class MainModel {
           price: price.toFixed(2),
           discount: discountPrice.toFixed(2),
           sizesList: sizes,
+          options: {
+            gender,
+            split: isSplit ? 'Split' : '',
+          },
         };
         newProducts.push(productdata);
       },
     );
-    return newProducts;
+    const priceFacet = this.products.facets[
+      'variants.price.centAmount'
+    ] as RangeFacetResult;
+
+    if (priceFacet && priceFacet.ranges) {
+      const priceRanges = priceFacet.ranges?.[0];
+      if (priceRanges) {
+        priceRangeFacet = {
+          min: priceRanges.min,
+          max: priceRanges.max,
+          mean: priceRanges.mean,
+        };
+      }
+    }
+    return { products: newProducts, priceRangeFacets: priceRangeFacet };
   }
 
   public getProducts() {
@@ -126,12 +157,16 @@ export default class MainModel {
     this.parseCategories(
       new Map(this.categories.map((category) => [category.id, category])),
     );
+    console.log(
+      this.parsedCategories.get('8fe8f4c6-7e11-4e55-963f-a0ae4e1534d3'),
+    );
     return this.parsedCategories;
   }
 
   public createFilterResponse() {
     const { attributes = [], priceRange = { min: 0, max: 5000 } } =
       this.selectedFilters;
+    console.log(this.selectedFilters);
     const query = [];
 
     // Add category filter
@@ -147,16 +182,16 @@ export default class MainModel {
       }
       attributeMap[key].push(value);
     });
-
+    console.log(attributeMap);
     Object.entries(attributeMap).forEach(([key, values]) => {
       if (values.length > 1) {
         const valueString = values.map((value) => `"${value}"`).join(',');
-        query.push(`variants.attributes.${key}:${valueString}`);
+        query.push(`variants.attributes.${key}.key:${valueString}`);
       } else {
-        query.push(`variants.attributes.${key}:"${values[0]}"`);
+        query.push(`variants.attributes.${key}.key:"${values[0]}"`);
       }
     });
-
+    console.log(query);
     // Add price range filter
     if (priceRange.min !== undefined && priceRange.max !== undefined) {
       const minPrice = priceRange.min * 100;
@@ -240,5 +275,80 @@ export default class MainModel {
         },
       ];
     });
+  }
+
+  public async getFullAttributesFromType(body: ProductType) {
+    const specsMap: { [key: string]: { [key: string]: string } } = {};
+    const specsTableMap: { [key: string]: { [key: string]: string } } = {};
+    const detailsMap: { [key: string]: { [key: string]: string } } = {};
+
+    body.attributes!.forEach((attribute) => {
+      const { name, type } = attribute;
+      if (type.name === 'enum') {
+        const attributeName = `${name}`;
+        const valueMap: { [key: string]: string } = {};
+        type.values.forEach((value) => {
+          if (value.key !== '') {
+            valueMap[value.label] = value.key;
+          }
+        });
+        if (name.startsWith('Specs_')) {
+          specsMap[attributeName] = valueMap;
+        } else if (name.startsWith('SpecsTable_')) {
+          specsTableMap[attributeName] = valueMap;
+        } else if (name.startsWith('Details_')) {
+          detailsMap[attributeName] = valueMap;
+        }
+      }
+    });
+    // const specsMapArray = Object.entries(specsMap);
+    // const specsTableMapArray = Object.entries(specsTableMap);
+    // const detailsMapArray = Object.entries(detailsMap);
+
+    // specsMapArray.sort((a, b) => a[0].localeCompare(b[0]));
+    // specsTableMapArray.sort((a, b) => a[0].localeCompare(b[0]));
+    // detailsMapArray.sort((a, b) => a[0].localeCompare(b[0]));
+    // this.attributesGroup = {
+    //   specsMap: Object.fromEntries(specsMapArray),
+    //   specsTableMap: Object.fromEntries(specsTableMapArray),
+    //   detailsMap: Object.fromEntries(detailsMapArray),
+    // };
+    this.attributesGroup = {
+      specsMap,
+      specsTableMap,
+      detailsMap,
+    };
+    console.log('specsMap', this.attributesGroup.specsMap);
+    console.log('specsTableMap', this.attributesGroup.specsTableMap);
+  }
+
+  static markGenderCategory(product: ProductProjection) {
+    const femaleCategoryIds = [
+      'e7b30d52-7126-49ea-97a6-b64cf33e6381',
+      '4aa9cfa6-5541-4754-853b-9121c3340516',
+    ];
+
+    const maleCategoryIds = [
+      '07788de1-155d-4299-a3da-1faded7b52a9',
+      '2426b46a-daf2-43a2-8b54-0d18c41167d3',
+    ];
+    const productCategoryIds = product.categories.map(
+      (category) => category.id,
+    );
+    const isFemale = productCategoryIds.some((id) =>
+      femaleCategoryIds.includes(id),
+    );
+    const isMale = productCategoryIds.some((id) =>
+      maleCategoryIds.includes(id),
+    );
+    let gender = '';
+    if (isFemale && isMale) {
+      gender = 'Unisex';
+    } else if (isFemale) {
+      gender = 'Female';
+    } else if (isMale) {
+      gender = 'Male';
+    }
+    return gender;
   }
 }
