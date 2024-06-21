@@ -9,7 +9,7 @@
   .attributes-container {
     max-height: 100vh;
     overflow-y: scroll;
-    ::-webkit-scrollbar {
+    &::-webkit-scrollbar {
       display: none;
 
     }
@@ -127,9 +127,16 @@
 
   .filter__option__header,
   .category-header {
+    cursor: pointer;
     font-size: 18px;
     font-weight: 600;
     color: #333;
+    transition: 0.2s ease-in-out;
+    &:hover {
+      color: $primary;
+      transition: 0.2s ease-in-out;
+      transform: translateX(5px);
+    }
   }
 
   .categories-header {
@@ -137,16 +144,15 @@
     color: #333;
     cursor: pointer;
     transition: 0.2s ease-in-out;
-
-    &:hover {
-      color: $primary;
-      transition: 0.2s ease-in-out;
-    }
-
     &::after {
       content: '▼';
       font-size: 12px;
       margin-left: 5px;
+    }
+    &:hover {
+      color: $primary;
+      transition: 0.2s ease-in-out;
+      transform: translateX(5px);
     }
   }
 
@@ -155,7 +161,7 @@
     transition: 0.2s ease-in-out;
   }
 
-  .category-container_hidden {
+  .category-container--active {
     transition: 0.2s ease-in-out;
     display: block;
   }
@@ -163,7 +169,16 @@
   .option-list {
     padding: 0;
   }
+  .option-list {
+    display: none;
+    transition: 0.2s ease-in-out;
+    &--active {
+      transition: 0.2s ease-in-out;
+      display: block;
+      border-bottom: 2px solid $primary;
 
+    }
+  }
   .option-list__link {
     color: #1d1b1b;
     text-decoration: none;

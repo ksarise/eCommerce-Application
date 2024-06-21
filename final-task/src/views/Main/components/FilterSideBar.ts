@@ -35,7 +35,7 @@ export default class FilterSideBar {
       this.filterSideBar
         .querySelectorAll('.category-container')
         .forEach((category) =>
-          category.classList.toggle('category-container_hidden'),
+          category.classList.toggle('category-container--active'),
         );
     });
     const categoriesList = tags
@@ -50,8 +50,12 @@ export default class FilterSideBar {
         ['category-header'],
         mainCategoryName.replace(/(?!^)([A-Z])/, ' $1'),
       );
+
       categoryContainer.appendChild(categoryHeader);
       const optionList = tags.ul(['option-list']);
+      categoryHeader.addEventListener('click', () => {
+        optionList.classList.toggle('option-list--active');
+      });
       subCategories.sort((a, b) => a.name.localeCompare(b.name));
       subCategories.forEach(({ id, name }) => {
         const listItem = tags.li(['option-list__item']);
@@ -83,7 +87,6 @@ export default class FilterSideBar {
   }) {
     const attributesHeader = tags.h2(['attributes-header'], 'Attributes');
     this.filterSideBar.appendChild(attributesHeader);
-
     const categoryContainer = tags
       .div(['attributes-container'])
       .getElement() as HTMLDivElement;
@@ -95,6 +98,16 @@ export default class FilterSideBar {
           key,
         }));
 
+        const filterOption = new FilterOption(attributeName, options);
+        categoryContainer.append(filterOption.getElement());
+      },
+    );
+    Object.entries(attributesGroups.specsTableMap).forEach(
+      ([attributeName, attributeValues]) => {
+        const options = Object.entries(attributeValues).map(([label, key]) => ({
+          label,
+          key,
+        }));
         const filterOption = new FilterOption(attributeName, options);
         categoryContainer.append(filterOption.getElement());
       },

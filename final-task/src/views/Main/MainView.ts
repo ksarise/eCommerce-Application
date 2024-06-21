@@ -171,9 +171,16 @@ export default class MainView {
       .forEach((element: Element) => {
         element.addEventListener('change', (event: Event) => {
           const target = event.target as HTMLInputElement;
-          const { optiontype, optionname } = target.dataset;
+          const { optiontype, optionname, optionattrid } = target.dataset;
           const { checked, id } = target;
-          if (optiontype && optionname) {
+          if (
+            optiontype &&
+            optionname &&
+            optionattrid &&
+            optiontype === 'attribute'
+          ) {
+            callback(optiontype, optionname, optionattrid, checked);
+          } else if (optiontype && optionname) {
             callback(optiontype, optionname, id, checked);
           }
         });
