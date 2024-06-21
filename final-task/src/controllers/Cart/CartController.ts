@@ -40,6 +40,8 @@ export default class CartPageController {
       this.handleClickProduct.bind(this);
     this.cartPageView.totalCostContainer.handleClickPromoCode =
       this.handleClickPromoCode.bind(this);
+    this.cartPageModel.updateHeaderCartQuantity =
+      this.updateHeaderCartQuantity.bind(this);
   }
 
   public handleClickGoToCatalog() {
@@ -118,5 +120,9 @@ export default class CartPageController {
         type: 'negative',
       });
     }
+  }
+
+  public updateHeaderCartQuantity(quantity: number) {
+    this.cartPageView.updateHeaderCartQuantity(quantity);
   }
 }
