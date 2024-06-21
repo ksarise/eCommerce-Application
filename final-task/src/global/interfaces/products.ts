@@ -6,6 +6,7 @@ export interface Product {
   price: string;
   discount: string;
   sizesList: string[];
+  options: { gender: string; split: string };
 }
 export interface ParsedCategory {
   name: string;

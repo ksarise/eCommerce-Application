@@ -112,6 +112,7 @@ export default class MainView {
         product.price,
         product.discount,
         product.sizesList,
+        product.options,
         variantsInCart,
         bindClickCallback,
       );

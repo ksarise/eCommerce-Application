@@ -11,6 +11,30 @@
     border-radius: 15px;
     background-color: #fff;
     justify-content: center;
+    &__split, &__gender {
+      padding: 2px;
+      border-radius: 5px;
+      text-decoration: none;
+      position: absolute;
+      left: 5%;
+      top: 30%;
+      bottom: auto;
+      max-width: 90%;
+      max-height: 90%;
+      color: white;
+      font-weight: 700;
+      transition: 0.3s ease-in-out;
+      &-male {
+        background-color: rgba(189, 45, 35, 0.671);
+      }
+      &-female {
+        background-color: rgba(48, 48, 163, 0.712);
+      }
+    }
+    &__split {
+      background-color: #b88e2f;
+      top: 20%
+    }
 
     &__image-link {
       display: flex;
@@ -222,24 +246,20 @@
   &:hover {
     border-color: $primary;
     z-index: 10;
-    // transition: 0.5s ease-in-out;
-
     .product-card__inner {
-      // max-height: fit-content;
-      // width: 450px;
       position: absolute;
-      // top: -160px;
-      // left: -80px;
       transform: scale(1.1);
       -webkit-animation: Pulse 5s infinite ease-in-out;
       -o-animation: Pulse 5s infinite ease-in-out;
       -ms-animation: Pulse 5s infinite ease-in-out;
       -moz-animation: Pulse 5s infinite ease-in-out;
       animation: Pulse 5s infinite ease-in-out;
-      // transform: scale(.75);
       z-index: 10;
-      // transition: transform 0.7s ease-in-out;
       overflow: hidden;
+      &__split, &__gender {
+        transition: 0.3s ease-in-out;
+        transform: scale(1.1);
+      }
     }
 
     .product-card__inner__footer {

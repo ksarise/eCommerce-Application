@@ -6,12 +6,35 @@
   border-radius: 10px;
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
   width: 24%;
+  .attributes-header {
+    cursor: pointer;
+    &::after {
+      content: '▼';
+      font-size: 12px;
+      margin-left: 5px;
+      transition: 0.2s ease-in-out;
+    }
+    &.active::after {
+      content: '▲';
+      transition: 0.2s ease-in-out;
+    }
+    &.active {
+      color: $primary;
+      transition: 0.2s ease-in-out;
+      transform: translateX(10px);
+    }
+    &:hover {
+      color: $primary;
+      transition: 0.2s ease-in-out;
+      transform: translateX(5px);
+    }
+  }
   .attributes-container {
+    display: none;
     max-height: 100vh;
     overflow-y: scroll;
     &::-webkit-scrollbar {
       display: none;
-
     }
   }
   li {
@@ -132,6 +155,21 @@
     font-weight: 600;
     color: #333;
     transition: 0.2s ease-in-out;
+    &::after {
+      content: '▼';
+      font-size: 12px;
+      margin-left: 5px;
+      transition: 0.2s ease-in-out;
+    }
+    &.active::after {
+      content: '▲';
+      transition: 0.2s ease-in-out;
+    }
+    &.active {
+      color: $primary;
+      transition: 0.2s ease-in-out;
+      transform: translateX(10px);
+    }
     &:hover {
       color: $primary;
       transition: 0.2s ease-in-out;
@@ -148,6 +186,16 @@
       content: '▼';
       font-size: 12px;
       margin-left: 5px;
+      transition: 0.2s ease-in-out;
+    }
+    &.active::after {
+      content: '▲';
+      transition: 0.2s ease-in-out;
+    }
+    &.active {
+      color: $primary;
+      transition: 0.2s ease-in-out;
+      transform: translateX(5px);
     }
     &:hover {
       color: $primary;
@@ -168,15 +216,12 @@
   .filter__option__list,
   .option-list {
     padding: 0;
-  }
-  .option-list {
     display: none;
     transition: 0.2s ease-in-out;
     &--active {
       transition: 0.2s ease-in-out;
       display: block;
       border-bottom: 2px solid $primary;
-
     }
   }
   .option-list__link {

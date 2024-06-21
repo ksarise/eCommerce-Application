@@ -32,11 +32,12 @@ export default class FilterSideBar {
     });
     categoriesHead.append(categoriesHeader, categoriesHeadButton);
     categoriesHeader.addEventListener('click', () => {
+      categoriesHeader.classList.toggle('active');
       this.filterSideBar
         .querySelectorAll('.category-container')
-        .forEach((category) =>
-          category.classList.toggle('category-container--active'),
-        );
+        .forEach((category) => {
+          category.classList.toggle('category-container--active');
+        });
     });
     const categoriesList = tags
       .div(['category-list'])
@@ -55,6 +56,7 @@ export default class FilterSideBar {
       const optionList = tags.ul(['option-list']);
       categoryHeader.addEventListener('click', () => {
         optionList.classList.toggle('option-list--active');
+        categoryHeader.classList.toggle('active');
       });
       subCategories.sort((a, b) => a.name.localeCompare(b.name));
       subCategories.forEach(({ id, name }) => {
@@ -90,7 +92,10 @@ export default class FilterSideBar {
     const categoryContainer = tags
       .div(['attributes-container'])
       .getElement() as HTMLDivElement;
-
+    attributesHeader.addEventListener('click', () => {
+      categoryContainer.classList.toggle('category-container--active');
+      attributesHeader.classList.toggle('active');
+    });
     Object.entries(attributesGroups.specsMap).forEach(
       ([attributeName, attributeValues]) => {
         const options = Object.entries(attributeValues).map(([label, key]) => ({

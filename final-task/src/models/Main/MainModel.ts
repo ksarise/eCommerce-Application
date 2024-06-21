@@ -86,6 +86,8 @@ export default class MainModel {
             );
           })
           .filter((size) => size !== '');
+        const gender = MainModel.markGenderCategory(product);
+        const isSplit = product.slug['en-US'].includes('Splitboard');
         const productdata: ProductCard = {
           name: product.name['en-US'],
           desc: product.description!['en-US'],
@@ -94,6 +96,10 @@ export default class MainModel {
           price: price.toFixed(2),
           discount: discountPrice.toFixed(2),
           sizesList: sizes,
+          options: {
+            gender,
+            split: isSplit ? 'Split' : '',
+          },
         };
         newProducts.push(productdata);
       },
@@ -150,6 +156,9 @@ export default class MainModel {
   public getParsedCategories() {
     this.parseCategories(
       new Map(this.categories.map((category) => [category.id, category])),
+    );
+    console.log(
+      this.parsedCategories.get('8fe8f4c6-7e11-4e55-963f-a0ae4e1534d3'),
     );
     return this.parsedCategories;
   }
@@ -311,5 +320,35 @@ export default class MainModel {
     };
     console.log('specsMap', this.attributesGroup.specsMap);
     console.log('specsTableMap', this.attributesGroup.specsTableMap);
+  }
+
+  static markGenderCategory(product: ProductProjection) {
+    const femaleCategoryIds = [
+      'e7b30d52-7126-49ea-97a6-b64cf33e6381',
+      '4aa9cfa6-5541-4754-853b-9121c3340516',
+    ];
+
+    const maleCategoryIds = [
+      '07788de1-155d-4299-a3da-1faded7b52a9',
+      '2426b46a-daf2-43a2-8b54-0d18c41167d3',
+    ];
+    const productCategoryIds = product.categories.map(
+      (category) => category.id,
+    );
+    const isFemale = productCategoryIds.some((id) =>
+      femaleCategoryIds.includes(id),
+    );
+    const isMale = productCategoryIds.some((id) =>
+      maleCategoryIds.includes(id),
+    );
+    let gender = '';
+    if (isFemale && isMale) {
+      gender = 'Unisex';
+    } else if (isFemale) {
+      gender = 'Female';
+    } else if (isMale) {
+      gender = 'Male';
+    }
+    return gender;
   }
 }

@@ -9,7 +9,6 @@ export default class FilterOption {
 
   constructor(name: string, options?: { label: string; key: string }[]) {
     this.options = options || [];
-    console.log('this.options', this.options);
     this.name = name;
     this.FilterContainer = tags
       .div(['filter__option'])
@@ -23,7 +22,7 @@ export default class FilterOption {
 
     const FilterListGen = tags.ul(['filter__option__list']);
     FilterHeaderGen.addEventListener('click', () => {
-      FilterListGen.classList.toggle('filter__option--active');
+      FilterListGen.classList.toggle('filter__option__list--active');
     });
     if (this.options) {
       this.options.sort((a, b) => a.label.localeCompare(b.label));
