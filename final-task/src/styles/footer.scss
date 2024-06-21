@@ -1,4 +1,9 @@
-@import 'variables';
+@font-face {
+  font-family: 'frost glide';
+  src: url('fonts/primal.ttf');
+  font-weight: normal;
+  font-style: normal;
+}
 
 .footer {
   position: relative;
@@ -94,9 +99,21 @@
   }
 
   &__h1 {
+    font-family: 'frost glide';
     display: flex;
+    align-items: center;
     text-align: center;
-    font-size: 5vw;
+    font-size: 3vw;
+    color: black;
+
+    @media screen and (max-width: 800px) {
+      font-size: 4vw;
+    }
+
+    @media screen and (max-width: 500px) {
+      font-size: 10vw;
+    }
+
   }
 
   &__h2 {
@@ -289,6 +306,7 @@
     font-stretch: 150%;
 
     &-link {
+      font-family: 'frost glide';
       color: inherit;
       text-decoration: none;
     }
@@ -332,9 +350,19 @@
 
   &__rost-glide {
     background-image: url('/logo.svg');
-    width: 5vw;
-    height: 5vw;
+    width: 4vw;
+    height: 4vw;
     background-size: contain;
     background-repeat: no-repeat;
+
+    @media screen and (max-width: 800px) {
+      width: 5vw;
+      height: 5vw;
+    }
+
+    @media screen and (max-width: 500px) {
+      width: 11vw;
+      height: 11vw;
+    }
   }
 }

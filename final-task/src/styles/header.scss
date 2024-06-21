@@ -65,7 +65,7 @@
             width: 100%;
           }
         }
-      } 
+      }
     }
 
     &.loginned {
@@ -157,7 +157,7 @@
       &:hover {
         transform: translateY(-3px);
       }
-  
+
       &[title]:hover:after {
         content: attr(title);
         position: absolute;
@@ -171,7 +171,6 @@
         border-radius: 5px;
         z-index: 1;
       }
-  
     }
     &_registration[title]:hover:after {
       content: attr(title);
@@ -213,8 +212,7 @@
 }
 
 .header__home {
-
-  @media (any-hover: none){
+  @media (any-hover: none) {
     background-color: #ffffff00;
   }
   .header__button {
@@ -261,31 +259,31 @@
           background-image: url('/svg/snowboarder.svg');
           background-size: 50px 50px;
         }
-  
+
         .img_about {
           width: 50px;
           height: 30px;
           background-size: 50px 30px;
           background-image: url('/svg/about_us.svg');
         }
-  
+
         .img_logout {
           background-image: url('/svg/logout.svg');
         }
-  
+
         .img_login {
           background-image: url('/svg/login.svg');
         }
-  
+
         .img_registration {
           background-image: url('/svg/sign-up.svg');
         }
-  
+
         .img_cart {
           background-image: url('/svg/cart.svg');
         }
       }
-  
+
       .header__navigation_link {
         color: $text;
       }

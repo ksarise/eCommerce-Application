@@ -15,3 +15,12 @@ interface SubCategory {
   id: string;
   name: string;
 }
+
+export interface ProductCard {
+  id: string;
+  name: string;
+  desc: string;
+  image: string;
+  price: string;
+  discount: string;
+}
