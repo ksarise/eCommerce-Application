@@ -23,6 +23,10 @@
     font-weight: 500;
     line-height: 24px;
 
+    @media (max-width: 480px) {
+      font-size: 12px;
+    }
+
     &_link {
       text-decoration: none;
       color: $text;
@@ -64,6 +68,11 @@
     color: $primary;
     transition: 0.3s;
     border-radius: 5px;
+    &_cart {
+      &_quantity {
+        font-size: 12px;
+      }
+    }
 
     .img_registration,
     .img_login,
@@ -75,6 +84,10 @@
       background-repeat: no-repeat;
       background-position: center;
       background-size: contain;
+      @media (max-width: 480px) {
+        width: 15px;
+        height: 15px;
+      }
     }
 
     .img_profile {
@@ -87,6 +100,10 @@
       height: 30px;
       background-size: 50px 30px;
       background-image: url('/svg/about_us.svg');
+      @media (max-width: 480px) {
+        width: 30px !important;
+        height: 20px !important;
+      }
     }
 
     .img_profile {
@@ -177,5 +194,10 @@
   cursor: pointer;
   &:hover {
     transform: translateY(-3px);
+  }
+
+  @media (max-width: 480px) {
+    width: 15px;
+    height: 15px;
   }
 }
