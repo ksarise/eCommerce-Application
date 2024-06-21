@@ -30,7 +30,6 @@ export default class MainView {
   constructor() {
     this.mainContainer = tags.div(['main']).getElement() as HTMLDivElement;
     this.catalogPromoCodes = tags.div(['promocode']).getElement();
-    this.filterContainer = new FilterSideBar();
     this.catalogContainer = tags
       .div(['catalog'])
       .getElement() as HTMLDivElement;
@@ -38,6 +37,7 @@ export default class MainView {
       .div(['catalog__panel', 'container'])
       .getElement() as HTMLDivElement;
 
+    this.filterContainer = new FilterSideBar();
     const filtersBtn = tags.button(['catalog__filters__btn'], 'Open Filters');
     filtersBtn.addEventListener('click', () => {
       this.filterContainer.toggleSideBar();
@@ -428,5 +428,10 @@ export default class MainView {
 
   public updateCatalogResultsCount(count: number) {
     this.catalogUtilityPanelCount.innerHTML = `${count} Results`;
+  }
+
+  public facetsCallback(min: number, max: number, mean: number) {
+    console.log(`Facets callback: Min: ${min}, Max: ${max}, Mean: ${mean}`);
+    this.filterContainer.PriceRangeSlider.updateCurentRange(min, max, mean);
   }
 }

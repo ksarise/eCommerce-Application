@@ -2,6 +2,8 @@ import {
   PagedQueryResponse,
   Category,
   ProductProjection,
+  ProductProjectionPagedSearchResponse,
+  RangeFacetResult,
   Cart,
 } from '@commercetools/platform-sdk';
 import {
@@ -10,10 +12,11 @@ import {
 } from '../../global/interfaces/products';
 
 export default class MainModel {
-  private products: PagedQueryResponse = {
+  private products: ProductProjectionPagedSearchResponse = {
     count: 0,
     limit: 0,
     offset: 0,
+    facets: {},
     results: [],
   };
 
@@ -45,13 +48,10 @@ export default class MainModel {
     };
   }
 
-  public setProducts(products: PagedQueryResponse) {
+  public setProducts(products: ProductProjectionPagedSearchResponse) {
     this.products = products;
+    console.log(products.facets);
   }
-
-  // public addProducts(products: PagedQueryResponse) {
-  //   this.products = this.products.concat(products);
-  // }
 
   public setCategories(categories: PagedQueryResponse) {
     this.categories = categories.results as Category[];
@@ -59,6 +59,7 @@ export default class MainModel {
 
   public getData() {
     const newProducts: ProductCard[] = [];
+    let priceRangeFacet = { min: 0, max: 0, mean: 0 };
     (this.products.results as ProductProjection[]).forEach(
       (product: ProductProjection) => {
         const price = product.masterVariant.prices![0].value.centAmount / 100;
@@ -87,7 +88,21 @@ export default class MainModel {
         newProducts.push(productdata);
       },
     );
-    return newProducts;
+    const priceFacet = this.products.facets[
+      'variants.price.centAmount'
+    ] as RangeFacetResult;
+
+    if (priceFacet && priceFacet.ranges) {
+      const priceRanges = priceFacet.ranges?.[0];
+      if (priceRanges) {
+        priceRangeFacet = {
+          min: priceRanges.min,
+          max: priceRanges.max,
+          mean: priceRanges.mean,
+        };
+      }
+    }
+    return { products: newProducts, priceRangeFacets: priceRangeFacet };
   }
 
   public getProducts() {

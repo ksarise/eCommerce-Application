@@ -1,19 +1,29 @@
 import tags from '../../../tags/tags';
 import { ParsedCategory } from '../../../global/interfaces/products';
 import FilterOption from './FilterOption';
+import PriceRangeSlider from './RangeSlider';
 
 export default class FilterSideBar {
   private filterSideBar: HTMLDivElement;
 
+  public PriceRangeSlider: PriceRangeSlider;
+
   constructor() {
+    console.log('render sidebar');
     const filterGen = tags.div(['filter-side-bar']);
     this.filterSideBar = filterGen.getElement() as HTMLDivElement;
     const apllyButton = tags.button(['filter-side-bar__apply-button'], 'Apply');
     const resetButton = tags.button(['filter-side-bar__reset-button'], 'Reset');
+    this.PriceRangeSlider = new PriceRangeSlider(
+      this.handlePriceRangeChange.bind(this),
+    );
+    this.filterSideBar.append(
+      apllyButton,
+      resetButton,
+      this.PriceRangeSlider.getElement(),
+    );
 
-    this.filterSideBar.append(apllyButton, resetButton);
-
-    this.createPriceRangeSlider();
+    // this.createPriceRangeSlider();
     this.createAttributeList();
   }
 
@@ -48,6 +58,7 @@ export default class FilterSideBar {
       );
       categoryContainer.appendChild(categoryHeader);
       const optionList = tags.ul(['option-list']);
+      subCategories.sort((a, b) => a.name.localeCompare(b.name));
       subCategories.forEach(({ id, name }) => {
         const listItem = tags.li(['option-list__item']);
         const link = tags.a(
@@ -69,78 +80,6 @@ export default class FilterSideBar {
       categoriesList.appendChild(categoryContainer);
     });
     this.filterSideBar.prepend(categoriesList);
-  }
-
-  private createPriceRangeSlider() {
-    const priceRangeContainer = tags
-      .div(['price-range-container'])
-      .getElement() as HTMLDivElement;
-    const priceRangeHeader = tags.h2(['price-range-header'], 'Price Range');
-
-    const priceMinRange = tags.input(['price-range-min'], {
-      type: 'range',
-      min: '0',
-      max: '500',
-      value: '0',
-    });
-    priceMinRange.dataset.optiontype = 'price';
-
-    const priceMaxRange = tags.input(['price-range-max'], {
-      type: 'range',
-      min: '500',
-      max: '1000',
-      value: '1000',
-    });
-    priceMaxRange.dataset.optiontype = 'price';
-
-    const minTooltip = tags.span(['tooltip', 'tooltip-min']);
-    minTooltip.textContent = priceMinRange.value;
-
-    const maxTooltip = tags.span(['tooltip', 'tooltip-max']);
-    maxTooltip.textContent = priceMaxRange.value;
-
-    const minRangeContainer = tags.div(['range-wrapper']).getElement();
-    minRangeContainer.append(priceMinRange, minTooltip);
-
-    const maxRangeContainer = tags.div(['range-wrapper']).getElement();
-    maxRangeContainer.append(priceMaxRange, maxTooltip);
-
-    const rangesContainer = tags.div(['price-ranges']).getElement();
-    rangesContainer.append(minRangeContainer, maxRangeContainer);
-    priceRangeContainer.append(priceRangeHeader, rangesContainer);
-    this.filterSideBar.append(priceRangeContainer);
-
-    priceMinRange.addEventListener('input', () => {
-      minTooltip.textContent = `${priceMinRange.value}$`;
-      FilterSideBar.updateSliderStyles(priceMinRange, priceMaxRange);
-    });
-
-    priceMaxRange.addEventListener('input', () => {
-      maxTooltip.textContent = `$${priceMaxRange.value}$`;
-      FilterSideBar.updateSliderStyles(priceMinRange, priceMaxRange);
-    });
-
-    FilterSideBar.updateSliderStyles(priceMinRange, priceMaxRange);
-  }
-
-  static updateSliderStyles(
-    minSlider: HTMLInputElement,
-    maxSlider: HTMLInputElement,
-  ) {
-    const minSliderCopy = minSlider;
-    const maxSliderCopy = maxSlider;
-    const minValue =
-      ((Number(minSlider.value) - Number(minSlider.min)) /
-        (Number(minSlider.max) - Number(minSlider.min))) *
-      100;
-
-    const maxValue =
-      ((Number(maxSlider.value) - Number(maxSlider.min)) /
-        (Number(maxSlider.max) - Number(maxSlider.min))) *
-      100;
-    const primaryColor = '#b88e2f';
-    maxSliderCopy.style.background = `linear-gradient(to right, ${primaryColor} 0%, ${primaryColor} ${maxValue}%, #ddd ${maxValue}%, #ddd 100%)`;
-    minSliderCopy.style.background = `linear-gradient(to right, #ddd 0%, #ddd ${minValue}%, ${primaryColor} ${minValue}%, ${primaryColor} 100%)`;
   }
 
   public createAttributeList() {
