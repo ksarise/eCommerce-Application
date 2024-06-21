@@ -13,7 +13,9 @@ export default class FooterView {
     this.footer = tags.div(['footer']).getElement();
     this.contactUs = tags.div(['footer__content']).getElement();
     this.mainContent = tags.div(['footer__content']).getElement();
-    this.command = tags.div(['footer__content']).getElement();
+    this.command = tags
+      .div(['footer__content', 'footer__command'])
+      .getElement();
     this.footer.append(this.mainContent, this.contactUs, this.command);
     this.createFooterBlock();
   }
@@ -34,7 +36,9 @@ export default class FooterView {
   }
 
   private createHeading() {
-    const heading = tags.h1(['footer__h1'], 'Frost glide');
+    const frostGlideSvg = tags.div(['footer__rost-glide']).getElement();
+    const heading = tags.h1(['footer__h1'], 'rost glide');
+    heading.prepend(frostGlideSvg);
     this.mainContent.append(heading);
   }
 
@@ -182,6 +186,7 @@ export default class FooterView {
   }
 
   private createTeam() {
+    const blockTeam = tags.div(['footer__block']).getElement();
     const heading = tags.h2(['footer__h2'], 'Our Team');
     const list = tags.div(['footer__list']).getElement();
     const listItems = [
@@ -205,7 +210,8 @@ export default class FooterView {
       link.append(svg, listItem);
       list.append(link);
     });
-    this.command.append(heading, list);
+    blockTeam.append(heading, list);
+    this.command.append(blockTeam);
   }
 
   private createEmailBlock() {
