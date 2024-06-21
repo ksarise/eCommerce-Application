@@ -17,14 +17,13 @@
   @media screen and (max-width: 1050px) {
     grid-template-columns: repeat(2, 1fr);
     grid-template-rows: 2fr 0.5fr;
-    
 
     .footer__command {
       grid-column-start: 1;
       grid-column-end: 3;
     }
 
-    .footer__payment-items  {
+    .footer__payment-items {
       justify-content: start;
     }
   }
@@ -44,7 +43,7 @@
         align-items: start;
       }
     }
-    .footer__h1 ,
+    .footer__h1,
     .footer__h2 {
       text-align: center;
     }
@@ -128,6 +127,19 @@
     transition: 0.3s ease-in-out;
     text-align: start;
 
+    &:hover {
+      color: $primary;
+
+      &::after {
+        width: 30%;
+
+        @media screen and (max-width: 650px) {
+          width: 100%;
+        }
+        height: 2px;
+      }
+    }
+
     &::after {
       content: '';
       display: block;
@@ -135,14 +147,6 @@
       height: 2px;
       background-color: $primary;
       transition: 0.3s ease-in-out;
-    }
-    &:hover {
-      color: $primary;
-
-      &::after {
-        width: 30%;
-        height: 2px;
-      }
     }
   }
 

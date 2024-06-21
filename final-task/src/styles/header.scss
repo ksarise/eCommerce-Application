@@ -14,6 +14,10 @@
   transition: 0.3s;
   align-items: center;
 
+  @media (any-hover: none) {
+    background-color: #ffffffcb;
+  }
+
   @media screen and (max-width: 430px) {
     grid-template-columns: 0.5fr 5fr;
 
@@ -23,8 +27,10 @@
     }
   }
 
-  &:hover {
-    background: white;
+  @media (any-hover: hover) {
+    &:hover {
+      background: white;
+    }
   }
 
   &__navigation {
@@ -52,12 +58,14 @@
         background-color: $primary;
         transition: width 0.3s;
       }
-      &:hover {
-        color: $primary;
-        &:after {
-          width: 100%;
+      @media (any-hover: hover) {
+        &:hover {
+          color: $primary;
+          &:after {
+            width: 100%;
+          }
         }
-      }
+      } 
     }
 
     &.loginned {
@@ -104,8 +112,7 @@
         }
       }
     }
-
-
+    .img_cart,
     .img_registration,
     .img_login,
     .img_logout,
@@ -142,24 +149,30 @@
       background-image: url('/svg/sign-up.svg');
     }
 
-    &:hover {
-      transform: translateY(-3px);
+    .img_cart {
+      background-image: url('/svg/cart.svg');
     }
 
-    &[title]:hover:after {
-      content: attr(title);
-      position: absolute;
-      display: flex;
-      top: 35px;
-      left: -30px;
-      background-color: $secondary;
-      border: 1px solid $primary;
-      color: $primary;
-      padding: 2px;
-      border-radius: 5px;
-      z-index: 1;
+    @media (any-hover: hover) {
+      &:hover {
+        transform: translateY(-3px);
+      }
+  
+      &[title]:hover:after {
+        content: attr(title);
+        position: absolute;
+        display: flex;
+        top: 35px;
+        left: -30px;
+        background-color: $secondary;
+        border: 1px solid $primary;
+        color: $primary;
+        padding: 2px;
+        border-radius: 5px;
+        z-index: 1;
+      }
+  
     }
-
     &_registration[title]:hover:after {
       content: attr(title);
       left: -40px;
@@ -200,6 +213,10 @@
 }
 
 .header__home {
+
+  @media (any-hover: none){
+    background-color: #ffffff00;
+  }
   .header__button {
     .img_profile {
       background-image: url('/svg/snowboarder-hover.svg');
@@ -231,36 +248,47 @@
     .img_registration {
       background-image: url('/svg/sign-up-white.svg');
     }
-  }
-  &:hover {
-    .header__button {
-      .img_profile {
-        background-image: url('/svg/snowboarder.svg');
-        background-size: 50px 50px;
-      }
 
-      .img_about {
-        width: 50px;
-        height: 30px;
-        background-size: 50px 30px;
-        background-image: url('/svg/about_us.svg');
-      }
-
-      .img_logout {
-        background-image: url('/svg/logout.svg');
-      }
-
-      .img_login {
-        background-image: url('/svg/login.svg');
-      }
-
-      .img_registration {
-        background-image: url('/svg/sign-up.svg');
-      }
+    .img_cart {
+      background-image: url('/svg/cart-white.svg');
     }
-
-    .header__navigation_link {
-      color: $text;
+  }
+  @media (any-hover: hover) {
+    &:hover {
+      color: $primary;
+      .header__button {
+        .img_profile {
+          background-image: url('/svg/snowboarder.svg');
+          background-size: 50px 50px;
+        }
+  
+        .img_about {
+          width: 50px;
+          height: 30px;
+          background-size: 50px 30px;
+          background-image: url('/svg/about_us.svg');
+        }
+  
+        .img_logout {
+          background-image: url('/svg/logout.svg');
+        }
+  
+        .img_login {
+          background-image: url('/svg/login.svg');
+        }
+  
+        .img_registration {
+          background-image: url('/svg/sign-up.svg');
+        }
+  
+        .img_cart {
+          background-image: url('/svg/cart.svg');
+        }
+      }
+  
+      .header__navigation_link {
+        color: $text;
+      }
     }
   }
 
@@ -308,25 +336,13 @@
     .img_registration {
       background-image: url('/svg/sign-up.svg');
     }
+
+    .img_cart {
+      background-image: url('/svg/cart.svg');
+    }
   }
 
   .header__navigation_link {
     color: $text;
-  }
-}
-
-.img_cart {
-  width: 25px;
-  height: 25px;
-  fill: $primary;
-  transition: 0.3s;
-  cursor: pointer;
-  &:hover {
-    transform: translateY(-3px);
-  }
-
-  @media (max-width: 480px) {
-    width: 15px;
-    height: 15px;
   }
 }

@@ -170,6 +170,9 @@ export default class Login {
         .querySelector('.header')
         ?.classList.toggle('header__scroll', false);
     }
+    if (!document.querySelector('.catalog')) {
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    }
   }
 
   public addListenerToLogin() {
