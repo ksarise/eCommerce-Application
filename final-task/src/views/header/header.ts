@@ -210,6 +210,15 @@ export default class HeaderView {
     const buttonCartQuantity = buttonCart.querySelector(
       '.header__button_cart_quantity',
     ) as HTMLSpanElement;
-    buttonCartQuantity.textContent = String(value);
+    if (buttonCartQuantity) {
+      if (value !== 0) {
+        buttonCartQuantity.classList.remove(
+          'header__button_cart_quantity-hidden',
+        );
+        buttonCartQuantity.innerHTML = value.toString();
+      } else {
+        buttonCartQuantity.classList.add('header__button_cart_quantity-hidden');
+      }
+    }
   }
 }
