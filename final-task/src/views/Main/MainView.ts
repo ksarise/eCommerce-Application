@@ -17,7 +17,7 @@ export default class MainView {
 
   private catalogContainer: HTMLDivElement;
 
-  private filterContainer: FilterSideBar;
+  public filterContainer: FilterSideBar;
 
   private breadcrumbContainer: HTMLDivElement;
 
@@ -431,7 +431,6 @@ export default class MainView {
   }
 
   public facetsCallback(min: number, max: number, mean: number) {
-    console.log(`Facets callback: Min: ${min}, Max: ${max}, Mean: ${mean}`);
     this.filterContainer.PriceRangeSlider.updateCurentRange(min, max, mean);
   }
 }

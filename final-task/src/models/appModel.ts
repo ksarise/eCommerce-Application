@@ -191,4 +191,10 @@ export default class AppModel {
     const response = (await this.apiService.getDiscountCodes()).body.results;
     return response;
   }
+
+  public async requestProductType() {
+    const productTypeKey = 'SnowboardProductTypeKey';
+    const response = await this.apiService.getProductType(productTypeKey);
+    return response;
+  }
 }

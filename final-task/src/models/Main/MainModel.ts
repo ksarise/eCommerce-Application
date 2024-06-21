@@ -5,6 +5,7 @@ import {
   ProductProjectionPagedSearchResponse,
   RangeFacetResult,
   Cart,
+  ProductType,
 } from '@commercetools/platform-sdk';
 import {
   Product as ProductCard,
@@ -30,6 +31,16 @@ export default class MainModel {
 
   public textSearch: string = '';
 
+  public attributesGroup: {
+    specsMap: { [key: string]: { [key: string]: string } };
+    specsTableMap: { [key: string]: { [key: string]: string } };
+    detailsMap: { [key: string]: { [key: string]: string } };
+  } = {
+    specsMap: {},
+    specsTableMap: {},
+    detailsMap: {},
+  };
+
   public currentCategory: { name: string; id: string } | null = null;
 
   public selectedFilters: {
@@ -50,7 +61,6 @@ export default class MainModel {
 
   public setProducts(products: ProductProjectionPagedSearchResponse) {
     this.products = products;
-    console.log(products.facets);
   }
 
   public setCategories(categories: PagedQueryResponse) {
@@ -147,6 +157,7 @@ export default class MainModel {
   public createFilterResponse() {
     const { attributes = [], priceRange = { min: 0, max: 5000 } } =
       this.selectedFilters;
+    console.log(this.selectedFilters);
     const query = [];
 
     // Add category filter
@@ -162,16 +173,16 @@ export default class MainModel {
       }
       attributeMap[key].push(value);
     });
-
+    console.log(attributeMap);
     Object.entries(attributeMap).forEach(([key, values]) => {
       if (values.length > 1) {
         const valueString = values.map((value) => `"${value}"`).join(',');
-        query.push(`variants.attributes.${key}:${valueString}`);
+        query.push(`variants.attributes.${key}.key:${valueString}`);
       } else {
-        query.push(`variants.attributes.${key}:"${values[0]}"`);
+        query.push(`variants.attributes.${key}.key:"${values[0]}"`);
       }
     });
-
+    console.log(query);
     // Add price range filter
     if (priceRange.min !== undefined && priceRange.max !== undefined) {
       const minPrice = priceRange.min * 100;
@@ -255,5 +266,50 @@ export default class MainModel {
         },
       ];
     });
+  }
+
+  public async getFullAttributesFromType(body: ProductType) {
+    const specsMap: { [key: string]: { [key: string]: string } } = {};
+    const specsTableMap: { [key: string]: { [key: string]: string } } = {};
+    const detailsMap: { [key: string]: { [key: string]: string } } = {};
+
+    body.attributes!.forEach((attribute) => {
+      const { name, type } = attribute;
+      if (type.name === 'enum') {
+        const attributeName = `${name}`;
+        const valueMap: { [key: string]: string } = {};
+        type.values.forEach((value) => {
+          if (value.key !== '') {
+            valueMap[value.label] = value.key;
+          }
+        });
+        if (name.startsWith('Specs_')) {
+          specsMap[attributeName] = valueMap;
+        } else if (name.startsWith('SpecsTable_')) {
+          specsTableMap[attributeName] = valueMap;
+        } else if (name.startsWith('Details_')) {
+          detailsMap[attributeName] = valueMap;
+        }
+      }
+    });
+    // const specsMapArray = Object.entries(specsMap);
+    // const specsTableMapArray = Object.entries(specsTableMap);
+    // const detailsMapArray = Object.entries(detailsMap);
+
+    // specsMapArray.sort((a, b) => a[0].localeCompare(b[0]));
+    // specsTableMapArray.sort((a, b) => a[0].localeCompare(b[0]));
+    // detailsMapArray.sort((a, b) => a[0].localeCompare(b[0]));
+    // this.attributesGroup = {
+    //   specsMap: Object.fromEntries(specsMapArray),
+    //   specsTableMap: Object.fromEntries(specsTableMapArray),
+    //   detailsMap: Object.fromEntries(detailsMapArray),
+    // };
+    this.attributesGroup = {
+      specsMap,
+      specsTableMap,
+      detailsMap,
+    };
+    console.log('specsMap', this.attributesGroup.specsMap);
+    console.log('specsTableMap', this.attributesGroup.specsTableMap);
   }
 }

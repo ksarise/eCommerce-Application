@@ -442,4 +442,13 @@ export default class API {
       .execute();
     return response;
   }
+
+  public async getProductType(productTypeKey: string) {
+    const response = await this.apiRoot
+      .productTypes()
+      .withKey({ key: productTypeKey })
+      .get()
+      .execute();
+    return response;
+  }
 }

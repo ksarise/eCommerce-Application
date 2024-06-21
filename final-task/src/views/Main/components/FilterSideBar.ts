@@ -9,22 +9,16 @@ export default class FilterSideBar {
   public PriceRangeSlider: PriceRangeSlider;
 
   constructor() {
-    console.log('render sidebar');
     const filterGen = tags.div(['filter-side-bar']);
     this.filterSideBar = filterGen.getElement() as HTMLDivElement;
     const apllyButton = tags.button(['filter-side-bar__apply-button'], 'Apply');
     const resetButton = tags.button(['filter-side-bar__reset-button'], 'Reset');
-    this.PriceRangeSlider = new PriceRangeSlider(
-      this.handlePriceRangeChange.bind(this),
-    );
+    this.PriceRangeSlider = new PriceRangeSlider();
     this.filterSideBar.append(
       apllyButton,
       resetButton,
       this.PriceRangeSlider.getElement(),
     );
-
-    // this.createPriceRangeSlider();
-    this.createAttributeList();
   }
 
   public createOptionList(categories: Map<string, ParsedCategory>) {
@@ -82,25 +76,30 @@ export default class FilterSideBar {
     this.filterSideBar.prepend(categoriesList);
   }
 
-  public createAttributeList() {
+  public createAttributeList(attributesGroups: {
+    specsMap: { [key: string]: { [key: string]: string } };
+    specsTableMap: { [key: string]: { [key: string]: string } };
+    detailsMap: { [key: string]: { [key: string]: string } };
+  }) {
     const attributesHeader = tags.h2(['attributes-header'], 'Attributes');
     this.filterSideBar.appendChild(attributesHeader);
+
     const categoryContainer = tags
       .div(['attributes-container'])
       .getElement() as HTMLDivElement;
-    const widthContainer = new FilterOption('Width', ['Regular', 'Wide']);
-    const coreContainer = new FilterOption('Core-Laminates', [
-      'Basalt, Wood',
-      'Bamboo, Carbon, Wood',
-      'Bamboo, Wood',
-      'Wood',
-      'Carbon, Wood',
-      'Carbon, Flax, Wood',
-    ]);
-    categoryContainer.append(
-      widthContainer.getElement(),
-      coreContainer.getElement(),
+
+    Object.entries(attributesGroups.specsMap).forEach(
+      ([attributeName, attributeValues]) => {
+        const options = Object.entries(attributeValues).map(([label, key]) => ({
+          label,
+          key,
+        }));
+
+        const filterOption = new FilterOption(attributeName, options);
+        categoryContainer.append(filterOption.getElement());
+      },
     );
+
     this.filterSideBar.appendChild(categoryContainer);
   }
 

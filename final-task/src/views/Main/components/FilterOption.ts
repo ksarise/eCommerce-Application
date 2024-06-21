@@ -5,29 +5,42 @@ export default class FilterOption {
 
   public name: string;
 
-  public options?: string[] = [];
+  public options?: { label: string; key: string }[] = [];
 
-  constructor(name: string, options?: string[]) {
-    this.options = options;
+  constructor(name: string, options?: { label: string; key: string }[]) {
+    this.options = options || [];
+    console.log('this.options', this.options);
     this.name = name;
     this.FilterContainer = tags
       .div(['filter__option'])
       .getElement() as HTMLDivElement;
-    const FilterHeaderGen = tags.h3(['filter__option__header'], name);
+    this.FilterContainer.dataset.optionkey = name;
+    const nameForTitle = name
+      .replace(/^Specs_/, '')
+      .replace(/([a-z])([A-Z])/g, '$1 $2');
+    const FilterHeaderGen = tags.h3(['filter__option__header'], nameForTitle);
 
     const FilterListGen = tags.ul(['filter__option__list']);
     if (this.options) {
+      // this.options.sort((a, b) => a.label.localeCompare(b.label));
       this.options.forEach((option) => {
         const FilterItemGen = tags.li(['filter__option__item']);
         const FilterInputGen = tags.input(['option-list__checkbox'], {
           type: 'checkbox',
-          id: option,
+          id: option.key,
         });
         FilterInputGen.dataset.optiontype = 'attribute';
         FilterInputGen.dataset.optionname = `${name}`;
-        const FilterLabelGen = tags.label(['option-list__label'], option, {
-          for: option,
-        });
+        const FilterLabelGen = tags.label(
+          ['option-list__label'],
+          option.label
+            .replace(/([a-z])([A-Z])/g, '$1 $2')
+            .replace(/,/g, ', ')
+            .replace(/(\d)([A-Z])/g, '$1 $2'),
+          {
+            for: option.key,
+          },
+        );
         FilterLabelGen.dataset.optiontype = 'attribute';
         FilterLabelGen.dataset.optionname = `${name}`;
         FilterItemGen.append(FilterInputGen, FilterLabelGen);

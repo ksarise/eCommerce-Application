@@ -5,19 +5,16 @@ export default class PriceRangeSlider {
 
   private container: HTMLDivElement;
 
-  private onChange: (min: number, max: number) => void;
-
   private priceMinRange: HTMLInputElement;
 
   private priceMaxRange: HTMLInputElement;
 
-  constructor(onChange: (min: number, max: number) => void) {
+  constructor() {
     this.currentRange = {
       min: 0,
       max: 1000,
       mean: 500,
     };
-    this.onChange = onChange;
 
     this.priceMinRange = tags.input(['price-range-min'], {
       type: 'range',
@@ -62,19 +59,11 @@ export default class PriceRangeSlider {
     this.priceMinRange.addEventListener('input', () => {
       minTooltip.innerHTML = ` From <br>$${this.priceMinRange.value}`;
       this.updateSliderStyles();
-      this.onChange(
-        Number(this.priceMinRange.value),
-        Number(this.priceMaxRange.value),
-      );
     });
 
     this.priceMaxRange.addEventListener('input', () => {
       maxTooltip.innerHTML = ` To<br>$${this.priceMaxRange.value}`;
       this.updateSliderStyles();
-      this.onChange(
-        Number(this.priceMinRange.value),
-        Number(this.priceMaxRange.value),
-      );
     });
 
     this.updateSliderStyles();
@@ -107,7 +96,9 @@ export default class PriceRangeSlider {
       max,
       mean,
     };
-    this.setSlidersRanges(min, max, mean);
+    if (min && max && mean) {
+      this.setSlidersRanges(min, max, mean);
+    }
   }
 
   private setSlidersRanges(min: number, max: number, mean: number) {
