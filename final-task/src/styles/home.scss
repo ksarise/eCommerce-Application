@@ -137,7 +137,7 @@
         cursor: pointer;
         transition: 0.4s ease;
         &:hover {
-          background: $primary;
+          background: #fb2427;
           transform: scale(1.1);
           color: white;
         }
@@ -253,7 +253,7 @@
       cursor: pointer;
       transition: 0.4s ease;
       &:hover {
-        background: $primary;
+        background: #fb2427;
         transform: scale(1.1);
         color: white;
       }
@@ -282,8 +282,7 @@
   margin: 0 auto;
   max-width: 1200px;
   flex-direction: row;
-  justify-content: space-between;
-  gap: 50px;
+  gap: 70px;
   text-align: center;
   margin-bottom: 40px;
   @media screen and (max-width: 1050px) {

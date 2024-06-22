@@ -25,7 +25,10 @@ export default class FilterSideBar {
     const categoriesHead = tags
       .div(['categories-head'])
       .getElement() as HTMLDivElement;
-    const categoriesHeader = tags.h2(['categories-header'], 'Categories');
+    const categoriesHeader = tags.h2(
+      ['categories-header', 'active'],
+      'Categories',
+    );
     const categoriesHeadButton = tags.button(['categories-head__button'], 'X');
     categoriesHeadButton.addEventListener('click', () => {
       this.toggleSideBar();
@@ -45,7 +48,7 @@ export default class FilterSideBar {
     categoriesList.prepend(categoriesHead);
     categories.forEach(({ name: mainCategoryName, subCategories }) => {
       const categoryContainer = tags
-        .div(['category-container'])
+        .div(['category-container', 'category-container--active'])
         .getElement() as HTMLDivElement;
       const categoryHeader = tags.h3(
         ['category-header'],
@@ -87,10 +90,13 @@ export default class FilterSideBar {
     specsTableMap: { [key: string]: { [key: string]: string } };
     detailsMap: { [key: string]: { [key: string]: string } };
   }) {
-    const attributesHeader = tags.h2(['attributes-header'], 'Attributes');
+    const attributesHeader = tags.h2(
+      ['attributes-header', 'active'],
+      'Attributes',
+    );
     this.filterSideBar.appendChild(attributesHeader);
     const categoryContainer = tags
-      .div(['attributes-container'])
+      .div(['attributes-container', 'category-container--active'])
       .getElement() as HTMLDivElement;
     attributesHeader.addEventListener('click', () => {
       categoryContainer.classList.toggle('category-container--active');

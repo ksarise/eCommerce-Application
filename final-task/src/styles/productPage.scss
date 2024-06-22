@@ -2,8 +2,15 @@
 
 .product {
   display: flex;
+  flex-direction: column;
   gap: 10px;
   color: $text;
+  &__main {
+    display: flex;
+    gap: 10px;
+    color: $text;
+    flex-direction: row;
+  }
   &__right-container {
     position: relative;
   }
@@ -151,6 +158,23 @@
         border: 2px solid $primary;
         color: $primary;
       }
+    }
+  }
+  &__spec-table {
+    box-sizing: border-box;
+    border-spacing: 0;
+    &_head {
+      &-row {
+      }
+      &-cell {
+      }
+    }
+    &_row {
+    }
+    &_cell {
+      padding: 2px;
+      text-align: center;
+      border: 1px solid black;
     }
   }
 }

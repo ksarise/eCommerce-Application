@@ -37,7 +37,7 @@ export default class FooterView {
 
   private createHeading() {
     const frostGlideSvg = tags.div(['footer__rost-glide']).getElement();
-    const heading = tags.h1(['footer__h1'], 'rost glide');
+    const heading = tags.h1(['footer__h1'], 'Frost glide');
     heading.prepend(frostGlideSvg);
     this.mainContent.append(heading);
   }
@@ -83,11 +83,13 @@ export default class FooterView {
         class: 'footer__phone',
         text: '+1 800 123 4567',
         href: 'tel:+1 800 123 4567',
+        type: 'tel',
       },
       {
         class: 'footer__email',
-        text: 'flostglide@gmail.com',
-        href: 'flostglide@gmail.com',
+        text: 'frostglide@gmail.com',
+        href: 'frostglide@gmail.com',
+        type: 'email',
       },
       {
         class: 'footer__address',
