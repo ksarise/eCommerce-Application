@@ -12,8 +12,13 @@ The purpose of Frost Glide is to create a one-stop destination for snowboarders 
 
 - Vite: Local development server.
 - HTML5: Standard markup language for creating the structure of web pages.
-- Tailwind CSS: Utility-first CSS framework for building custom designs with ease and efficiency.
 - TypeScript: TypeScript adds optional static types to JavaScript, providing improved code quality, readability, and maintainability.
+- Jest: Testing framework for JavaScript.
+- Puppeteer: Web automation parsing tool.
+- Prettier: Code formatter.
+- Sass: CSS preprocessor.
+- Eslint: JavaScript code linter.
+- Husky: Git pre-commit hook.
 
 The application is powered by CommerceTools 🌐, a leading provider of commerce solutions for B2C and B2B enterprises. CommerceTools offers a cloud-native, microservices-based commerce platform that enables brands to create unique and engaging digital commerce experiences.
 
