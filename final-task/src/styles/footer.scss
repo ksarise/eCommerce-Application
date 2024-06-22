@@ -1,6 +1,6 @@
 @font-face {
   font-family: 'frost glide';
-  src: url('fonts/primal.ttf');
+  src: url('/fonts/primal.ttf');
   font-weight: normal;
   font-style: normal;
 }
@@ -103,7 +103,8 @@
     display: flex;
     align-items: center;
     text-align: center;
-    font-size: 3vw;
+    font-size: 2vw;
+    font-weight: 400;
     color: black;
 
     @media screen and (max-width: 800px) {
@@ -300,7 +301,7 @@
     justify-content: space-between;
     align-items: center;
     padding: 15px;
-    background-color: $primary;
+    background-color: #fb2427;
     color: white;
     font-size: 20px;
     font-stretch: 150%;

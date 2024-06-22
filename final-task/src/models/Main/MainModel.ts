@@ -157,16 +157,12 @@ export default class MainModel {
     this.parseCategories(
       new Map(this.categories.map((category) => [category.id, category])),
     );
-    console.log(
-      this.parsedCategories.get('8fe8f4c6-7e11-4e55-963f-a0ae4e1534d3'),
-    );
     return this.parsedCategories;
   }
 
   public createFilterResponse() {
     const { attributes = [], priceRange = { min: 0, max: 5000 } } =
       this.selectedFilters;
-    console.log(this.selectedFilters);
     const query = [];
 
     // Add category filter
@@ -182,7 +178,6 @@ export default class MainModel {
       }
       attributeMap[key].push(value);
     });
-    console.log(attributeMap);
     Object.entries(attributeMap).forEach(([key, values]) => {
       if (values.length > 1) {
         const valueString = values.map((value) => `"${value}"`).join(',');
@@ -191,7 +186,6 @@ export default class MainModel {
         query.push(`variants.attributes.${key}.key:"${values[0]}"`);
       }
     });
-    console.log(query);
     // Add price range filter
     if (priceRange.min !== undefined && priceRange.max !== undefined) {
       const minPrice = priceRange.min * 100;
@@ -318,8 +312,6 @@ export default class MainModel {
       specsTableMap,
       detailsMap,
     };
-    console.log('specsMap', this.attributesGroup.specsMap);
-    console.log('specsTableMap', this.attributesGroup.specsTableMap);
   }
 
   static markGenderCategory(product: ProductProjection) {

@@ -344,3 +344,22 @@
     color: $text;
   }
 }
+@keyframes draw {
+  from {
+    stroke-dasharray: 0, 100%;
+    stroke-dashoffset: 0;
+  }
+  to {
+    stroke-dasharray: 100%, 0;
+    stroke-dashoffset: 0;
+  }
+}
+
+.color-logo .path {
+  stroke: #f80303;
+  stroke-width: 4;
+  fill: none;
+  stroke-dasharray: 100%;
+  stroke-dashoffset: 100%;
+  animation: draw 2s linear forwards;
+}
