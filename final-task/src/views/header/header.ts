@@ -152,7 +152,10 @@ export default class HeaderView {
         title: 'Cart',
       })
       .getElement() as HTMLDivElement;
-    const buttonCartQuantity = tags.span(['header__button_cart_quantity'], '0');
+    const buttonCartQuantity = tags.span(
+      ['header__button_cart_quantity', '-hidden'],
+      '0',
+    );
     buttonCartBlock.append(imgCart, buttonCartQuantity);
     buttonCartBlock.addEventListener('click', () => {
       this.handleClickCartButton!();

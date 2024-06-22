@@ -160,21 +160,18 @@
       }
     }
   }
-  &__spec-table{
+  &__spec-table {
     box-sizing: border-box;
     border-spacing: 0;
-    &_head{
-      &-row{
-
+    &_head {
+      &-row {
       }
-      &-cell{
-
+      &-cell {
       }
     }
-    &_row{
-      
+    &_row {
     }
-    &_cell{
+    &_cell {
       padding: 2px;
       text-align: center;
       border: 1px solid black;

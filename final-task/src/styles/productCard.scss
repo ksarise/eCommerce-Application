@@ -11,7 +11,8 @@
     border-radius: 15px;
     background-color: #fff;
     justify-content: center;
-    &__split, &__gender {
+    &__split,
+    &__gender {
       padding: 2px;
       border-radius: 5px;
       text-decoration: none;
@@ -33,7 +34,7 @@
     }
     &__split {
       background-color: #b88e2f;
-      top: 20%
+      top: 20%;
     }
 
     &__image-link {
@@ -256,7 +257,8 @@
       animation: Pulse 5s infinite ease-in-out;
       z-index: 10;
       overflow: hidden;
-      &__split, &__gender {
+      &__split,
+      &__gender {
         transition: 0.3s ease-in-out;
         transform: scale(1.1);
       }
