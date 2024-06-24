@@ -5,6 +5,13 @@ require("dotenv").config();
   const PARSEURL = process.env.PARSE_URL;
   const browser = await puppeteer.launch({ headless: false });
   const page = await browser.newPage();
+  const IMAGES_STORAGE = process.env.IMAGES_STORAGE;
+  if (!PARSEURL) {
+    throw new Error("PARSE_URL is not defined");
+  }
+  if (!process.env.IMAGES_STORAGE) {
+    throw new Error("IMAGES_STORAGE url is not defined");
+  }
   await page.goto(`${PARSEURL}`);
   // Parse all product cards links on the page
   let arr = await page.evaluate(() => {
@@ -22,7 +29,7 @@ require("dotenv").config();
 
     // Product Card parse and autoformat
     let { ProductImagesCard, imagesSrcList } = await itemPage.evaluate(
-      (linkNumber) => {
+      (linkNumber, IMAGES_STORAGE) => {
         try {
           let titleDetails =
             document.querySelector(".pdp-header-title").innerText;
@@ -115,7 +122,7 @@ require("dotenv").config();
               },
               {
                 uri: "variants.images.url",
-                uriValue: `https://raw.githubusercontent.com/ksarise/parser/main/assets/SNW-${linkNumber}-01/${i}.jpg`,
+                uriValue: `${IMAGES_STORAGE}/assets/SNW-${linkNumber}-01/${i}.jpg`,
               },
               {
                 width: "variants.images.dimensions.w",
@@ -154,7 +161,7 @@ require("dotenv").config();
               },
               {
                 uri: "variants.images.url",
-                uriValue: `https://raw.githubusercontent.com/ksarise/parser/main/assets/SNW-${linkNumber}-01/0.jpg`,
+                uriValue: `${IMAGES_STORAGE}/assets/SNW-${linkNumber}-01/0.jpg`,
               },
               {
                 width: "variants.images.dimensions.w",
@@ -173,7 +180,8 @@ require("dotenv").config();
           console.log(linkNumber, error);
         }
       },
-      linkNumber
+      linkNumber,
+      IMAGES_STORAGE
     );
     console.log(imagesSrcList);
     itemPage.close();

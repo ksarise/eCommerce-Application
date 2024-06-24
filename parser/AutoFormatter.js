@@ -39,6 +39,8 @@ function formatAndExportData(ProductCards, fileName) {
   XLSX.utils.book_append_sheet(wb, we, fileName);
   let filePathExcel = `${fileName}.xlsx`;
   XLSX.writeFile(wb, filePathExcel);
-  console.log(`data${fileName} exported`);
+  console.log(
+    `Data ${fileName} exported to ${fileName}.xlsx and ${fileName}.csv`
+  );
 }
 module.exports = { formatAndExportData };
