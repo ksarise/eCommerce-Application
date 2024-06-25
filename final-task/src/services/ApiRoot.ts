@@ -3,33 +3,49 @@ import {
   ByProjectKeyRequestBuilder,
   Product,
   ClientResponse,
+  Cart,
+  LineItemDraft,
+  QueryParam,
+  ProductProjectionPagedSearchResponse,
 } from '@commercetools/platform-sdk';
 import {
   createPasswordClient,
   createAnonymousClient,
   createRefreshTokenClient,
+  createExistingTokenClient,
 } from './client';
 import { CustomerDraft, ApiResponse } from '../global/interfaces/registration';
 
 export default class API {
-  private apiRoot: ByProjectKeyRequestBuilder;
+  public apiRoot: ByProjectKeyRequestBuilder;
 
   constructor() {
     const keyToken = localStorage.getItem('key-token');
-    const userCreds = JSON.parse(localStorage.getItem('userCreds') as string);
     if (keyToken) {
-      const { refreshToken } = JSON.parse(keyToken);
-      this.apiRoot = createApiBuilderFromCtpClient(
-        createRefreshTokenClient(refreshToken),
-      ).withProjectKey({
-        projectKey: import.meta.env.VITE_CTP_PROJECT_KEY,
-      });
-    } else if (userCreds && !keyToken) {
-      this.apiRoot = createApiBuilderFromCtpClient(
-        createPasswordClient(userCreds.email, userCreds.password),
-      ).withProjectKey({
-        projectKey: import.meta.env.VITE_CTP_PROJECT_KEY,
-      });
+      const { token, expirationTime, refreshToken } = JSON.parse(keyToken);
+      const currentTime = Date.now();
+      console.log(currentTime, expirationTime);
+      if (expirationTime < currentTime) {
+        if (refreshToken) {
+          this.apiRoot = createApiBuilderFromCtpClient(
+            createRefreshTokenClient(refreshToken),
+          ).withProjectKey({
+            projectKey: import.meta.env.VITE_CTP_PROJECT_KEY,
+          });
+        } else {
+          this.apiRoot = createApiBuilderFromCtpClient(
+            createAnonymousClient(),
+          ).withProjectKey({
+            projectKey: import.meta.env.VITE_CTP_PROJECT_KEY,
+          });
+        }
+      } else {
+        this.apiRoot = createApiBuilderFromCtpClient(
+          createExistingTokenClient(token),
+        ).withProjectKey({
+          projectKey: import.meta.env.VITE_CTP_PROJECT_KEY,
+        });
+      }
     } else {
       this.apiRoot = createApiBuilderFromCtpClient(
         createAnonymousClient(),
@@ -52,35 +68,43 @@ export default class API {
   }
 
   public getProducts(queryArgs: {
+    limit?: number;
+    offset?: number;
     filter?: string[];
     sort?: string;
     text?: string;
-  }) {
-    if (queryArgs.filter) {
-      return this.apiRoot
-        .productProjections()
-        .search()
-        .get({
-          queryArgs: {
-            'filter.query': queryArgs.filter,
-            sort: queryArgs.sort,
-            'text.en-US': queryArgs.text,
-          },
-        })
-        .execute();
+  }): Promise<ClientResponse<ProductProjectionPagedSearchResponse>> {
+    const queryParams: { [key: string]: QueryParam } = {
+      sort: queryArgs.sort || 'name.en-US asc',
+      limit: queryArgs.limit || 10,
+      offset: queryArgs.offset || 0,
+      facet: [
+        'variants.price.centAmount:range(0 to 100000000)',
+        'categories.id counting products',
+      ],
+    };
+    if (queryArgs.filter && queryArgs.filter.length > 0) {
+      queryParams['filter.query'] = queryArgs.filter;
+    }
+    if (queryArgs.text) {
+      queryParams['text.en-US'] = queryArgs.text;
     }
     return this.apiRoot
       .productProjections()
-      .get({
-        queryArgs: {
-          sort: 'name.en-US asc',
-        },
-      })
+      .search()
+      .get({ queryArgs: queryParams })
       .execute();
   }
 
   public getCategories() {
-    return this.apiRoot.categories().get().execute();
+    return this.apiRoot
+      .categories()
+      .get({
+        queryArgs: {
+          limit: 100,
+        },
+      })
+      .execute();
   }
 
   public getMyCustomerDraft() {
@@ -122,11 +146,7 @@ export default class API {
       .execute();
   }
 
-  public async changePasswordLogin() {
-    const { email } = JSON.parse(localStorage.getItem('userCreds') as string);
-    const { password } = JSON.parse(
-      localStorage.getItem('userCreds') as string,
-    );
+  public async changePasswordLogin(email: string, password: string) {
     await this.changeTypeClient('password', { email, password });
     await this.postCustomerLogin(email, password);
   }
@@ -242,10 +262,12 @@ export default class API {
 
   public async postCustomerLogin(email: string, password: string) {
     try {
-      await this.changeTypeClient('password', {
-        email,
-        password,
-      });
+      if (!localStorage.getItem('userCreds')) {
+        await this.changeTypeClient('password', {
+          email,
+          password,
+        });
+      }
       const response = await this.apiRoot
         .login()
         .post({
@@ -302,6 +324,131 @@ export default class API {
 
   public getProductById(id: string): Promise<ClientResponse<Product>> {
     const response = this.apiRoot.products().withId({ ID: id }).get().execute();
+    return response;
+  }
+
+  public async createCartRequest(): Promise<ClientResponse<Cart>> {
+    const response = await this.apiRoot
+      .carts()
+      .post({ body: { currency: 'USD', country: 'US' } })
+      .execute();
+    return response;
+  }
+
+  public async getCartById(cartId: string): Promise<ClientResponse<Cart>> {
+    const response = await this.apiRoot
+      .carts()
+      .withId({ ID: cartId })
+      .get()
+      .execute();
+    return response;
+  }
+
+  public async createDiscountById(
+    cartId: string,
+    code: string,
+    version: number,
+  ) {
+    const response = await this.apiRoot
+      .carts()
+      .withId({ ID: cartId })
+      .post({
+        body: {
+          version,
+          actions: [
+            {
+              action: 'addDiscountCode',
+              code,
+            },
+          ],
+        },
+      })
+      .execute();
+    return response;
+  }
+
+  public async getDiscountCodes() {
+    const response = await this.apiRoot.discountCodes().get().execute();
+    return response;
+  }
+
+  public async addLineItemToCart(
+    cartId: string,
+    lineItemDraft: LineItemDraft,
+    cartVersion?: number,
+  ): Promise<ClientResponse<Cart>> {
+    const response = await this.apiRoot
+      .carts()
+      .withId({ ID: cartId })
+      .post({
+        body: {
+          version: cartVersion || 1,
+          actions: [
+            {
+              action: 'addLineItem',
+              ...lineItemDraft,
+            },
+          ],
+        },
+      })
+      .execute();
+    return response;
+  }
+
+  public async removeLineItemFromCart(
+    cartId: string,
+    lineItemId: string,
+    cartVersion?: number,
+  ): Promise<ClientResponse<Cart>> {
+    const response = await this.apiRoot
+      .carts()
+      .withId({ ID: cartId })
+      .post({
+        body: {
+          version: cartVersion || 1,
+          actions: [
+            {
+              action: 'removeLineItem',
+              lineItemId,
+            },
+          ],
+        },
+      })
+      .execute();
+    return response;
+  }
+
+  public async updateProductQuantity(
+    cartId: string,
+    lineItemId: string,
+    quantity: number,
+    cartVersion?: number,
+  ): Promise<ClientResponse<Cart>> {
+    const response = await this.apiRoot
+      .carts()
+      .withId({ ID: cartId })
+      .post({
+        body: {
+          version: cartVersion || 1,
+          actions: [
+            {
+              action: 'changeLineItemQuantity',
+              lineItemId,
+              quantity,
+            },
+          ],
+        },
+      })
+      .execute();
+    return response;
+  }
+
+  public async getProductType(productTypeKey: string) {
+    const response = await this.apiRoot
+      .productTypes()
+      .withKey({ key: productTypeKey })
+      .get()
+      .execute();
     return response;
   }
 }

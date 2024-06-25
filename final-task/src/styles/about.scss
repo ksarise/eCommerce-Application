@@ -1,0 +1,341 @@
+@import 'variables';
+
+.about-us {
+  scroll-behavior: smooth;
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+  color: $text;
+  text-decoration: none;
+
+  &__team {
+    text-align: center;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+    padding: 0.5em 1.5em;
+    background-color: $secondary;
+    border-radius: 40px;
+  }
+
+  &__members {
+    width: 100%;
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 20px;
+
+    @media (max-width: 800px) {
+      grid-template-columns: 1fr;
+    }
+  }
+
+  &__heading {
+    display: flex;
+    color: $text;
+    align-items: center;
+    flex-direction: column;
+
+    &::after {
+      content: '';
+      display: block;
+      width: 40%;
+      height: 1px;
+      background-color: $primary;
+      transition: width 0.3s;
+    }
+  }
+
+  @media (any-hover: hover) {
+    &__member {
+      width: 100%;
+      position: relative;
+      min-height: 300px;
+      perspective: 2000px;
+      z-index: 5;
+
+      &:hover {
+        .about-us__front {
+          transform: rotateY(180deg);
+        }
+
+        .about-us__back {
+          transform: rotateY(360deg);
+        }
+      }
+    }
+
+    &__back,
+    &__front {
+      text-align: center;
+      width: 100%;
+      position: absolute;
+      top: 0;
+      left: 0;
+      color: inherit;
+      background-color: white;
+      text-decoration: none;
+      min-height: 300px;
+      padding: 0.5em 1em;
+      border-radius: 40px;
+      gap: 10px;
+      transition: 0.3s ease-in-out;
+      cursor: pointer;
+      transition: 0.6s;
+      backface-visibility: hidden;
+    }
+
+    &__back {
+      color: white;
+      transform: rotateY(180deg);
+      background-color: $primary;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      align-items: center;
+
+      .about-us__name {
+        color: white;
+        font-size: 1.9em;
+
+        &::after {
+          content: '';
+          display: block;
+          width: 100%;
+          height: 2px;
+          background-color: $secondary;
+          transition: width 0.3s;
+        }
+      }
+
+      .about-us__li {
+        color: $text;
+      }
+
+      .about-us__bio {
+        line-height: 1.5em;
+        text-align: start;
+      }
+    }
+
+    &__biography {
+      line-height: 1.5em;
+    }
+
+    &__front {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: space-around;
+    }
+  }
+
+  @media (any-hover: none) {
+    &__member {
+      text-align: center;
+      color: inherit;
+      background-color: white;
+      text-decoration: none;
+      text-decoration: none;
+      padding: 0.5em 1em;
+      border-radius: 40px;
+      gap: 10px;
+    }
+
+    &__front,
+    &__back {
+      color: inherit;
+      text-decoration: none;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      gap: 10px;
+    }
+
+    &__back {
+      .about-us__bio {
+        display: none;
+      }
+
+      .about-us__name {
+        display: none;
+      }
+    }
+  }
+
+  &__round_photo {
+    width: 200px;
+    height: 200px;
+    display: flex;
+    place-content: center;
+    overflow: hidden;
+    border-radius: 100%;
+    background-position: center;
+    background-repeat: no-repeat;
+    background-size: 200px auto;
+  }
+
+  &__name {
+    transition: 0.3s;
+    color: $primary;
+    font-size: 1.5em;
+  }
+
+  &__role {
+    margin: 0;
+    text-align: start;
+  }
+
+  &__li {
+    color: $light-text;
+    font-size: 1.2em;
+  }
+
+  &__gitinfo,
+  &__github {
+    display: block;
+    width: 100px;
+    height: 40px;
+    background-image: url('/svg/github.svg');
+    background-repeat: no-repeat;
+    background-size: 30px 30px;
+    background-position: center;
+    transition: 0.6s;
+
+    &:hover {
+      background-color: $secondary;
+      border-radius: 20px;
+    }
+  }
+
+  &__content {
+    background-color: $primary;
+    border-radius: 10px;
+    transition: 0.6s;
+
+    @media (any-hover: hover) {
+      &:hover {
+        border-radius: 10px 20px 20px 10px;
+
+        .about-us__personal_info {
+          border-radius: 100px 20px 20px 100px;
+          padding-left: 50px;
+          padding-right: 10px;
+
+          .about-us__heading {
+            &::after {
+              width: 100%;
+            }
+          }
+
+          .about-us__gitinfo {
+            background-color: white;
+            border-radius: 20px;
+          }
+        }
+      }
+    }
+
+    @media (any-hover: none) {
+      border-radius: 10px 20px 20px 10px;
+
+      .about-us__personal_info {
+        border-radius: 100px 20px 20px 100px;
+        padding-left: 50px;
+
+        .about-us__heading {
+          &::after {
+            width: 100%;
+          }
+        }
+
+        .about-us__gitinfo {
+          background-color: white;
+          border-radius: 20px;
+        }
+      }
+    }
+  }
+
+  &__contribution {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+  }
+
+  &__contribution_li {
+    color: $light-text;
+  }
+
+  &__personal_info {
+    position: relative;
+    background-color: $secondary;
+    border-radius: 10px;
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    transition: 0.6s;
+    padding: 20px 10px;
+    padding-right: 50px;
+    gap: 10px;
+
+    .about-us__heading {
+      &::after {
+        width: 40%;
+        height: 1.5px;
+      }
+    }
+  }
+
+  h3 {
+    margin: 0;
+  }
+
+  &__point {
+    font-style: normal;
+    font-stretch: condensed;
+    font-size: 1.2em;
+    padding: 20px;
+    padding-right: 40px;
+    color: $text;
+    background-color: white;
+    border-radius: 0 20px 0 20px;
+    transition: 0.6s;
+    margin: 10px 0;
+    line-height: 1.5em;
+
+    &:hover {
+      background-color: $secondary;
+    }
+
+    &::before {
+      content: '↪';
+      margin-right: 10px;
+      color: $secondary;
+      transition: 0.6s;
+    }
+
+    margin-left: 20px;
+    &::before {
+      content: '↪';
+      color: $primary;
+    }
+  }
+
+  &__rss {
+    height: 100px;
+    width: 200px;
+    background-image: url('/svg/rs_school_js.svg');
+    background-size: 150px auto;
+    background-repeat: no-repeat;
+    align-self: center;
+    background-position: center;
+    transition: 0.6s;
+
+    &:hover {
+      background-color: $primary;
+      border-radius: 20px;
+    }
+  }
+}

@@ -199,6 +199,92 @@ const option = (
   }).getElement();
 };
 
+const section = (
+  classNames: string[],
+  content?: string,
+  attributes: { [key: string]: string } = {},
+): HTMLElement => {
+  return new BaseComponentGenerator({
+    tag: 'section',
+    classNames,
+    content,
+    attributes,
+  }).getElement();
+};
+const table = (
+  classNames: string[],
+  content?: string,
+  attributes: { [key: string]: string } = {},
+): HTMLTableElement => {
+  return new BaseComponentGenerator({
+    tag: 'table',
+    classNames,
+    content,
+    attributes,
+  }).getElement() as HTMLTableElement;
+};
+const thead = (
+  classNames: string[],
+  content?: string,
+  attributes: { [key: string]: string } = {},
+): HTMLTableSectionElement => {
+  return new BaseComponentGenerator({
+    tag: 'thead',
+    classNames,
+    content,
+    attributes,
+  }).getElement() as HTMLTableSectionElement;
+};
+
+const tbody = (
+  classNames: string[],
+  content?: string,
+  attributes: { [key: string]: string } = {},
+): HTMLTableSectionElement => {
+  return new BaseComponentGenerator({
+    tag: 'tbody',
+    classNames,
+    content,
+    attributes,
+  }).getElement() as HTMLTableSectionElement;
+};
+const tr = (
+  classNames: string[],
+  content?: string,
+  attributes: { [key: string]: string } = {},
+): HTMLTableRowElement => {
+  return new BaseComponentGenerator({
+    tag: 'tr',
+    classNames,
+    content,
+    attributes,
+  }).getElement() as HTMLTableRowElement;
+};
+const td = (
+  classNames: string[],
+  content?: string,
+  attributes: { [key: string]: string } = {},
+): HTMLTableCellElement => {
+  return new BaseComponentGenerator({
+    tag: 'td',
+    classNames,
+    content,
+    attributes,
+  }).getElement() as HTMLTableCellElement;
+};
+const th = (
+  classNames: string[],
+  content?: string,
+  attributes: { [key: string]: string } = {},
+): HTMLTableCellElement => {
+  return new BaseComponentGenerator({
+    tag: 'th',
+    classNames,
+    content,
+    attributes,
+  }).getElement() as HTMLTableCellElement;
+};
+
 const tags = {
   div,
   h1,
@@ -216,6 +302,13 @@ const tags = {
   span,
   select,
   option,
+  section,
+  table,
+  thead,
+  tbody,
+  tr,
+  td,
+  th,
 };
 
 export default tags;

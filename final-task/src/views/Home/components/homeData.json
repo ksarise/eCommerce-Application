@@ -1,0 +1,123 @@
+{
+  "terrains": [
+    {
+      "title": "Freeride",
+      "text": "For the adventurer seeking untouched snow.",
+      "id": "ab20b56d-b8db-4822-b439-21707a5ebc6f",
+      "main": "Terrain",
+      "buttonText": "Explore Now"
+    },
+    {
+      "title": "Freestyle",
+      "text": "For the trickster mastering the park.",
+      "id": "62afad2d-349f-4bc6-b33d-d69294521a9b",
+      "main": "Terrain",
+      "buttonText": "Trick Now"
+    },
+    {
+      "title": "All-Mountain",
+      "text": "For the rider who is brave enough",
+      "id": "441d95e2-71c7-4508-ae11-cc9593f4cb0c",
+      "main": "Terrain",
+      "buttonText": "Conquer Now"
+    },
+    {
+      "title": "Powder",
+      "text": "For the enthusiast who loves deep snow.",
+      "id": "c26ae1c9-ac8c-4ebb-b65c-97fd3a198e05",
+      "main": "Terrain",
+      "buttonText": "Enjoy Now"
+    }
+  ],
+  "products": [
+    {
+      "title": "Lib Tech T.Rice Pro HP C2",
+      "price": "$ 367.49",
+      "id": "8be4f644-0522-46c1-8e33-49ce1288f6e0"
+    },
+    {
+      "title": "CAPiTA Mega Mercury",
+      "price": "$ 559.96",
+      "id": "fbeb0a1e-a573-4c7d-ae4d-d64ee9bae86f"
+    },
+    {
+      "title": "Burton Feelgood Flying V",
+      "price": "$ 433.96",
+      "id": "da4c0397-92c5-463a-ac36-4843b99c5f40"
+    },
+    {
+      "title": "GNU Asym Velvet C2",
+      "price": "$ 384.99",
+      "id": "55d5754d-a55f-4106-a47d-ca37cb84b31c"
+    },
+    {
+      "title": "K2 Dreamsicle",
+      "price": "$ 269.97",
+      "id": "3614eb16-eae0-4aed-83ec-09a0eff980a6"
+    },
+    {
+      "title": "Rossignol Myth",
+      "price": "$ 259.97",
+      "id": "8a236257-a8c1-456d-97a6-4be3b8ec0784"
+    }
+  ],
+  "brands": [
+    {
+      "title": "Lib-Tech",
+      "text": "The belief that anything is possible",
+      "id": "9c393b21-2d93-4895-848c-02117bc26b3e",
+      "main": "Brand",
+      "buttonText": "Shop Now"
+    },
+    {
+      "title": "Capita",
+      "text": "Hand-crafted - with 100% clean energy",
+      "id": "bc4912ad-fd98-4287-bcb7-8e11e4efbe42",
+      "main": "Brand",
+      "buttonText": "Shop Now"
+    },
+    {
+      "title": "Ride",
+      "text": "For the People",
+      "id": "3daa511b-ecc5-433d-8661-27f8565d81ce",
+      "main": "Brand",
+      "buttonText": "Shop Now"
+    },
+    {
+      "title": "Burton",
+      "text": "We Are Riders",
+      "id": "9369379d-b02f-46c7-abc8-a875223d2312",
+      "main": "Brand",
+      "buttonText": "Shop Now"
+    }
+  ],
+  "reviews": [
+    {
+      "title": "Disgusting place!",
+      "description": "Back in my day, we rode down hills in plastic bags, not on those frivolous, brightly colored boards.",
+      "author": "Merl"
+    },
+    {
+      "title": "Resilient Revelations",
+      "description": "When I fell off the lift into the snowdrift, I realized how durable these boards are - not at all like my broken dreams and more stylish.",
+      "author": "Harold"
+    },
+    {
+      "title": "Pleasant prices!",
+      "description": "Great sale prices saved me money on post-season treatments.",
+      "author": "John"
+    }
+  ],
+  "offerItems": [
+    {
+      "title": "Summer Sale!",
+      "discount": "SS798<br>20% OFF",
+      "button": "Shop Now"
+    },
+    {
+      "title": "Better Together!",
+      "discount": "FA345<br>30% OFF",
+      "button": "Shop Now"
+    }
+  ]
+}

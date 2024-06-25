@@ -12,7 +12,6 @@ export default class MainController {
   }
 
   public initialize() {
-    this.renderProducts();
     this.mainView.setCategories(this.mainModel.getParsedCategories());
     this.mainView.bindOptionList(this.handleOptionList.bind(this));
     this.mainView.bindPriceFilter(this.handlePriceRangeChange.bind(this));
@@ -33,14 +32,35 @@ export default class MainController {
     this.mainModel.createFilterResponse();
   }
 
-  public handleResetFilters() {
+  public handleResetFilters(
+    bindClickCallback: (
+      isAdd: boolean,
+      parentId: string,
+      variantId: number,
+    ) => void,
+  ) {
     this.mainModel.resetFilters();
     this.mainView.clearFilters();
-    this.renderProducts();
+    this.renderProducts(bindClickCallback);
   }
 
-  public renderProducts() {
+  public renderProducts(
+    bindClickCallback: (
+      isAdd: boolean,
+      parentId: string,
+      variantId: number,
+    ) => void,
+  ) {
     const products = this.mainModel.getProducts();
-    this.mainView.renderProducts(products);
+    this.mainView.facetsCallback(
+      products.priceRangeFacets.min,
+      products.priceRangeFacets.max,
+      products.priceRangeFacets.mean,
+    );
+    this.mainView.renderProducts(
+      products.products,
+      this.mainModel.variantsInCart,
+      bindClickCallback,
+    );
   }
 }

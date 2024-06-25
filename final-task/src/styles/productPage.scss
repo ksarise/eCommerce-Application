@@ -2,8 +2,15 @@
 
 .product {
   display: flex;
+  flex-direction: column;
   gap: 10px;
   color: $text;
+  &__main {
+    display: flex;
+    gap: 10px;
+    color: $text;
+    flex-direction: row;
+  }
   &__right-container {
     position: relative;
   }
@@ -72,6 +79,9 @@
       color: $primary;
       transition: 0.3s;
       border-radius: 5px;
+      &-remove {
+        display: none;
+      }
       @media (max-width: 620px) {
         font-size: 20px;
       }
@@ -106,9 +116,71 @@
     flex-direction: column;
     align-items: center;
   }
+
+  &__variants {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    padding-top: 10px;
+    padding-bottom: 20px;
+    &_title {
+      margin: 0;
+      color: $text;
+      font-size: 20px;
+      font-weight: 500;
+      line-height: 150%;
+      @media (max-width: 620px) {
+        font-size: 16px;
+      }
+    }
+    &_sizes {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+      @media (max-width: 620px) {
+        gap: 5px;
+      }
+    }
+    &_button {
+      padding: 5px 5px;
+      cursor: pointer;
+      border: 2px solid $primary-light;
+      background: rgb(255, 255, 255);
+      font-size: 20px;
+      color: $primary-light;
+      transition: 0.3s;
+      border-radius: 5px;
+      &-active {
+        border: 2px solid $primary;
+        color: $primary;
+      }
+      &:hover {
+        border: 2px solid $primary;
+        color: $primary;
+      }
+    }
+  }
+  &__spec-table {
+    box-sizing: border-box;
+    border-spacing: 0;
+    &_head {
+      &-row {
+      }
+      &-cell {
+      }
+    }
+    &_row {
+    }
+    &_cell {
+      padding: 2px;
+      text-align: center;
+      border: 1px solid black;
+    }
+  }
 }
 
 .alt-column {
+  height: 700px;
   width: 70px;
   display: flex;
   flex-direction: column;

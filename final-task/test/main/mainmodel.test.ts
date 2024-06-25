@@ -1,6 +1,6 @@
 import { PagedQueryResponse } from '@commercetools/platform-sdk';
 import MainModel from '../../src/models/Main/MainModel';
-import { Product as ProductCard } from '../../src/global/interfaces/products';
+import { ProductCard } from '../../src/global/interfaces/products';
 import mockProduct from './mockProduct.json';
 
 describe('MainModel', () => {

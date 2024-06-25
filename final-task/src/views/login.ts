@@ -107,7 +107,7 @@ export default class Login {
     const register = tags.a(
       ['register-link'],
       '/registration',
-      'Did you registered? Register',
+      "Don't have an account? Sign up",
       { title: 'Register', 'data-navigo': 'true' },
     );
     this.form.append(
@@ -161,6 +161,18 @@ export default class Login {
   public addClassToLogin(flag: boolean = false) {
     this.body.classList.toggle('body-login', flag);
     document.querySelector('.view')!.classList.toggle('view-login', flag);
+    if (!document.querySelector('.home')) {
+      document
+        .querySelector('.header')
+        ?.classList.toggle('header__home', false);
+    } else {
+      document
+        .querySelector('.header')
+        ?.classList.toggle('header__scroll', false);
+    }
+    if (!document.querySelector('.catalog')) {
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    }
   }
 
   public addListenerToLogin() {

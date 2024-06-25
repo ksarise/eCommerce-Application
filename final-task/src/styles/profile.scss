@@ -42,6 +42,7 @@
 
   .input {
     width: 100%;
+    position: relative;
   }
 
   .label {
@@ -61,6 +62,10 @@
   }
 
   &__form {
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
     max-height: 80vh;
     width: 350px;
     text-align: center;
@@ -73,9 +78,27 @@
   }
 
   .popup__block {
+    position: relative;
     display: flex;
     flex-direction: column;
     justify-content: center;
+
+    .visible__password {
+      position: absolute;
+      right: 0.5em;
+      top: 1.5em;
+      width: 1.5em;
+      height: 1.5em;
+      cursor: pointer;
+      background-image: url('/eye-password-show.svg');
+      background-size: 30px 30px;
+      background-repeat: no-repeat;
+      background-position: center;
+    }
+
+    .hidden_password {
+      background-image: url('/eye-password-hide.svg');
+    }
   }
 
   width: 100%;
@@ -232,15 +255,26 @@
     }
   }
 
-  &__edit,
-  &__add,
-  &__rubbish,
-  &__save,
-  &__changepass {
+  .popup__cross {
     position: absolute;
-    top: 3px;
+    top: 10px;
     right: 10px;
+    width: 30px;
+    height: 30px;
+    background-image: url('/svg/cross.svg');
+    background-size: 30px 30px;
+    background-repeat: no-repeat;
+    background-position: center;
+    transition: 0.6s;
+
+    &:hover {
+      transform: rotate(90deg);
+    }
+  }
+
+  button {
     display: flex;
+    justify-content: center;
     gap: 5px;
     padding: 5px 15px;
     cursor: pointer;
@@ -252,6 +286,33 @@
     color: $primary;
     transition: 0.3s;
     border-radius: 5px;
+    text-align: center;
+
+    &:disabled {
+      border: gray 3px solid;
+      color: gray;
+      cursor: auto;
+      text-align: center;
+    }
+
+    &:hover:not(:disabled) {
+      background-color: $primary;
+      color: #fff;
+    }
+  }
+
+  &__save {
+    align-items: center;
+    text-align: center;
+  }
+
+  &__edit,
+  &__add,
+  &__rubbish,
+  &__changepass {
+    position: absolute;
+    top: 3px;
+    right: 10px;
 
     .img_edit,
     .img_rubbish {
@@ -271,16 +332,7 @@
       background-image: url('/svg/pen-svgrepo-com.svg');
     }
 
-    &:disabled {
-      border: gray 3px solid;
-      color: gray;
-      cursor: auto;
-    }
-
     &:hover:not(:disabled) {
-      background-color: $primary;
-      color: #fff;
-
       .img_edit {
         background-image: url('/svg/pen-svgrepo-com-hover.svg');
       }

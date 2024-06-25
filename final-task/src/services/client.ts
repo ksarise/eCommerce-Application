@@ -1,7 +1,7 @@
 import fetch from 'node-fetch';
 import {
   ClientBuilder,
-  type AuthMiddlewareOptions,
+  // type AuthMiddlewareOptions,
   type HttpMiddlewareOptions,
   type PasswordAuthMiddlewareOptions,
   type AnonymousAuthMiddlewareOptions,
@@ -27,34 +27,11 @@ class MyTokenCache implements TokenCache {
   }
 
   get() {
-    const tokenString = localStorage.getItem(LOCAL_STORAGE_TOKEN_KEY);
-    if (tokenString) {
-      const tokenData = JSON.parse(tokenString);
-      const currentTime = Math.floor(Date.now() / 1000);
-      if (tokenData.expirationTime > currentTime) {
-        this.myCache = tokenData;
-      } else {
-        this.myCache = { token: '', expirationTime: 1800, refreshToken: '' };
-        localStorage.removeItem(LOCAL_STORAGE_TOKEN_KEY);
-      }
-    }
     return this.myCache;
   }
 }
 
-const tokenCache = new MyTokenCache();
-
-const authMiddlewareOptions: AuthMiddlewareOptions = {
-  host: hostAuth,
-  projectKey,
-  credentials: {
-    clientId,
-    clientSecret,
-  },
-  scopes,
-  tokenCache,
-  fetch,
-};
+let tokenCache = new MyTokenCache();
 
 const httpMiddlewareOptions: HttpMiddlewareOptions = {
   host: import.meta.env.VITE_CTP_API_URL,
@@ -62,6 +39,10 @@ const httpMiddlewareOptions: HttpMiddlewareOptions = {
 };
 
 export const createPasswordClient = (email: string, password: string) => {
+  console.log('passwordTokenFlow');
+  if (!localStorage.getItem('userCreds')) {
+    tokenCache = new MyTokenCache();
+  }
   const options: PasswordAuthMiddlewareOptions = {
     host: hostAuth,
     projectKey,
@@ -88,14 +69,18 @@ export const createPasswordClient = (email: string, password: string) => {
 };
 
 export const createAnonymousClient = () => {
+  console.log('anonymousTokenFlow');
+  const anonymousId = crypto.randomUUID();
+  localStorage.setItem('anonymousId', anonymousId);
   const options: AnonymousAuthMiddlewareOptions = {
     host: hostAuth,
     projectKey,
     credentials: {
       clientId,
       clientSecret,
-      anonymousId: crypto.randomUUID(),
+      anonymousId,
     },
+    tokenCache,
     scopes,
     fetch,
   };
@@ -110,6 +95,7 @@ export const createAnonymousClient = () => {
 };
 
 export const createRefreshTokenClient = (refreshToken: string) => {
+  console.log('refreshTokenFlow');
   const options: RefreshAuthMiddlewareOptions = {
     host: hostAuth,
     projectKey,
@@ -118,6 +104,7 @@ export const createRefreshTokenClient = (refreshToken: string) => {
       clientSecret,
     },
     refreshToken,
+    tokenCache,
     fetch,
   };
   const clientNew = new ClientBuilder()
@@ -130,11 +117,21 @@ export const createRefreshTokenClient = (refreshToken: string) => {
   return clientNew;
 };
 
-const ctpClient = new ClientBuilder()
-  .withProjectKey(projectKey)
-  .withClientCredentialsFlow(authMiddlewareOptions)
-  .withHttpMiddleware(httpMiddlewareOptions)
-  .withLoggerMiddleware()
-  .build();
+export const createExistingTokenClient = (token: string) => {
+  console.log('existingTokenFlow');
+  const rightToken = `Bearer ${token}`;
+  type ExistingTokenMiddlewareOptions = {
+    force?: boolean;
+  };
+  const options: ExistingTokenMiddlewareOptions = {
+    force: true,
+  };
+  const clientNew = new ClientBuilder()
+    .withProjectKey(projectKey)
+    .withExistingTokenFlow(rightToken, options)
+    .withHttpMiddleware(httpMiddlewareOptions)
+    .withLoggerMiddleware()
+    .build();
 
-export default ctpClient;
+  return clientNew;
+};

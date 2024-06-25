@@ -5,6 +5,8 @@ export interface Product {
   image: string;
   price: string;
   discount: string;
+  sizesList: string[];
+  options: { gender: string; split: string };
 }
 export interface ParsedCategory {
   name: string;
@@ -13,4 +15,13 @@ export interface ParsedCategory {
 interface SubCategory {
   id: string;
   name: string;
+}
+
+export interface ProductCard {
+  id: string;
+  name: string;
+  desc: string;
+  image: string;
+  price: string;
+  discount: string;
 }

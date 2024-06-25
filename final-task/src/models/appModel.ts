@@ -1,5 +1,7 @@
 import API from '../services/ApiRoot';
 import RegistrationPageModel from './Registration/RegistrationModel';
+import ProductPageModel from './Product/productModel';
+import CartPageModel from './Cart/CartModel';
 import {
   ApiResponse,
   RegistrationFormData,
@@ -12,20 +14,25 @@ export default class AppModel {
 
   public registrationModel: RegistrationPageModel;
 
-  public mainModel: MainModel = new MainModel();
+  public mainModel: MainModel;
+
+  public productPageModel: ProductPageModel;
+
+  public cartPageModel: CartPageModel;
 
   public isLogined: boolean = false;
 
   constructor() {
     this.apiService = new API();
     this.registrationModel = new RegistrationPageModel();
+    this.cartPageModel = new CartPageModel(this.apiService);
+    this.productPageModel = new ProductPageModel(
+      this.apiService,
+      this.cartPageModel,
+    );
     this.mainModel = new MainModel();
     if (localStorage.getItem('userCreds')) {
       this.isLogined = true;
-      this.apiService.postCustomerLogin(
-        JSON.parse(localStorage.getItem('userCreds') as string).email,
-        JSON.parse(localStorage.getItem('userCreds') as string).password,
-      );
     } else {
       this.isLogined = false;
     }
@@ -40,7 +47,7 @@ export default class AppModel {
     const result = await this.apiService.postCustomerLogin(email, password);
     if (result.result) {
       this.isLogined = true;
-      localStorage.setItem('userCreds', JSON.stringify({ email, password }));
+      localStorage.setItem('userCreds', JSON.stringify(true));
     }
     return result;
   }
@@ -115,8 +122,8 @@ export default class AppModel {
     return result;
   }
 
-  public async changePasswordLogin() {
-    await this.apiService.changePasswordLogin();
+  public async changePasswordLogin(email: string, password: string) {
+    await this.apiService.changePasswordLogin(email, password);
   }
 
   public async setDefaultAddress(
@@ -146,20 +153,19 @@ export default class AppModel {
   }
 
   public async requestGetProducts(
-    filters?: string[],
-    sorts?: string,
-    texts?: string,
+    limit: number,
+    offset: number,
+    filter?: string[],
+    sort?: string,
+    text?: string,
   ) {
-    let response;
-    if (filters) {
-      response = await this.apiService.getProducts({
-        filter: filters,
-        sort: sorts,
-        text: texts,
-      });
-    } else {
-      response = await this.apiService.getProducts({});
-    }
+    const response = await this.apiService.getProducts({
+      limit,
+      offset,
+      filter,
+      sort,
+      text,
+    });
     return response.body;
   }
 
@@ -171,12 +177,24 @@ export default class AppModel {
   public logout() {
     this.isLogined = false;
     localStorage.removeItem('key-token');
+    localStorage.removeItem('userCreds');
     this.apiService.changeTypeClient('anonymous');
     window.location.reload();
   }
 
   public getProductById(id: string) {
     const response = this.apiService.getProductById(id);
+    return response;
+  }
+
+  public async getDiscountsCode() {
+    const response = (await this.apiService.getDiscountCodes()).body.results;
+    return response;
+  }
+
+  public async requestProductType() {
+    const productTypeKey = 'SnowboardProductTypeKey';
+    const response = await this.apiService.getProductType(productTypeKey);
     return response;
   }
 }

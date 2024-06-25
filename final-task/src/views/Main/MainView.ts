@@ -1,8 +1,10 @@
+import { DiscountCode } from '@commercetools/platform-sdk';
 import tags from '../../tags/tags';
 import ProductCard from './components/ProductCard';
 import FilterSideBar from './components/FilterSideBar';
 import { Product, ParsedCategory } from '../../global/interfaces/products';
 import BaseComponentGenerator from '../../tags/base-component';
+import DiscountBanner from './components/DiscountBanner';
 
 export default class MainView {
   private mainContainer: HTMLDivElement;
@@ -15,26 +17,34 @@ export default class MainView {
 
   private catalogContainer: HTMLDivElement;
 
-  private filterContainer: FilterSideBar;
+  public filterContainer: FilterSideBar;
 
   private breadcrumbContainer: HTMLDivElement;
 
+  private catalogPromoCodes: HTMLElement;
+
+  public productCards: ProductCard[] = [];
+
+  public catalogUtilityPanelCount: HTMLElement;
+
   constructor() {
     this.mainContainer = tags.div(['main']).getElement() as HTMLDivElement;
-    this.filterContainer = new FilterSideBar();
+    this.catalogPromoCodes = tags.div(['promocode']).getElement();
     this.catalogContainer = tags
       .div(['catalog'])
       .getElement() as HTMLDivElement;
     this.catalogPanelContainer = tags
       .div(['catalog__panel', 'container'])
       .getElement() as HTMLDivElement;
+
+    this.filterContainer = new FilterSideBar();
     const filtersBtn = tags.button(['catalog__filters__btn'], 'Open Filters');
     filtersBtn.addEventListener('click', () => {
       this.filterContainer.toggleSideBar();
     });
     this.catalogPanelContainer.append(filtersBtn);
     this.catalogListContainer = tags
-      .div(['catalog__list', 'container'], 'Catalog', {})
+      .div(['catalog__list', 'container'], '', {})
       .getElement() as HTMLDivElement;
     this.catalogContainer.append(
       this.catalogPanelContainer,
@@ -46,16 +56,35 @@ export default class MainView {
     this.breadcrumbContainer = tags
       .div(['breadcrumb-container'])
       .getElement() as HTMLDivElement;
-    const breadcrumbHomeItem = tags.span(['breadcrumb-item'], 'Home >');
-    const breadcrumbCatalogItem = tags.a(['breadcrumb-item'], '/', 'Catalog >');
+    const breadcrumbHomeItem = tags.a(['breadcrumb-item'], '/', 'Home >');
+    const breadcrumbCatalogItem = tags.a(
+      ['breadcrumb-item'],
+      '/catalog',
+      'Catalog >',
+    );
     this.breadcrumbContainer.append(breadcrumbHomeItem, breadcrumbCatalogItem);
     this.catalogWrapContainer.append(
       this.filterContainer.getContent(),
       this.catalogContainer,
     );
     this.createTextSearch();
-    this.createSortDropdown();
+    const catalogUtilityPanelContainer = tags
+      .div(['catalog__utility-panel'])
+      .getElement() as HTMLDivElement;
+    const catalogUtilityPanelCountContainer = tags
+      .div(['catalog__utility-panel__count-container'])
+      .getElement() as HTMLDivElement;
+    this.catalogUtilityPanelCount = tags.span(
+      ['catalog__utility-panel__count'],
+      '249 Results',
+    );
+    catalogUtilityPanelCountContainer.append(this.catalogUtilityPanelCount);
+    catalogUtilityPanelContainer.append(catalogUtilityPanelCountContainer);
+
+    this.catalogPanelContainer.append(catalogUtilityPanelContainer);
+    MainView.createSortDropdown(catalogUtilityPanelContainer);
     this.mainContainer.append(
+      this.catalogPromoCodes,
       this.breadcrumbContainer,
       this.catalogWrapContainer,
     );
@@ -65,10 +94,16 @@ export default class MainView {
     return this.mainContainer;
   }
 
-  public renderProducts(products: Product[]) {
-    this.catalogListContainer.innerHTML = '';
-
-    products.forEach((product: Product) => {
+  public async renderProducts(
+    products: Product[],
+    variantsInCart: { [key: string]: string }[],
+    bindClickCallback: (
+      isAdd: boolean,
+      parentId: string,
+      variantId: number,
+    ) => void,
+  ) {
+    this.productCards = products.map((product: Product) => {
       const productCard = new ProductCard(
         product.name,
         product.desc,
@@ -76,8 +111,13 @@ export default class MainView {
         product.id,
         product.price,
         product.discount,
+        product.sizesList,
+        product.options,
+        variantsInCart,
+        bindClickCallback,
       );
       this.catalogListContainer.append(productCard.renderCard());
+      return productCard;
     });
   }
 
@@ -132,9 +172,16 @@ export default class MainView {
       .forEach((element: Element) => {
         element.addEventListener('change', (event: Event) => {
           const target = event.target as HTMLInputElement;
-          const { optiontype, optionname } = target.dataset;
+          const { optiontype, optionname, optionattrid } = target.dataset;
           const { checked, id } = target;
-          if (optiontype && optionname) {
+          if (
+            optiontype &&
+            optionname &&
+            optionattrid &&
+            optiontype === 'attribute'
+          ) {
+            callback(optiontype, optionname, optionattrid, checked);
+          } else if (optiontype && optionname) {
             callback(optiontype, optionname, id, checked);
           }
         });
@@ -239,7 +286,7 @@ export default class MainView {
     this.catalogPanelContainer.append(textSearchContainer);
   }
 
-  public createSortDropdown() {
+  static createSortDropdown(parent: HTMLElement) {
     const sortDropdownContainer = tags
       .div(['sort-dropdown-container'])
       .getElement();
@@ -273,7 +320,7 @@ export default class MainView {
       sortDropdown.appendChild(option);
     });
     sortDropdownContainer.append(sortDropdownLabel, sortDropdown.getElement());
-    this.catalogPanelContainer.append(sortDropdownContainer);
+    parent.append(sortDropdownContainer);
   }
 
   public bindSortDropdown(callback: (value: string) => void): void {
@@ -316,7 +363,7 @@ export default class MainView {
 
   public updateBreadcrumb(categoryNames: string[]) {
     this.clearBreadcrumb();
-    let pathname = '/categories';
+    let pathname = '/catalog/categories';
     categoryNames.forEach((categoryName) => {
       pathname += `/${categoryName.toLowerCase()}`;
       const breadcrumbItem = tags.a(
@@ -331,7 +378,67 @@ export default class MainView {
   private clearBreadcrumb() {
     this.breadcrumbContainer.innerHTML = '';
     const breadcrumbHomeItem = tags.a(['breadcrumb-item'], '/', 'Home >');
-    const breadcrumbCatalogItem = tags.a(['breadcrumb-item'], '/', 'Catalog >');
+    const breadcrumbCatalogItem = tags.a(
+      ['breadcrumb-item'],
+      '/catalog',
+      'Catalog >',
+    );
     this.breadcrumbContainer.prepend(breadcrumbHomeItem, breadcrumbCatalogItem);
+  }
+
+  public createPromoCodes(codes: DiscountCode[]) {
+    codes.forEach((code) => {
+      const banner = new DiscountBanner(
+        code.name?.['en-US'],
+        code.description?.['en-US'],
+        code.code,
+      );
+      const block = banner.getBanner();
+      this.catalogPromoCodes.append(block);
+    });
+  }
+
+  public updateProductCards(
+    productCardId: string,
+    newVariantsInCart: { [key: string]: string }[],
+  ) {
+    const updatedCard = this.productCards.find(
+      (productCard) => productCard.id === productCardId,
+    );
+    if (updatedCard) {
+      updatedCard.variantsInCart = newVariantsInCart;
+      updatedCard.updateSizeItemClasses();
+    }
+  }
+
+  public showSkeletons(limit: number) {
+    for (let i = 0; i < limit; i += 1) {
+      const skeleton = document.createElement('div');
+      skeleton.className = 'skeleton skeleton-card';
+      skeleton.innerHTML = `
+        <div class="skeleton-image"></div>
+        <div class="skeleton-text"></div>
+        <div class="skeleton-text"></div>
+        <div class="skeleton-text"></div>
+      `;
+      this.catalogListContainer.append(skeleton);
+    }
+  }
+
+  public removeSkeletons() {
+    const skeletons = this.catalogListContainer.querySelectorAll('.skeleton');
+    skeletons.forEach((skeleton) => skeleton.remove());
+  }
+
+  public clearCatalogList() {
+    this.catalogListContainer.innerHTML = '';
+  }
+
+  public updateCatalogResultsCount(count: number) {
+    this.catalogUtilityPanelCount.innerHTML = `${count} Results`;
+  }
+
+  public facetsCallback(min: number, max: number, mean: number) {
+    this.filterContainer.PriceRangeSlider.updateCurentRange(min, max, mean);
   }
 }
